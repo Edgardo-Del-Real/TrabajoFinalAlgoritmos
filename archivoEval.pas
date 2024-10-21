@@ -4,24 +4,37 @@ UNIT archivoEval;
 INTERFACE
 USES
   crt;
-
-CONST 
-  N=100;
-
-Type
+CONST
+    RUTA='C:\Users\lucia\OneDrive\Escritorio.dat';
+TYPE
   t_fecha = record
     dia:string[2];
     mes:string[2];
     anio:byte;
   end;
-  t_dato = record
+  t_dato_eval = record
     num_legajo:string[8];
     fecha_eval:t_fecha;
-    valSegDif: array [1..5] of int [0..4];
-    obs:string[10000];
+    valSegDif: array [1..5] of integer;
+    obs:string[255];
   end;
-  t_vector = array [1..N] of t_dato;
-USES
-  CRT;
+  t_archivo_eval = file of t_dato_eval;
+
+Procedure crear_abrir2 (VAR arch:t_archivo_eval);
+Procedure cerrar2 (VAR arch:t_archivo_eval);
 
 IMPLEMENTATION
+Procedure crear_abrir2 (VAR arch:t_archivo_eval);
+begin
+    assign(arch, ruta);
+    {$I-}
+    reset(arch);
+    {$I+}
+    If ioresult<>0 then
+        rewrite(arch);
+end;
+Procedure cerrar2 (VAR arch:t_archivo_eval);
+begin
+    close(arch);
+end;
+end.
