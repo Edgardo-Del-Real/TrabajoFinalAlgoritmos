@@ -11,7 +11,7 @@ TYPE
     dia:string[2];
     mes:string[2];
     anio:byte;
-  end;
+  end;   //hola luciana
   t_dato_alum = record
     num_legajo:string[8];
     apynom:string[100];
