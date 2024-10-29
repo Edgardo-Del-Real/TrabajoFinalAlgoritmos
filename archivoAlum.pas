@@ -12,14 +12,14 @@ TYPE
     mes:string[2];
     anio:byte;
   end;   
-  t_dato_alum = record
+  t_dato_alumnos = record
     num_legajo:string[8];
     apynom:string[100];
     fecha_nac:t_fecha;
     estado:boolean;
     discapacidad: array [1..5] of boolean;
   end;
-  t_archivo_alumnos = file of t_dato_alum;
+  t_archivo_alumnos = file of t_dato_alumnos;
 
 Procedure crear_abrir (VAR arch:t_archivo_alumnos);
 Procedure cerrar (VAR arch:t_archivo_alumnos);

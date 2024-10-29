@@ -36,3 +36,22 @@ alumnos con problemas de aprendizaje, y las dificultades asociadas.</p>
 ● Valoración de Seguimiento por Dificultad : array [1..5] of int [0..4]
 <br>
 ● Observación (campo de texto)
+
+<h2> NOTAS </h2>
+●El trabajo se deberá implementar con archivos random.
+<br>
+●El archivo de Alumnos se mantendrá ordenado mediante árboles binarios de búsqueda (uno por Número de Legajo y uno por Apellido y Nombres, con clave y pos_relativa_maestro) 
+y el Archivo de evaluaciones, por fecha
+<br>
+● Debe estar modularizado en Units.
+<br>
+● Se puede agregar cualquier aporte que considere conveniente, justificando.
+<br>
+● Se presupone que el usuario será personal del área de educación, por lo que la carga y
+<br>
+● visualización de los datos debe ser práctica y amigable.
+
+
+
+
+
