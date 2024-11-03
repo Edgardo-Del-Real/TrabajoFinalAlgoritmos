@@ -110,9 +110,26 @@ end;
 
 procedure ConsultaAlumno (archivoAlumno:t_archivo_alumnos; pos:integer);
 var
-    x:t_dato_alumnos;
+    x:t_dato_alum;
     begin
     seek(archivoAlumno,pos);
     read(archivoAlumno,x);
     MuestraDatosAlumno(x);
     end;
+
+procedure BusquedaAlumno (archivoAlumno:t_archivo_alumnos; buscado:t_dato_alum; var pos:integer);
+var
+ i:byte;
+begin
+i := 0;
+ while (buscado <> x.apynom) and (pos = 0) do
+  begin
+      seek(archivoAlumno,i);
+      read(archivoAlumno,x);
+      if x.apynom = buscado then
+       pos := i 
+      else
+       i := i + 1;
+  end;
+end;
+
