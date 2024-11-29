@@ -8,14 +8,14 @@ CONST
   RUTA = 'C:\Users\lucia\OneDrive\Escritorio\Trabajo Final Algoritmos.dat';
 TYPE
   t_fecha = record
-    dia:string[2];
-    mes:string[2];
+    dia:1..31;
+    mes:1..12;
     anio:byte;
   end;   
   t_dato_alumnos = record
     num_legajo:string[8];
     apynom:string[100];
-    fecha_nac:t_fecha;
+    fecha_nac:t_fecha;  
     estado:boolean;
     discapacidad: array [1..5] of boolean;
   end;
