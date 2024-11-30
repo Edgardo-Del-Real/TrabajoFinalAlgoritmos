@@ -69,7 +69,7 @@ BEGIN
        WRITELN('4- CONSULTA');
        READLN(OPCION);
        {CASE OPCION OF
-            1:'';
+            1:DarAltaAlumno (archivoAlumno,x);
             2:'';
             3:'';
             4:'';
