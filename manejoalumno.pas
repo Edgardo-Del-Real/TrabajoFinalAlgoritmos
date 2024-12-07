@@ -5,17 +5,20 @@ INTERFACE
         CRT, ARCHIVOALUM;
 IMPLEMENTATION
 
-procedure CargarDatosAlumno (var x:t_dato_alumnos);
+procedure CargarDatosAlumno (var x:t_dato_alumnos ; var raizapynom,raiznumlegajo:t_punt_arbol);
 var
     disc:char;
     i:byte;
+    arb:t_dato_arbol;
 begin
 with x do
     begin
     write('Igrese numero de legajo: ');
     readln(num_legajo);
+    arb.clave := num_legajo;
     write('Ingrese Nombre y Apellido: ');
     readln(apynom);
+    arb.clave := apynom;
     writeln('Ingrese Fecha de nacimiento. Ej: 08/09/2001');
     write('Ingrese dia ');
     readln(fecha_nac.dia);
@@ -32,6 +35,8 @@ with x do
             discapacidad.i:=true;
     estado:=true;
     end;
+    AGREGAR_ARBOL(raizapynom,arb);
+    AGREGAR_ARBOL(raiznumlegajo,arb);
     
 end;
 
@@ -93,7 +98,7 @@ var
     MuestraDatosAlumno(x);
     end;
 
-procedure BusquedaAlumno (archivoAlumno:t_archivo_alumnos; buscado:t_dato_alum; var pos:integer);
+{procedure BusquedaAlumno (archivoAlumno:t_archivo_alumnos; buscado:t_dato_alum; var pos:integer);
 var
  i:byte;
 begin
@@ -107,5 +112,5 @@ i := 0;
       else
        i := i + 1;
   end;
-end;
+end;}
 

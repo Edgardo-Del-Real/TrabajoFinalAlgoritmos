@@ -91,5 +91,17 @@ implementation
      ELSE BAJA1(RAIZ);
     READKEY
    end;
+
+PROCEDURE CARGAR_ARBOL(VAR RAIZ:T_PUNT);
+ VAR CAR,TECLA: CHAR;
+ BEGIN
+
+ AGREGAR (RAIZ,CAR);
+ end;
+ END;
+
+
+
+
 end.
 

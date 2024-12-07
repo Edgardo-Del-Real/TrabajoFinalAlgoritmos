@@ -13,10 +13,14 @@ PROCEDURE MENUSEGUIMIENTO ();
 PROCEDURE MENULISTADOS ();
 
 IMPLEMENTATION
-PROCEDURE MENUPRINCIAL ();
+PROCEDURE MENUPRINCIAL // (VAR arch:t_archivo_alumnos; VAR arch2:t_archivo_eval; VAR raiz,raiz2:t_punt_arbol);
 VAR
   OPCION:0..4;
 BEGIN
+     // crear_abrir (VAR arch:t_archivo_alumnos);
+     // crear_abrir (VAR arch:t_archivo_alumnos);
+     // CREAR_ARBOL (VAR RAIZ:T_PUNT_ARBOL);
+     // CREAR_ARBOL (VAR RAIZ:T_PUNT_ARBOL);
      TEXTCOLOR(WHITE);
      GOTOXY(40,10);
      WRITE('BIENVENIDO A ');
