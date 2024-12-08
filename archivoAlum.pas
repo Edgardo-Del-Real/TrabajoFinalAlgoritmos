@@ -5,7 +5,7 @@ INTERFACE
 USES
   crt;
 CONST
-  RUTA = '/home/edgardo/.dat';
+  RUTA = 'C:\Users\GAMER\Desktop.dat';
 TYPE
   t_fecha = record
     dia:1..31;
