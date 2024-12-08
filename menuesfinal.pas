@@ -7,7 +7,7 @@ INTERFACE
 USES
   CRT, archivoAlum, archivoEval;
 
-PROCEDURE MENUPRINCIAL ();
+PROCEDURE MENUPRINCIAL (VAR arch:t_archivo_alumnos; VAR arch2:t_archivo_eval; VAR raiz,raiz2:t_punt_arbol);
 PROCEDURE MENUALUMNO ();
 PROCEDURE MENUSEGUIMIENTO ();
 PROCEDURE MENULISTADOS ();
@@ -17,8 +17,8 @@ PROCEDURE MENUPRINCIAL; // (VAR arch:t_archivo_alumnos; VAR arch2:t_archivo_eval
 VAR
   OPCION:0..4;
 BEGIN
-     // crear_abrir (VAR arch:t_archivo_alumnos);
-     // crear_abrir (VAR arch:t_archivo_alumnos);
+      crear_abrir (VAR arch:t_archivo_alumnos);
+      crear_abrir (VAR arch:t_archivo_alumnos);
      // CREAR_ARBOL (VAR RAIZ:T_PUNT_ARBOL);
      // CREAR_ARBOL (VAR RAIZ:T_PUNT_ARBOL);
      TEXTCOLOR(WHITE);
@@ -59,6 +59,7 @@ BEGIN
             //4:'';
        //END;
   UNTIL OPCION = 0 ;
+  readkey;
 END;
 
 PROCEDURE MENUALUMNO ();
