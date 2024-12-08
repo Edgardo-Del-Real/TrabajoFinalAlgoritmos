@@ -5,7 +5,7 @@ INTERFACE
 USES
   crt;
 CONST
-    RUTA='C:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos.dat';
+    RUTA='C:\Users\GAMER\Desktop.dat';
 TYPE
   t_fecha = record
     dia:string[2];
@@ -30,8 +30,8 @@ begin
     {$I-}
     reset(arch);
     {$I+}
-    If ioresult<>0 then
-        rewrite(arch);
+    {If ioresult<>0 then
+        rewrite(arch);}
 end;
 Procedure cerrar2 (VAR arch:t_archivo_eval);
 begin

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <ProjectSession>
+    <PathDelim Value="\"/>
+    <Version Value="12"/>
+    <BuildModes Active="Default"/>
+    <Units>
+      <Unit>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <CursorPos X="21" Y="3"/>
+        <UsageCount Value="20"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="menuesfinal.pas"/>
+        <UnitName Value="MENUESFINAL"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
+        <TopLine Value="47"/>
+        <CursorPos X="15" Y="62"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unitArbol.pas"/>
+        <UnitName Value="UNITARBOL"/>
+        <EditorIndex Value="4"/>
+        <CursorPos X="10"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="archivoAlum.pas"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="11"/>
+        <CursorPos X="7" Y="11"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="archivoEval.pas"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="8"/>
+        <CursorPos X="5" Y="33"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit>
+    </Units>
+    <JumpHistory HistoryIndex="29">
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="8" Column="57"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="10" Column="94"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="8" Column="43"/>
+      </Position>
+      <Position>
+        <Filename Value="unitArbol.pas"/>
+        <Caret Column="10"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="20" Column="24" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="21" Column="24" TopLine="4"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="6" Column="19"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="7" Column="28"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="5" Column="9"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="23" Column="82"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="4" Column="4"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="10" Column="25"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="7" Column="19"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="21" Column="27" TopLine="6"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="6"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="9" Column="29"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="6"/>
+      </Position>
+      <Position>
+        <Filename Value="seguimientodeaprendizaje.lpr"/>
+        <Caret Line="3" Column="21"/>
+      </Position>
+      <Position>
+        <Filename Value="archivoAlum.pas"/>
+        <Caret Line="8" Column="25" TopLine="5"/>
+      </Position>
+      <Position>
+        <Filename Value="archivoAlum.pas"/>
+        <Caret Line="30" Column="20" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="archivoAlum.pas"/>
+        <Caret Line="35" Column="22" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="24" Column="25" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="archivoAlum.pas"/>
+        <Caret Line="28" Column="11" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="25" Column="12" TopLine="8"/>
+      </Position>
+      <Position>
+        <Filename Value="archivoEval.pas"/>
+        <Caret Line="29" Column="29" TopLine="9"/>
+      </Position>
+      <Position>
+        <Filename Value="archivoEval.pas"/>
+        <Caret Line="34" Column="24" TopLine="9"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="26" Column="6" TopLine="16"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="22" Column="32" TopLine="9"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="59" Column="26" TopLine="53"/>
+      </Position>
+      <Position>
+        <Filename Value="menuesfinal.pas"/>
+        <Caret Line="62" Column="34" TopLine="44"/>
+      </Position>
+    </JumpHistory>
+    <RunParams>
+      <FormatVersion Value="2"/>
+      <Modes ActiveMode=""/>
+    </RunParams>
+  </ProjectSession>
+</CONFIG>

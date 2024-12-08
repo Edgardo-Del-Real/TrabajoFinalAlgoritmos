@@ -63,7 +63,6 @@ BEGIN
        END;
   UNTIL OPCION = 0 ;
   READKEY;
-  CLRSCR;
 END;
 
 PROCEDURE MENUALUMNO ();
@@ -84,7 +83,6 @@ BEGIN
             4:'';
        END;}
   UNTIL OPCION = 0 ;
-  CLRSCR;
 END;
 
 PROCEDURE MENUSEGUIMIENTO ();
@@ -103,7 +101,6 @@ BEGIN
             3:'';
        END;}
   UNTIL OPCION = 0 ;
-  CLRSCR;
 END;
 
 PROCEDURE MENULISTADOS ();
@@ -122,7 +119,6 @@ BEGIN
             3:'';
        END; }
   UNTIL OPCION = 0 ;
-  CLRSCR;
 END;
 
 PROCEDURE MENUESTADISTICAS ();
@@ -141,7 +137,6 @@ BEGIN
             3:'';
        END;}
   UNTIL OPCION = 0 ;
-  CLRSCR;
 END;
 
 

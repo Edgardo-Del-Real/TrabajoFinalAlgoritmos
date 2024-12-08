@@ -31,8 +31,8 @@ begin
   {$I-}
   reset (arch);
   {$I+}
-  if ioresult<>0 then
-    rewrite(arch);
+  {if ioresult<>0 then
+    rewrite(arch);  }
 end;
 Procedure cerrar (VAR arch:t_archivo_alumnos);
 begin
