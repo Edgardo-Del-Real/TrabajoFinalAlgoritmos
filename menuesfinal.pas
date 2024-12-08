@@ -13,7 +13,7 @@ PROCEDURE MENUSEGUIMIENTO ();
 PROCEDURE MENULISTADOS ();
 
 IMPLEMENTATION
-PROCEDURE MENUPRINCIAL // (VAR arch:t_archivo_alumnos; VAR arch2:t_archivo_eval; VAR raiz,raiz2:t_punt_arbol);
+PROCEDURE MENUPRINCIAL; // (VAR arch:t_archivo_alumnos; VAR arch2:t_archivo_eval; VAR raiz,raiz2:t_punt_arbol);
 VAR
   OPCION:0..4;
 BEGIN
