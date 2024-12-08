@@ -19,6 +19,7 @@ with x do
     write('Ingrese Nombre y Apellido: ');
     readln(apynom);
     arb.clave := apynom;
+    // ?? No se sobrescribe
     writeln('Ingrese Fecha de nacimiento. Ej: 08/09/2001');
     write('Ingrese dia ');
     readln(fecha_nac.dia);
@@ -33,8 +34,10 @@ with x do
         readln(discapacidad);
         if UpCase(disc) = 'T' then
             discapacidad.i:=true;
-    estado:=true;
+        else
+            discapacidad.i:=false;
     end;
+    estado:= true;
     AGREGAR_ARBOL(raizapynom,arb);
     AGREGAR_ARBOL(raiznumlegajo,arb);
     
@@ -89,21 +92,33 @@ FOR I:=1 TO 5 do
 END;                   
 end;
 
-procedure ConsultaAlumno (archivoAlumno:t_archivo_alumnos; pos:integer);
+{procedure ConsultaAlumno (archivoAlumno:t_archivo_alumnos);
 var
-    x:t_dato_alum;
+    x:t_dato_alumnos;
+    buscado:string;
+    pos:integer;
+begin
+    writeln('****CONSULTA ALUMNO****');
+    write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+    readln(buscado);
+    BusquedaAlumno(archivoAlumno,buscado,pos);
+    if pos = 0 then
+        writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
+    else
     begin
-    seek(archivoAlumno,pos);
-    read(archivoAlumno,x);
-    MuestraDatosAlumno(x);
+        seek(archivoAlumno,pos);
+        read(archivoAlumno,x);
+        MuestraDatosAlumno(x);
     end;
+end;
 
-{procedure BusquedaAlumno (archivoAlumno:t_archivo_alumnos; buscado:t_dato_alum; var pos:integer);
+procedure BusquedaAlumno (archivoAlumno:t_archivo_alumnos; buscado:string ; var pos:integer);
 var
  i:byte;
 begin
 i := 0;
- while (buscado <> x.apynom) and (pos = 0) do
+pos := 0;
+ while (buscado <> x.apynom) and (pos = 0) and (not eof(archivoAlumno)) do
   begin
       seek(archivoAlumno,i);
       read(archivoAlumno,x);
@@ -113,4 +128,133 @@ i := 0;
        i := i + 1;
   end;
 end;}
+
+procedure ConsultaAlumnoPorApynom(var raizapynom: t_punt_arbol ; archivoAlumno:t_archivo_alumnos);
+var
+  buscado: string;
+  pos: integer;
+  x: t_dato_alumnos;
+begin
+  writeln('****CONSULTA ALUMNO POR APELLIDO Y NOMBRE****');
+  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+  readln(buscado);
+  pos := Preorden(raizapynom, buscado);
+  if pos = -1 then
+    writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
+  else
+  begin
+    seek(archivoAlumno, pos);
+    read(archivoAlumno, x);
+    MuestraDatosAlumno(x);
+  end;
+end;
+
+
+
+procedure BajaAlumno(var raizapynom: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+var
+  buscado: string;
+  pos: integer;
+  x: t_dato_alumnos;
+begin
+  writeln('****BAJA ALUMNO****');
+  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+  readln(buscado);
+  pos := Preorden(raizapynom, buscado);
+  if pos = -1 then
+    writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
+  else
+  begin
+    // Leer el registro del archivo de alumnos en la posición pos
+    seek(archivoAlumno, pos);
+    read(archivoAlumno, x);
+    
+    if not x.estado then
+    begin
+      writeln('ALUMNO YA DADO DE BAJA')
+    else
+    begin
+      x.estado := false;
+      // Sobreescribir el registro en el archivo de alumnos
+      seek(archivoAlumno, pos);
+      write(archivoAlumno, x);
+      
+      writeln('ALUMNO DADO DE BAJA CORRECTAMENTE');
+    end;
+  end;
+end;
+
+procedure ModificarAlumno(var raizapynom: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+var
+  buscado: string;
+  pos: integer;
+  x: t_dato_alumnos;
+  opcion: byte;
+  i: byte;
+  arb: t_dato_arbol;
+begin
+  writeln('****MODIFICAR ALUMNO****');
+  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+  readln(buscado);
+  pos := Preorden(raizapynom, buscado);
+  if pos = -1 then
+    writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
+  else
+  begin
+    // Leer el registro del archivo de alumnos en la posición pos
+    seek(archivoAlumno, pos);
+    read(archivoAlumno, x);
+    
+    // Mostrar los datos actuales del alumno
+    writeln('DATOS ACTUALES DEL ALUMNO:');
+    MuestraDatosAlumno(x);
+
+    writeln('QUE CAMPO DESEA MODIFICAR?');
+    writeln('1- APELLIDO Y NOMBRES');
+    writeln('2- FECHA DE NACIMIENTO');
+    writeln('3- DISCAPACIDAD');
+    writeln('4- ESTADO');
+    write('OPCION: ');
+    readln(opcion);
+    case opcion of
+      1:
+        begin
+          write('INGRESE NUEVO APELLIDO Y NOMBRES: ');
+          readln(x.apynom);
+          arb.clave := x.apynom;
+          AGREGAR_ARBOL(raizapynom, arb);
+        end;
+      2:
+        begin
+          writeln('INGRESE NUEVA FECHA DE NACIMIENTO:');
+          readln(x.fecha_nac);
+        end;
+      3:
+        begin
+          writeln('INGRESE DISCAPACIDAD: ');
+          writeln('Oprima T si la tiene y F si no la tiene');
+            for i:= 1 to 5 do
+            begin
+                write('Discapacidad ', i, ' :');
+                readln(discapacidad);
+                if UpCase(disc) = 'T' then
+                discapacidad.i:=true;
+                else
+                discapacidad.i:=false;
+            end;
+        end;
+      4:
+        begin
+          writeln('SE CAMBIO EL ESTADO DEL ALUMNO');
+          x.estado := not x.estado; 
+        end;
+    end;
+    
+    // Sobreescribir el registro en el archivo de alumnos
+    seek(archivoAlumno, pos);
+    write(archivoAlumno, x);
+    
+    writeln('ALUMNO MODIFICADO CORRECTAMENTE');
+  end;
+end;
 

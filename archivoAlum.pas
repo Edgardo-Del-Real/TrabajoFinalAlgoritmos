@@ -38,4 +38,5 @@ Procedure cerrar (VAR arch:t_archivo_alumnos);
 begin
   close(arch);
 end;
-end.                                         
+end.                    
+
