@@ -2,24 +2,52 @@ UNIT manejoAlumno;
 {$CODEPAGE UTF8}
 INTERFACE
     USES  
-        CRT, ARCHIVOALUM;
-IMPLEMENTATION
+        CRT, ARCHIVOALUM, UNITARBOL;
 
-procedure CargarDatosAlumno (var x:t_dato_alumnos ; var raizapynom,raiznumlegajo:t_punt_arbol);
+procedure CargarDatosAlumno (var x:t_dato_alumnos);
+PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_alumnos; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
+procedure CargarAlumno(var archivoAlumno:t_archivo_alumnos; var FinArch:cardinal; x:t_dato_alumnos);
+procedure DarAltaAlumno (var archivoAlumno:t_archivo_alumnos; var x:t_dato_alumnos);
+procedure MuestraDatosAlumno(x:t_dato_alumnos);
+procedure ConsultaAlumnos(var raizapynom, raizlegajo: t_punt_arbol ; VAR archivoAlumno:t_archivo_alumnos);
+procedure BajaAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+procedure ModificarAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+IMPLEMENTATION
+PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_alumnos; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
+VAR
+  X: T_DATO_alumnos;
+  I:BYTE;
+  R1,R:T_DATO_ARBOL;
+BEGIN
+  I:= 0;
+  if FILESIZE (ARCH) >= 1 then
+  begin                                                              //desp no va aca
+ WHILE NOT EOF(ARCH) DO
+   BEGIN
+     SEEK (ARCH, I);
+     READ (ARCH, X);
+     R.CLAVE:=X.NUM_LEGAJO;
+     R.POSARCH:= I;
+     AGREGAR_ARBOL (RAIZLEGAJO,R);
+     R1.CLAVE:=X.APYNOM;
+     R1.POSARCH:= I;
+     AGREGAR_ARBOL (RAIZAPYNOM,R1);
+     I:= I + 1;
+   END;
+ end;
+END;
+
+procedure CargarDatosAlumno (var x:t_dato_alumnos);
 var
     disc:char;
     i:byte;
-    arb:t_dato_arbol;
 begin
 with x do
     begin
     write('Igrese numero de legajo: ');
     readln(num_legajo);
-    arb.clave := num_legajo;
     write('Ingrese Nombre y Apellido: ');
     readln(apynom);
-    arb.clave := apynom;
-    // ?? No se sobrescribe
     writeln('Ingrese Fecha de nacimiento. Ej: 08/09/2001');
     write('Ingrese dia ');
     readln(fecha_nac.dia);
@@ -30,17 +58,16 @@ with x do
     writeln('Ahora seleccione las discapacidades ');
     writeln('Oprima T si la tiene y F si no la tiene');
     for i:=1 to 5 do
+    BEGIN
         write('Discapacidad ', i, ' :');
-        readln(discapacidad);
+        readln(disc);
         if UpCase(disc) = 'T' then
-            discapacidad.i:=true;
+            discapacidad[i]:=true
         else
-            discapacidad.i:=false;
+            discapacidad[i]:=false;
     end;
     estado:= true;
-    AGREGAR_ARBOL(raizapynom,arb);
-    AGREGAR_ARBOL(raiznumlegajo,arb);
-    
+end;
 end;
 
 procedure CargarAlumno(var archivoAlumno:t_archivo_alumnos; var FinArch:cardinal; x:t_dato_alumnos);
@@ -54,13 +81,16 @@ var
     FinArch:cardinal;
 begin
     writeln('****DAR ALTA ALUMNO****');
-    FinArch:= FileSize(archivoAlumno);
     CargarDatosAlumno(x);
+    FinArch:= FileSize(archivoAlumno);
     CargarAlumno(archivoAlumno, FinArch, x);
 end;
 
 procedure MuestraDatosAlumno(x:t_dato_alumnos);
+var
+    i:byte;
 begin
+clrscr;
 with x do 
 BEGIN
 GOTOXY(45,7);
@@ -85,63 +115,28 @@ TEXTCOLOR(WHITE);
 WRITE(ESTADO);
 GOTOXY(45,15);
 TEXTCOLOR(LIGHTBLUE);
-WRITE('DISCAPACIDAD/ES');
+WRITEln('DISCAPACIDAD/ES');
 TEXTCOLOR(WHITE);
-FOR I:=1 TO 5 do
-    WRITE('DISCAPACIDAD : ', I);
-END;                   
+WRITEln(' Problemas del habla y lenguaje: ', DISCAPACIDAD[1]);
+WRITEln(' Dificultad para escribir: ', DISCAPACIDAD[2]);
+WRITEln(' Dificultades de aprendizaje visual: ', DISCAPACIDAD[3]);
+WRITEln(' Memoria y otras dificultades del pensamiento: ', DISCAPACIDAD[4]);
+WRITEln(' Destrezas sociales inadecuadas: ', DISCAPACIDAD[5]);
+END;
 end;
 
-{procedure ConsultaAlumno (archivoAlumno:t_archivo_alumnos);
-var
-    x:t_dato_alumnos;
-    buscado:string;
-    pos:integer;
-begin
-    writeln('****CONSULTA ALUMNO****');
-    write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
-    readln(buscado);
-    BusquedaAlumno(archivoAlumno,buscado,pos);
-    if pos = 0 then
-        writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
-    else
-    begin
-        seek(archivoAlumno,pos);
-        read(archivoAlumno,x);
-        MuestraDatosAlumno(x);
-    end;
-end;
-
-procedure BusquedaAlumno (archivoAlumno:t_archivo_alumnos; buscado:string ; var pos:integer);
-var
- i:byte;
-begin
-i := 0;
-pos := 0;
- while (buscado <> x.apynom) and (pos = 0) and (not eof(archivoAlumno)) do
-  begin
-      seek(archivoAlumno,i);
-      read(archivoAlumno,x);
-      if x.apynom = buscado then
-       pos := i 
-      else
-       i := i + 1;
-  end;
-end;}
-
-procedure ConsultaAlumnoPorApynom(var raizapynom: t_punt_arbol ; archivoAlumno:t_archivo_alumnos);
+procedure ConsultaAlumnos(var raizapynom, raizlegajo: t_punt_arbol ; VAR archivoAlumno:t_archivo_alumnos);
 var
   buscado: string;
   pos: integer;
   x: t_dato_alumnos;
 begin
   writeln('****CONSULTA ALUMNO POR APELLIDO Y NOMBRE****');
-  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO O LEGAJO DEL ALUMNO: ');
   readln(buscado);
   pos := Preorden(raizapynom, buscado);
   if pos = -1 then
-    writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
-  else
+      POS := PREORDEN(raizlegajo, buscado);
   begin
     seek(archivoAlumno, pos);
     read(archivoAlumno, x);
@@ -151,7 +146,7 @@ end;
 
 
 
-procedure BajaAlumno(var raizapynom: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+procedure BajaAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
 var
   buscado: string;
   pos: integer;
@@ -162,8 +157,7 @@ begin
   readln(buscado);
   pos := Preorden(raizapynom, buscado);
   if pos = -1 then
-    writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
-  else
+    POS := PREORDEN(raizlegajo, buscado);
   begin
     // Leer el registro del archivo de alumnos en la posición pos
     seek(archivoAlumno, pos);
@@ -172,6 +166,7 @@ begin
     if not x.estado then
     begin
       writeln('ALUMNO YA DADO DE BAJA')
+    end
     else
     begin
       x.estado := false;
@@ -184,7 +179,7 @@ begin
   end;
 end;
 
-procedure ModificarAlumno(var raizapynom: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+procedure ModificarAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
 var
   buscado: string;
   pos: integer;
@@ -192,14 +187,14 @@ var
   opcion: byte;
   i: byte;
   arb: t_dato_arbol;
+  disc:char;
 begin
   writeln('****MODIFICAR ALUMNO****');
   write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
   readln(buscado);
   pos := Preorden(raizapynom, buscado);
   if pos = -1 then
-    writeln('NO SE ENCUENTRA REGISTRO DE ALUMNO')
-  else
+    pos := Preorden(raizlegajo, buscado);
   begin
     // Leer el registro del archivo de alumnos en la posición pos
     seek(archivoAlumno, pos);
@@ -226,8 +221,13 @@ begin
         end;
       2:
         begin
-          writeln('INGRESE NUEVA FECHA DE NACIMIENTO:');
-          readln(x.fecha_nac);
+          writeln('Ingrese Fecha de nacimiento. Ej: 08/09/2001');
+          write('Ingrese dia ');
+          readln(X.fecha_nac.dia);
+          write('Ingrese mes ');
+          readln(X.fecha_nac.mes);
+          write('Ingrese Año de nacimiento: ');
+          readln(X.fecha_nac.anio);
         end;
       3:
         begin
@@ -236,11 +236,11 @@ begin
             for i:= 1 to 5 do
             begin
                 write('Discapacidad ', i, ' :');
-                readln(discapacidad);
+                readln(disc);
                 if UpCase(disc) = 'T' then
-                discapacidad.i:=true;
+                X.discapacidad[i]:=true
                 else
-                discapacidad.i:=false;
+                X.discapacidad[i]:=false;
             end;
         end;
       4:
@@ -258,3 +258,4 @@ begin
   end;
 end;
 
+end.

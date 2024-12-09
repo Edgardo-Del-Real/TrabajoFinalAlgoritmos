@@ -5,70 +5,20 @@ UNIT MENUESFINAL;
 INTERFACE
 
 USES
-  CRT, ARCHIVOALUM, ARCHIVOEVAL, UNITARBOL;
+  CRT, ARCHIVOALUM, ARCHIVOEVAL, UNITARBOL, MANEJOALUMNO;
 
 PROCEDURE MENUPRINCIAL ();
-PROCEDURE MENUALUMNO ();
+PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
 PROCEDURE MENUSEGUIMIENTO ();
 PROCEDURE MENULISTADOS ();
 
 IMPLEMENTATION
-PROCEDURE MENUPRINCIAL ();
-VAR
-  OPCION:0..4;
-  ARCH:T_ARCHIVO_ALUMNOS;
-  ARCH2:T_ARCHIVO_EVAL;
-  RAIZ,RAIZ2:T_PUNT_ARBOL;
-BEGIN
-      CREAR_ABRIR (ARCH);
-      CREAR_ABRIR2 (ARCH2);
-      CREAR_ARBOL ( RAIZ);
-      CREAR_ARBOL ( RAIZ2);
-     TEXTCOLOR(WHITE);
-     GOTOXY(40,10);
-     WRITE('BIENVENIDO A ');
-     TEXTCOLOR(GREEN);
-     WRITELN('SEGUIMIENTO DE APRENDIZAJE');
-  REPEAT
-       TEXTCOLOR(GREEN);
-       GOTOXY(52,12);
-       WRITE('1- ');
-       TEXTCOLOR(WHITE);
-       WRITELN('ALUMNO');
-       GOTOXY(52,14);
-       TEXTCOLOR(GREEN);
-       WRITE('2- ');
-       TEXTCOLOR(WHITE);
-       WRITELN('SEGUIMIENTO');
-       GOTOXY(52,16);
-       TEXTCOLOR(GREEN);
-       WRITE('3- ');
-       TEXTCOLOR(WHITE);
-       WRITELN('LISTADOS');
-       GOTOXY(52,18);
-       TEXTCOLOR(GREEN);
-       WRITE('4- ');
-       TEXTCOLOR(WHITE);
-       WRITELN('ESTADISTICAS');
-       GOTOXY(52,20);
-       TEXTCOLOR(GREEN);
-       WRITE('RESPUESTA: ');
-       TEXTCOLOR(WHITE);
-       READLN(OPCION);
-         CASE OPCION OF
-            1:MENUALUMNO();
-            2:MENUSEGUIMIENTO ();
-            3:MENULISTADOS ();
-            //4:MENUESTADISTICAS ();
-       END;
-  UNTIL OPCION = 0 ;
-  READKEY;
-  CLRSCR;
-END;
 
-PROCEDURE MENUALUMNO ();
+
+PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
 VAR
   OPCION:0..4;
+  x:t_dato_alumnos;
 BEGIN
   CLRSCR;
   REPEAT
@@ -77,12 +27,12 @@ BEGIN
        WRITELN('3- MODIFICACIÓN');
        WRITELN('4- CONSULTA');
        READLN(OPCION);
-       {CASE OPCION OF
-            1:DARALTAALUMNO (ARCHIVOALUMNO,X);
-            2:'';
-            3:'';
-            4:'';
-       END;}
+       CASE OPCION OF
+            1:DarAltaAlumno (archivoAlumno,x);
+            2:BajaAlumno(raizapynom,raizlegajo,archivoAlumno);
+            3:ModificarAlumno(raizapynom, raizlegajo,archivoAlumno);
+            4:ConsultaAlumnos(raizapynom, raizlegajo,archivoAlumno);
+       END;
   UNTIL OPCION = 0 ;
   CLRSCR;
 END;
@@ -142,6 +92,60 @@ BEGIN
        END;}
   UNTIL OPCION = 0 ;
   CLRSCR;
+END;
+
+PROCEDURE MENUPRINCIAL ();
+VAR
+  OPCION:0..4;
+  ARCH:T_ARCHIVO_ALUMNOS;
+  ARCH2:T_ARCHIVO_EVAL;
+  RAIZ,RAIZ2:T_PUNT_ARBOL;
+BEGIN
+      CREAR_ABRIR (ARCH);
+      CREAR_ABRIR2 (ARCH2);
+      CREAR_ARBOL ( RAIZ);
+      CREAR_ARBOL ( RAIZ2);
+      PASAR_DATOS (ARCH,RAIZ,RAIZ2);
+     TEXTCOLOR(WHITE);
+     GOTOXY(40,10);
+     WRITE('BIENVENIDO A ');
+     TEXTCOLOR(GREEN);
+     WRITELN('SEGUIMIENTO DE APRENDIZAJE');
+  REPEAT
+       TEXTCOLOR(GREEN);
+       GOTOXY(52,12);
+       WRITE('1- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('ALUMNO');
+       GOTOXY(52,14);
+       TEXTCOLOR(GREEN);
+       WRITE('2- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('SEGUIMIENTO');
+       GOTOXY(52,16);
+       TEXTCOLOR(GREEN);
+       WRITE('3- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('LISTADOS');
+       GOTOXY(52,18);
+       TEXTCOLOR(GREEN);
+       WRITE('4- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('ESTADISTICAS');
+       GOTOXY(52,20);
+       TEXTCOLOR(GREEN);
+       WRITE('RESPUESTA: ');
+       TEXTCOLOR(WHITE);
+       READLN(OPCION);
+         CASE OPCION OF
+            1:MENUALUMNO (arch,RAIZ, RAIZ2);
+            2:MENUSEGUIMIENTO ();
+            3:MENULISTADOS ();
+            //4:MENUESTADISTICAS ();
+       END;
+  UNTIL OPCION = 0 ;
+  CERRAR(ARCH);
+  CERRAR2(ARCH2);
 END;
 
 
