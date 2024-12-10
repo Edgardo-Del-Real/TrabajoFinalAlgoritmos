@@ -8,6 +8,7 @@ USES
     crt, ARCHIVOEVAL, UNITARBOL,SysUtils ;
 
 procedure CargarDatosEval (var x:t_dato_eval);
+PROCEDURE PASAR_DATOS_EVAL (VAR ARCH: T_ARCHIVO_EVAL; VAR RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL);
 procedure DarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
 procedure CargarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
 procedure MuestraDatosEval(x:t_dato_eval);
@@ -16,6 +17,29 @@ procedure modificarEval(var raizapynom, raizlegajo: t_punt_arbol; var archivoEva
 function BuscarEvaluacion(var raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval; legajo: string; fecha: string): integer;
 
 IMPLEMENTATION
+PROCEDURE PASAR_DATOS_EVAL (VAR ARCH: T_ARCHIVO_EVAL; VAR RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL);
+VAR
+  X: T_DATO_EVAL;
+  I:BYTE;
+  R:T_DATO_ARBOL;
+  fecha:string;
+BEGIN
+  I:= 0;
+  if FILESIZE (ARCH) >= 1 then
+  begin
+ WHILE NOT EOF(ARCH) DO
+   BEGIN
+     SEEK (ARCH, I);
+     READ (ARCH, X);
+     fecha:=(IntToStr(x.fecha_eval.anio))+(IntToStr(x.fecha_eval.mes))+(IntToStr(x.fecha_eval.dia));
+     R.CLAVE:=fecha;
+     R.POSARCH:= I;
+     AGREGAR_ARBOL (RAIZFECHA,R);
+     I:= I + 1;
+   END;
+ end;
+END;
+
 
 procedure CargarDatosEval (var x:t_dato_eval);
 begin
@@ -64,18 +88,17 @@ var
   pos,i: integer;
   x: t_dato_eval;
 begin
-for i:=1 to fileSize(archivoEval)-1 do
+    BuscarEvaluacion:=-1;
+for i:=0 to fileSize(archivoEval)-1 do
   begin
-  seek(archivoEval, pos);
+  seek(archivoEval, i);
   read(archivoEval,x);
   if x.num_legajo = legajo then
     begin
     if (x.fecha_eval.dia = (StrToInt(Copy(fecha, 1, 2)))) and
        (x.fecha_eval.mes = (StrToInt(Copy(fecha, 4, 2)))) and
        (x.fecha_eval.anio = (StrToInt(Copy(fecha, 7, 4)))) then
-      BuscarEvaluacion := pos
-    else
-      BuscarEvaluacion := -1;
+      BuscarEvaluacion := i;
   end;
 end;
 end;

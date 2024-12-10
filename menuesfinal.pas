@@ -9,7 +9,7 @@ USES
 
 PROCEDURE MENUPRINCIAL ();
 PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
-PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
+PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZFECHA:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
 PROCEDURE MENULISTADOS ();
 
 IMPLEMENTATION
@@ -37,12 +37,13 @@ BEGIN
   CLRSCR;
 END;
 
-PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
+PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZFECHA:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
 VAR
   OPCION:0..3;
   x:t_dato_eval;
 BEGIN
   CLRSCR;
+  PASAR_DATOS_EVAL (archivoEval,RAIZLEGAJO,RAIZFECHA);
   REPEAT
        WRITELN('1- ALTA');
        WRITELN('2- MODIFICACIÓN');
@@ -50,7 +51,7 @@ BEGIN
        READLN(OPCION);
        CASE OPCION OF
             1:DarAltaEval(archivoEval,x);
-            2:modificarEval(raizapynom, raizlegajo,archivoEval);
+            //2:modificarEval(raizapynom, raizlegajo,archivoEval);
             3:ConsultaEvaluacion(raizlegajo,archivoEval);
        END;
   UNTIL OPCION = 0 ;
