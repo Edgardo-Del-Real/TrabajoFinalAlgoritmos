@@ -11,9 +11,9 @@ CONST
 
 TYPE
   t_fecha = record
-    dia:string[2];
-    mes:string[2];
-    anio:byte;
+    dia:1..31;
+    mes:1..12;
+    anio:word;
   end;
 
   t_dato_eval = record

@@ -21,11 +21,11 @@ procedure CargarDatosEval (var x:t_dato_eval);
 begin
      writeln('INGRESE NUMERO DE LEGAJO');
     readln(x.num_legajo);
-    writeln('INGRESE DIA DE NACIMIENTO');
+    writeln('INGRESE DIA DE EVALUACIÓN');
     readln(x.fecha_eval.dia);
-    writeln('INGRESE MES DE NACIMIENTO');
+    writeln('INGRESE MES DE EVALUACIÓN');
     readln(x.fecha_eval.mes);
-    writeln('INGRESE AÑO DE NACIMIENTO');
+    writeln('INGRESE AÑO DE EVALUACIÓN');
     readln(x.fecha_eval.anio);
     writeln('INGRESE DE 1 POR VEZ, LAS VALORACIONES: ');
     readln(x.valoracion[1]);
@@ -120,11 +120,9 @@ begin
   pos := Preorden(raizlegajo, buscado);
   if pos = -1 then
     POS := PREORDEN(raizapynom, buscado);
-  
   if pos = -1 then
     writeln('NO SE ENCUENTRA REGISTRO DE EVALUACION')
-  else
-  begin
+    else
     seek(archivoEval, pos);
     read(archivoEval, x);
 
@@ -167,6 +165,5 @@ begin
       writeln('EVALUACION MODIFICADA CORRECTAMENTE');
     end;
   end;
-end;
 
  end.
