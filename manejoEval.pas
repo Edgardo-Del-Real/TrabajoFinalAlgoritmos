@@ -42,22 +42,44 @@ END;
 
 
 procedure CargarDatosEval (var x:t_dato_eval);
+var
+   i:byte;
 begin
-     writeln('INGRESE NUMERO DE LEGAJO');
-    readln(x.num_legajo);
-    writeln('INGRESE DIA DE EVALUACIÓN');
-    readln(x.fecha_eval.dia);
-    writeln('INGRESE MES DE EVALUACIÓN');
-    readln(x.fecha_eval.mes);
-    writeln('INGRESE AÑO DE EVALUACIÓN');
-    readln(x.fecha_eval.anio);
-    writeln('INGRESE DE 1 POR VEZ, LAS VALORACIONES: ');
-    readln(x.valoracion[1]);
-    readln(x.valoracion[2]);
-    readln(x.valoracion[3]);
-    readln(x.valoracion[4]);
-    readln(x.valoracion[5]);
-    readln(x.obs);
+     clrscr;
+     gotoxy(50,10);
+     writeln('**DAR ALTA EVALUACIÓN**');
+     textcolor(green);
+     gotoxy(45,12);
+     write('INGRESE NUMERO DE LEGAJO: ');
+     textcolor(white);
+     readln(x.num_legajo);
+     textcolor(green);
+     gotoxy(45,14);
+     write('INGRESE DIA DE EVALUACIÓN: ');
+     textcolor(white);
+     readln(x.fecha_eval.dia);
+     textcolor(green);
+     gotoxy(45,16);
+     write('INGRESE MES DE EVALUACIÓN: ');
+     textcolor(white);
+     readln(x.fecha_eval.mes);
+     textcolor(green);
+     gotoxy(45,18);
+     write('INGRESE AÑO DE EVALUACIÓN: ');
+     textcolor(white);
+     readln(x.fecha_eval.anio);
+     textcolor(red);
+     gotoxy(45,20);
+     writeln('INGRESE LAS VALORACIONES: ');
+     for i:=1 to 5 do
+       begin
+         textcolor(green);
+         gotoxy(45,22);
+         write('Valoración ', i, ': ');
+         textcolor(white);
+         readln(x.valoracion[i]);
+       end;
+     clrscr;
 end;
 
 procedure MuestraDatosEval(x:t_dato_eval);
@@ -78,7 +100,6 @@ procedure DarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
 var
     FinArch:cardinal;
 begin
-    writeln('****DAR ALTA EVALUACIÓN****');
     CargarDatosEval(x);
     CargarAltaEval(archivoEval, x);
 end;
