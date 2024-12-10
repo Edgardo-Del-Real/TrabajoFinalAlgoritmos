@@ -84,10 +84,13 @@ end;
 
 procedure MuestraDatosEval(x:t_dato_eval);
 begin
+    clrscr;
+    writeln('DATOS ACTUALES DE LA EVALUACION:');
     writeln('Legajo: ', x.num_legajo);
     writeln('Fecha: ', x.fecha_eval.dia, '/', x.fecha_eval.mes, '/', x.fecha_eval.anio);
     writeln('Valoracion: ', x.valoracion[1], ' ', x.valoracion[2], ' ', x.valoracion[3], ' ', x.valoracion[4], ' ', x.valoracion[5]);
     writeln('Observaciones: ', x.obs);
+    clrscr;
 end;
 
 procedure CargarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
@@ -131,7 +134,7 @@ var
   pos: integer;
   x: t_dato_eval;
 begin
-  writeln('****CONSULTA EVALUACION****');
+  writeln('**CONSULTA EVALUACION**');
   write('INGRESE LEGAJO DEL ALUMNO: ');
   readln(buscadoLegajo);
   write('INGRESE FECHA DE LA EVALUACION (DD/MM/AAAA): ');
@@ -158,28 +161,53 @@ var
   x: t_dato_eval;
   opcion,i: integer;
 begin
-  writeln('****MODIFICAR EVALUACION****');
-  write('INGRESE LEGAJO');
+  clrscr;
+  gotoxy(50,10);
+  writeln('**MODIFICAR EVALUACION**');
+  textcolor(green);
+  gotoxy(45,12);
+  write('INGRESE LEGAJO: ');
+  textcolor(white);
   readln(LEGAJO);
-  write('INGRESE FECHA DD/MM/AAAA');
+  textcolor(green);
+  gotoxy(45,14);
+  write('INGRESE FECHA DD/MM/AAAA: ');
+  textcolor(white);
   readln(FECHA);
   POS := BuscarEvaluacion(raizlegajo,archivoEval,legajo,fecha);
-      if pos = -1 then
-    writeln('NO SE ENCUENTRA REGISTRO DE EVALUACION')
-    else
+  if pos = -1 then
     begin
-    seek(archivoEval, pos);
-    read(archivoEval, x);
+    gotoxy(45,16);
+    writeln('NO SE ENCUENTRA REGISTRO DE EVALUACION')
+    end
+  else
+    begin
+      seek(archivoEval, pos);
+      read(archivoEval, x);
 
-    writeln('DATOS ACTUALES DE LA EVALUACION:');
-    MuestraDatosEval(x);
-      
-    writeln('INGRESE EL CAMPO A MODIFICAR DE LA EVALUACION:');
-    writeln('1- FECHA DE LA EVALUACION (DD/MM/AAAA)');
-    writeln('2- VALORACION (1-5)');
-    writeln('3- OBSERVACIONES');
-    write('OPCION: ');
-    readln(opcion);
+      MuestraDatosEval(x);
+
+      gotoxy(45,16);
+      writeln('INGRESE EL CAMPO A MODIFICAR DE LA EVALUACION:');
+      textcolor(green);
+      gotoxy(45,18);
+      write('1- ');
+      textcolor(white);
+      writeln('FECHA DE LA EVALUACION (DD/MM/AAAA)');
+      textcolor(green);
+      gotoxy(45,20);
+      write('2- ');
+      textcolor(white);
+      writeln('VALORACION (1-5)');
+      textcolor(green);
+      gotoxy(45,22);
+      write('3- ');
+      textcolor(white);
+      writeln('OBSERVACIONES');
+      textcolor(green);
+      gotoxy(45,24);
+      write('OPCION: ');
+      readln(opcion);
     
     if (opcion < 1) or (opcion > 3) then
       writeln('OPCION INVALIDA')
@@ -210,6 +238,7 @@ begin
       writeln('EVALUACION MODIFICADA CORRECTAMENTE');
     end;
   end;
-  end;
+  clrscr;
+end;
 
  end.
