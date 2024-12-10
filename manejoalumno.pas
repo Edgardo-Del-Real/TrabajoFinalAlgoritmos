@@ -81,8 +81,8 @@ var
     FinArch:cardinal;
 begin
     writeln('****DAR ALTA ALUMNO****');
-    CargarDatosAlumno(x);
-    FinArch:= FileSize(archivoAlumno);
+    CargarDatosAlumno(x); 
+    FinArch:= FileSize(archivoAlumno);   // acá podriamos eliminar el finArch llamando al filesize del archivo nada mas
     CargarAlumno(archivoAlumno, FinArch, x);
 end;
 
@@ -132,7 +132,7 @@ var
   x: t_dato_alumnos;
 begin
   writeln('****CONSULTA ALUMNO POR APELLIDO Y NOMBRE****');
-  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO O LEGAJO DEL ALUMNO: ');
+  write('INGRESE APELLIDO Y NOMBRE O LEGAJO DEL ALUMNO: ');
   readln(buscado);
   pos := Preorden(raizapynom, buscado);
   if pos = -1 then
@@ -153,7 +153,7 @@ var
   x: t_dato_alumnos;
 begin
   writeln('****BAJA ALUMNO****');
-  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+  write('INGRESE APELLIDO Y NOMBRE O LEGAJO DEL ALUMNO: ');
   readln(buscado);
   pos := Preorden(raizapynom, buscado);
   if pos = -1 then

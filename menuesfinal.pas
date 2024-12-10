@@ -5,11 +5,11 @@ UNIT MENUESFINAL;
 INTERFACE
 
 USES
-  CRT, ARCHIVOALUM, ARCHIVOEVAL, UNITARBOL, MANEJOALUMNO;
+  CRT, ARCHIVOALUM, ARCHIVOEVAL, UNITARBOL, MANEJOALUMNO, MANEJOEVAL;
 
 PROCEDURE MENUPRINCIAL ();
 PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
-PROCEDURE MENUSEGUIMIENTO ();
+PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
 PROCEDURE MENULISTADOS ();
 
 IMPLEMENTATION
@@ -37,7 +37,7 @@ BEGIN
   CLRSCR;
 END;
 
-PROCEDURE MENUSEGUIMIENTO ();
+PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
 VAR
   OPCION:0..3;
 BEGIN
@@ -47,11 +47,11 @@ BEGIN
        WRITELN('2- MODIFICACIÓN');
        WRITELN('3- CONSULTA');
        READLN(OPCION);
-       {CASE OPCION OF
-            1:'';
-            2:'';
-            3:'';
-       END;}
+       CASE OPCION OF
+            1:DarAltaeval(archivoEval,x);
+            2:modificarEval(raizapynom, raizlegajo,archivoEval);
+            3:ConsultaEvaluacion(raizlegajo,archivoEval);
+       END;
   UNTIL OPCION = 0 ;
   CLRSCR;
 END;
