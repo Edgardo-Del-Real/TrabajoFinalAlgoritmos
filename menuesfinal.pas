@@ -40,6 +40,7 @@ END;
 PROCEDURE MENUSEGUIMIENTO (var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL; var archivoEval:t_archivo_eval);
 VAR
   OPCION:0..3;
+  x:t_dato_eval;
 BEGIN
   CLRSCR;
   REPEAT
@@ -48,7 +49,7 @@ BEGIN
        WRITELN('3- CONSULTA');
        READLN(OPCION);
        CASE OPCION OF
-            1:DarAltaeval(archivoEval,x);
+            1:DarAltaEval(archivoEval,x);
             2:modificarEval(raizapynom, raizlegajo,archivoEval);
             3:ConsultaEvaluacion(raizlegajo,archivoEval);
        END;
@@ -139,7 +140,7 @@ BEGIN
        READLN(OPCION);
          CASE OPCION OF
             1:MENUALUMNO (arch,RAIZ, RAIZ2);
-            2:MENUSEGUIMIENTO ();
+            2:MENUSEGUIMIENTO (RAIZ, RAIZ2,ARCH2);
             3:MENULISTADOS ();
             //4:MENUESTADISTICAS ();
        END;

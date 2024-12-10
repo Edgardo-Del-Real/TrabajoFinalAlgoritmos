@@ -5,23 +5,29 @@ UNIT manejoEval;
 INTERFACE
 
 USES
-    crt, ARCHIVOEVAL, UNITARBOL;
+    crt, ARCHIVOEVAL, UNITARBOL,SysUtils ;
 
 procedure CargarDatosEval (var x:t_dato_eval);
-PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_eval; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
+procedure DarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
 procedure CargarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
 procedure MuestraDatosEval(x:t_dato_eval);
 procedure ConsultaEvaluacion(var raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval);
 procedure modificarEval(var raizapynom, raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval);
+function BuscarEvaluacion(var raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval; legajo: string; fecha: string): integer;
 
 IMPLEMENTATION
 
 procedure CargarDatosEval (var x:t_dato_eval);
 begin
+     writeln('INGRESE NUMERO DE LEGAJO');
     readln(x.num_legajo);
+    writeln('INGRESE DIA DE NACIMIENTO');
     readln(x.fecha_eval.dia);
+    writeln('INGRESE MES DE NACIMIENTO');
     readln(x.fecha_eval.mes);
+    writeln('INGRESE AÑO DE NACIMIENTO');
     readln(x.fecha_eval.anio);
+    writeln('INGRESE DE 1 POR VEZ, LAS VALORACIONES: ');
     readln(x.valoracion[1]);
     readln(x.valoracion[2]);
     readln(x.valoracion[3]);
@@ -44,13 +50,34 @@ begin
     write(archivoEval, x);
 end;
 
-procedure DarAltaAlumno (var archivoEval:t_archivo_eval; var x:t_dato_eval);
+procedure DarAltaEval (var archivoEval:t_archivo_eval; var x:t_dato_eval);
 var
     FinArch:cardinal;
 begin
-    writeln('****DAR ALTA ALUMNO****');
+    writeln('****DAR ALTA EVALUACIÓN****');
     CargarDatosEval(x);
     CargarAltaEval(archivoEval, x);
+end;
+
+function BuscarEvaluacion(var raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval; legajo: string; fecha: string): integer;
+var
+  pos,i: integer;
+  x: t_dato_eval;
+begin
+for i:=1 to fileSize(archivoEval)-1 do
+  begin
+  seek(archivoEval, pos);
+  read(archivoEval,x);
+  if x.num_legajo = legajo then
+    begin
+    if (x.fecha_eval.dia = (StrToInt(Copy(fecha, 1, 2)))) and
+       (x.fecha_eval.mes = (StrToInt(Copy(fecha, 4, 2)))) and
+       (x.fecha_eval.anio = (StrToInt(Copy(fecha, 7, 4)))) then
+      BuscarEvaluacion := pos
+    else
+      BuscarEvaluacion := -1;
+  end;
+end;
 end;
 
 procedure ConsultaEvaluacion(var raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval);
@@ -73,39 +100,19 @@ begin
   begin
     seek(archivoEval, pos);
     read(archivoEval, x);
-    
     writeln('DATOS DE LA EVALUACION:');
     MuestraDatosEval(x);
   end;
 end;
 
-function BuscarEvaluacion(var raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval; legajo: string; fecha: string): integer;
-var
-  pos: integer;
-  x: t_dato_eval;
-begin
-  pos := Preorden(raizlegajo, legajo);
-  if pos = -1 then
-    BuscarEvaluacion := -1
-  else
-  begin
-    seek(archivoEval, pos);
-    read(archivoEval, x);
-    if (x.fecha_eval.dia = StrToInt(Copy(fecha, 1, 2))) and
-       (x.fecha_eval.mes = StrToInt(Copy(fecha, 4, 2))) and
-       (x.fecha_eval.anio = StrToInt(Copy(fecha, 7, 4))) then
-      BuscarEvaluacion := pos
-    else
-      BuscarEvaluacion := -1;
-  end;
-end;
+
 
 procedure modificarEval(var raizapynom, raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval);
 var
   buscado: string;
   pos: integer;
   x: t_dato_eval;
-  opcion: integer;
+  opcion,i: integer;
 begin
   writeln('****MODIFICAR EVALUACION****');
   write('INGRESE LEGAJO O NOMBRE DEL ALUMNO: ');
@@ -131,7 +138,7 @@ begin
     write('OPCION: ');
     readln(opcion);
     
-    if opcion < 1 or opcion > 3 then
+    if (opcion < 1) or (opcion > 3) then
       writeln('OPCION INVALIDA')
     else
     begin
@@ -162,5 +169,4 @@ begin
   end;
 end;
 
-
-
+ end.
