@@ -51,7 +51,7 @@ BEGIN
        READLN(OPCION);
        CASE OPCION OF
             1:DarAltaEval(archivoEval,x);
-            //2:modificarEval(raizapynom, raizlegajo,archivoEval);
+            2:modificarEval(raizfecha, raizlegajo,archivoEval);
             3:ConsultaEvaluacion(raizlegajo,archivoEval);
        END;
   UNTIL OPCION = 0 ;

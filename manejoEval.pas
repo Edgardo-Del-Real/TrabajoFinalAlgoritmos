@@ -132,20 +132,21 @@ end;
 
 procedure modificarEval(var raizapynom, raizlegajo: t_punt_arbol; var archivoEval: t_archivo_eval);
 var
-  buscado: string;
+  legajo, fecha: string;
   pos: integer;
   x: t_dato_eval;
   opcion,i: integer;
 begin
   writeln('****MODIFICAR EVALUACION****');
-  write('INGRESE LEGAJO O NOMBRE DEL ALUMNO: ');
-  readln(buscado);
-  pos := Preorden(raizlegajo, buscado);
-  if pos = -1 then
-    POS := PREORDEN(raizapynom, buscado);
-  if pos = -1 then
+  write('INGRESE LEGAJO');
+  readln(LEGAJO);
+  write('INGRESE FECHA DD/MM/AAAA');
+  readln(FECHA);
+  POS := BuscarEvaluacion(raizlegajo,archivoEval,legajo,fecha);
+      if pos = -1 then
     writeln('NO SE ENCUENTRA REGISTRO DE EVALUACION')
     else
+    begin
     seek(archivoEval, pos);
     read(archivoEval, x);
 
@@ -187,6 +188,7 @@ begin
       
       writeln('EVALUACION MODIFICADA CORRECTAMENTE');
     end;
+  end;
   end;
 
  end.
