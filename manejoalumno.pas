@@ -277,7 +277,7 @@ begin
     clrscr;
     textcolor(red);
     gotoxy(45,10);
-    writeln('QUE CAMPO DESEA MODIFICAR?');
+    writeln('QUE CAMPO DESEA MODIFICAR?');  //agregar opcion 0 que sea volver hacia atras
     textcolor(green);
     gotoxy(45,12);
     write('1- ');

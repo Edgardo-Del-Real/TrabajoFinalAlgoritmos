@@ -79,17 +79,40 @@ begin
          textcolor(white);
          readln(x.valoracion[i]);
        end;
+     textcolor(green);
+     gotoxy(45,24);
+     write('INGRESE UNA OBSERVACIÓN: ');
+     textcolor(white);
+     readln(x.obs);
      clrscr;
 end;
 
 procedure MuestraDatosEval(x:t_dato_eval);
 begin
     clrscr;
+    gotoxy(42,10);
     writeln('DATOS ACTUALES DE LA EVALUACION:');
-    writeln('Legajo: ', x.num_legajo);
-    writeln('Fecha: ', x.fecha_eval.dia, '/', x.fecha_eval.mes, '/', x.fecha_eval.anio);
-    writeln('Valoracion: ', x.valoracion[1], ' ', x.valoracion[2], ' ', x.valoracion[3], ' ', x.valoracion[4], ' ', x.valoracion[5]);
-    writeln('Observaciones: ', x.obs);
+    textcolor(green);
+    gotoxy(45,12);
+    write('Legajo: ');
+    textcolor(white);
+    writeln(x.num_legajo);
+    textcolor(green);
+    gotoxy(45,14);
+    write('Fecha: ');
+    textcolor(white);
+    writeln(x.fecha_eval.dia, '/', x.fecha_eval.mes, '/', x.fecha_eval.anio);
+    textcolor(green);
+    gotoxy(45,16);
+    write('Valoracion: ');
+    textcolor(white);
+    writeln(x.valoracion[1], ' ', x.valoracion[2], ' ', x.valoracion[3], ' ', x.valoracion[4], ' ', x.valoracion[5]);
+    textcolor(green);
+    gotoxy(45,18);
+    write('Observaciones: ');
+    textcolor(white);
+    writeln(x.obs);
+    readkey;
     clrscr;
 end;
 
@@ -134,22 +157,33 @@ var
   pos: integer;
   x: t_dato_eval;
 begin
+  clrscr;
+  gotoxy(52,10);
   writeln('**CONSULTA EVALUACION**');
+  textcolor(green);
+  gotoxy(45,12);
   write('INGRESE LEGAJO DEL ALUMNO: ');
+  textcolor(white);
   readln(buscadoLegajo);
+  textcolor(green);
+  gotoxy(45,14);
   write('INGRESE FECHA DE LA EVALUACION (DD/MM/AAAA): ');
+  textcolor(white);
   readln(buscadoFecha);
   
   pos := BuscarEvaluacion(raizlegajo, archivoEval, buscadoLegajo, buscadoFecha);
   if pos = -1 then
-    writeln('NO SE ENCUENTRA REGISTRO DE EVALUACION')
+    begin
+      gotoxy(45,16);
+      writeln('NO SE ENCUENTRA REGISTRO DE EVALUACION');
+    end
   else
-  begin
-    seek(archivoEval, pos);
-    read(archivoEval, x);
-    writeln('DATOS DE LA EVALUACION:');
-    MuestraDatosEval(x);
-  end;
+    begin
+      seek(archivoEval, pos);
+      read(archivoEval, x);
+      MuestraDatosEval(x);
+    end;
+    clrscr;
 end;
 
 
@@ -187,57 +221,74 @@ begin
 
       MuestraDatosEval(x);
 
-      gotoxy(45,16);
+      gotoxy(45,12);
       writeln('INGRESE EL CAMPO A MODIFICAR DE LA EVALUACION:');
       textcolor(green);
-      gotoxy(45,18);
+      gotoxy(45,14);
       write('1- ');
       textcolor(white);
       writeln('FECHA DE LA EVALUACION (DD/MM/AAAA)');
       textcolor(green);
-      gotoxy(45,20);
+      gotoxy(45,16);
       write('2- ');
       textcolor(white);
       writeln('VALORACION (1-5)');
       textcolor(green);
-      gotoxy(45,22);
+      gotoxy(45,18);
       write('3- ');
       textcolor(white);
       writeln('OBSERVACIONES');
       textcolor(green);
-      gotoxy(45,24);
+      gotoxy(45,20);
       write('OPCION: ');
+      textcolor(white);
       readln(opcion);
     
     if (opcion < 1) or (opcion > 3) then
-      writeln('OPCION INVALIDA')
+      begin
+        gotoxy(45,22);
+        writeln('OPCION INVALIDA');
+      end
     else
-    begin
-      case opcion of
-        1:
-        begin
-          write('INGRESE LA NUEVA FECHA DE LA EVALUACION (DD/MM/AAAA): ');
-          readln(x.fecha_eval.dia, x.fecha_eval.mes, x.fecha_eval.anio);
+      begin
+        case opcion of
+          1:
+          begin
+            clrscr;
+            textcolor(green);
+            gotoxy(42,12);
+            write('INGRESE LA NUEVA FECHA DE LA EVALUACION (DD/MM/AAAA): ');
+            textcolor(white);
+            readln(x.fecha_eval.dia, x.fecha_eval.mes, x.fecha_eval.anio);    //break
+          end;
+          2:
+          begin
+            clrscr;
+            textcolor(green);
+            gotoxy(45,12);
+            write('INGRESE LA NUEVA VALORACION (1-5): ');
+            for i:= 1 to 5 do
+              textcolor(white);
+              readln(x.valoracion[i]);
+          end;
+          3:
+          begin
+            clrscr;
+            textcolor(green);
+            gotoxy(45,12);
+            write('INGRESE LAS NUEVAS OBSERVACIONES: ');
+            textcolor(white);
+            readln(x.obs);
+          end;
         end;
-        2:
-        begin
-          write('INGRESE LA NUEVA VALORACION (1-5): ');
-          for i:= 1 to 5 do
-            readln(x.valoracion[i]);
-        end;
-        3:
-        begin
-          write('INGRESE LAS NUEVAS OBSERVACIONES: ');
-          readln(x.obs);
-        end;
+
+        seek(archivoEval, pos);
+        write(archivoEval, x);
+        gotoxy(45,20);
+        writeln('EVALUACION MODIFICADA CORRECTAMENTE');
       end;
-      
-      seek(archivoEval, pos);
-      write(archivoEval, x);
-      
-      writeln('EVALUACION MODIFICADA CORRECTAMENTE');
-    end;
   end;
+  readkey;
   clrscr;
 end;
 
