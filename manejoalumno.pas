@@ -1,8 +1,11 @@
 UNIT manejoAlumno;
+
 {$CODEPAGE UTF8}
+
 INTERFACE
+
     USES  
-        CRT, ARCHIVOALUM, UNITARBOL;
+        CRT, ARCHIVOALUM, UNITARBOL, SYSUTILS;
 
 procedure CargarDatosAlumno (var x:t_dato_alumnos);
 PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_alumnos; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
@@ -12,6 +15,7 @@ procedure MuestraDatosAlumno(x:t_dato_alumnos);
 procedure ConsultaAlumnos(var raizapynom, raizlegajo: t_punt_arbol ; VAR archivoAlumno:t_archivo_alumnos);
 procedure BajaAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
 procedure ModificarAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
+PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR x: T_DATO_ALUMNOS);
 
 IMPLEMENTATION
 PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_alumnos; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
@@ -378,5 +382,17 @@ begin
   readkey;
   clrscr;
 end;
+
+PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR x: T_DATO_ALUMNOS);
+var
+  fecha:string;
+BEGIN
+  fecha:=(IntToStr(x.fecha_nac.dia)) + ' / ' + (IntToStr(x.fecha_nac.mes)) + ' / ' + (IntToStr(x.fecha_nac.anio));
+  WITH X DO
+  BEGIN
+    WRITE(num_legajo:10, apynom:30, fecha:20, estado:10, discapacidad[1]:10, discapacidad[2]:10, discapacidad[3]:10, discapacidad[4]:10, discapacidad[5]:10);
+    WRITELN;
+  END;
+END;
 
 end.
