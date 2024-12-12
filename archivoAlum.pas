@@ -1,41 +1,41 @@
-UNIT archivoAlum;
+UNIT ARCHIVOALUM;
 {$CODEPAGE UTF8}
 
 INTERFACE
 USES
-  crt;
+  CRT;
 CONST
-  RUTA = 'C:\Users\lucia\OneDrive\Escritorio.dat';
+  RUTA = 'C:\USERS\GAMER\DESKTOP.DAT';
 TYPE
-  t_fecha = record
-    dia:1..31;
-    mes:1..12;
-    anio:word;
-  end;   
-  t_dato_alumnos = record
-    num_legajo:string[8];
-    apynom:string[100];
-    fecha_nac:t_fecha;  
-    estado:boolean;
-    discapacidad: array [1..5] of boolean;
-  end;
-  t_archivo_alumnos = file of t_dato_alumnos;
+  T_FECHA = RECORD
+    DIA:1..31;
+    MES:1..12;
+    ANIO:WORD;
+  END;
+  T_DATO_ALUMNOS = RECORD
+    NUM_LEGAJO:STRING[8];
+    APYNOM:STRING[100];
+    FECHA_NAC:T_FECHA;
+    ESTADO:BOOLEAN;
+    DISCAPACIDAD: ARRAY [1..5] OF BOOLEAN;
+  END;
+  T_ARCHIVO_ALUMNOS = FILE OF T_DATO_ALUMNOS;
 
-Procedure crear_abrir (VAR arch:t_archivo_alumnos);
-Procedure cerrar (VAR arch:t_archivo_alumnos);
+PROCEDURE CREAR_ABRIR (VAR ARCH:T_ARCHIVO_ALUMNOS);
+PROCEDURE CERRAR (VAR ARCH:T_ARCHIVO_ALUMNOS);
 
 IMPLEMENTATION
-Procedure crear_abrir (VAR arch:t_archivo_alumnos);
-begin
-  assign(arch, RUTA);
+PROCEDURE CREAR_ABRIR (VAR ARCH:T_ARCHIVO_ALUMNOS);
+BEGIN
+  ASSIGN(ARCH, RUTA);
   {$I-}
-  reset (arch);
+  RESET (ARCH);
   {$I+}
-  if ioresult<>0 then
-    rewrite(arch);
-end;
-Procedure cerrar (VAR arch:t_archivo_alumnos);
-begin
-  close(arch);
-end;
-end.                    
+  IF IORESULT<>0 THEN
+    REWRITE(ARCH);
+END;
+PROCEDURE CERRAR (VAR ARCH:T_ARCHIVO_ALUMNOS);
+BEGIN
+  CLOSE(ARCH);
+END;
+END.

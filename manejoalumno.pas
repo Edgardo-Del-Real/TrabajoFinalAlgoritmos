@@ -1,31 +1,31 @@
-UNIT manejoAlumno;
+UNIT MANEJOALUMNO;
 
 {$CODEPAGE UTF8}
 
 INTERFACE
 
-    USES  
+    USES
         CRT, ARCHIVOALUM, UNITARBOL, SYSUTILS;
 
-procedure CargarDatosAlumno (var x:t_dato_alumnos);
-PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_alumnos; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
-procedure CargarAlumno(var archivoAlumno:t_archivo_alumnos; var FinArch:cardinal; x:t_dato_alumnos);
-procedure DarAltaAlumno (var archivoAlumno:t_archivo_alumnos; var x:t_dato_alumnos);
-procedure MuestraDatosAlumno(x:t_dato_alumnos);
-procedure ConsultaAlumnos(var raizapynom, raizlegajo: t_punt_arbol ; VAR archivoAlumno:t_archivo_alumnos);
-procedure BajaAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
-procedure ModificarAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
-PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR x: T_DATO_ALUMNOS);
+PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS);
+PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_ALUMNOS; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
+PROCEDURE CARGARALUMNO(VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR FINARCH:CARDINAL; X:T_DATO_ALUMNOS);
+PROCEDURE DARALTAALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR X:T_DATO_ALUMNOS);
+PROCEDURE MUESTRADATOSALUMNO(X:T_DATO_ALUMNOS);
+PROCEDURE CONSULTAALUMNOS(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL ; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS);
+PROCEDURE BAJAALUMNO(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS);
+PROCEDURE MODIFICARALUMNO(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS);
+PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR X: T_DATO_ALUMNOS);
 
 IMPLEMENTATION
-PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_alumnos; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
+PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_ALUMNOS; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
 VAR
   X:T_DATO_ALUMNOS;
   I:BYTE;
   R1,R:T_DATO_ARBOL;
 BEGIN
   I:=0;
-  IF FILESIZE (ARCH) >= 1 then
+  IF FILESIZE (ARCH) >= 1 THEN
   BEGIN
        WHILE NOT EOF(ARCH) DO
        BEGIN
@@ -42,87 +42,87 @@ BEGIN
   END;
 END;
 
-procedure CargarDatosAlumno (var x:t_dato_alumnos);
-var
-    disc:char;
-    i:byte;
-begin
-  clrscr;
-  with x do
-      begin
-        textcolor(white);
-        gotoxy(50,10);
-        writeln('**ALTA ALUMNO**');
-        textcolor(green);
-        gotoxy(45,12);
-        write('Ingrese numero de legajo: ');
-        textcolor(white);
-        readln(num_legajo);
-        textcolor(green);
-        gotoxy(45,14);
-        write('Ingrese nombre y apellido: ');
-        textcolor(white);
-        readln(apynom);
-        textcolor(red);
-        gotoxy(45,16);
-        writeln('Ingrese Fecha de nacimiento. Ej: 08/09/2001');
-        textcolor(green);
-        gotoxy(45,18);
-        write('Ingrese dia: ');
-        textcolor(white);
-        readln(fecha_nac.dia);
-        textcolor(green);
-        gotoxy(45,20);
-        write('Ingrese mes: ');
-        textcolor(white);
-        readln(fecha_nac.mes);
-        textcolor(green);
-        gotoxy(45,22);
-        write('Ingrese año de nacimiento: ');
-        textcolor(white);
-        readln(fecha_nac.anio);
-        gotoxy(45,24);
-        write('Ahora seleccione las discapacidades, ');
-        textcolor(red);
-        writeln('oprima T si la tiene y F si no la tiene');
-        for i:=1 to 5 do
+PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS);
+VAR
+    DISC:CHAR;
+    I:BYTE;
+BEGIN
+  CLRSCR;
+  WITH X DO
+      BEGIN
+        TEXTCOLOR(WHITE);
+        GOTOXY(50,10);
+        WRITELN('**ALTA ALUMNO**');
+        TEXTCOLOR(GREEN);
+        GOTOXY(45,12);
+        WRITE('INGRESE NUMERO DE LEGAJO: ');
+        TEXTCOLOR(WHITE);
+        READLN(NUM_LEGAJO);
+        TEXTCOLOR(GREEN);
+        GOTOXY(45,14);
+        WRITE('INGRESE NOMBRE Y APELLIDO: ');
+        TEXTCOLOR(WHITE);
+        READLN(APYNOM);
+        TEXTCOLOR(RED);
+        GOTOXY(45,16);
+        WRITELN('INGRESE FECHA DE NACIMIENTO. EJ: 08/09/2001');
+        TEXTCOLOR(GREEN);
+        GOTOXY(45,18);
+        WRITE('INGRESE DIA: ');
+        TEXTCOLOR(WHITE);
+        READLN(FECHA_NAC.DIA);
+        TEXTCOLOR(GREEN);
+        GOTOXY(45,20);
+        WRITE('INGRESE MES: ');
+        TEXTCOLOR(WHITE);
+        READLN(FECHA_NAC.MES);
+        TEXTCOLOR(GREEN);
+        GOTOXY(45,22);
+        WRITE('INGRESE AÑO DE NACIMIENTO: ');
+        TEXTCOLOR(WHITE);
+        READLN(FECHA_NAC.ANIO);
+        GOTOXY(45,24);
+        WRITE('AHORA SELECCIONE LAS DISCAPACIDADES, ');
+        TEXTCOLOR(RED);
+        WRITELN('OPRIMA T SI LA TIENE Y F SI NO LA TIENE');
+        FOR I:=1 TO 5 DO
         BEGIN
-              textcolor(green);
-              gotoxy(45,27);
-              write('Discapacidad ', i, ' :');
-              textcolor(white);
-              readln(disc);
-              if UpCase(disc) = 'T' then
-                  discapacidad[i]:=true
-              else
-                  discapacidad[i]:=false;
-        end;
-        estado:= true;
-      end;
-  clrscr;
-end;
+              TEXTCOLOR(GREEN);
+              GOTOXY(45,27);
+              WRITE('DISCAPACIDAD ', I, ' :');
+              TEXTCOLOR(WHITE);
+              READLN(DISC);
+              IF UPCASE(DISC) = 'T' THEN
+                  DISCAPACIDAD[I]:=TRUE
+              ELSE
+                  DISCAPACIDAD[I]:=FALSE;
+        END;
+        ESTADO:= TRUE;
+      END;
+  CLRSCR;
+END;
 
-procedure CargarAlumno(var archivoAlumno:t_archivo_alumnos; var FinArch:cardinal; x:t_dato_alumnos);
-begin
-seek(archivoAlumno, FinArch);
-Write(archivoAlumno,x);
-end;
+PROCEDURE CARGARALUMNO(VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR FINARCH:CARDINAL; X:T_DATO_ALUMNOS);
+BEGIN
+SEEK(ARCHIVOALUMNO, FINARCH);
+WRITE(ARCHIVOALUMNO,X);
+END;
 
-procedure DarAltaAlumno (var archivoAlumno:t_archivo_alumnos; var x:t_dato_alumnos);
-var
-    FinArch:cardinal;
-begin
-    CargarDatosAlumno(x); 
-    FinArch:= FileSize(archivoAlumno);   // acá podriamos eliminar el finArch llamando al filesize del archivo nada mas
-    CargarAlumno(archivoAlumno, FinArch, x);
-end;
+PROCEDURE DARALTAALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR X:T_DATO_ALUMNOS);
+VAR
+    FINARCH:CARDINAL;
+BEGIN
+    CARGARDATOSALUMNO(X);
+    FINARCH:= FILESIZE(ARCHIVOALUMNO);
+    CARGARALUMNO(ARCHIVOALUMNO, FINARCH, X);
+END;
 
-procedure MuestraDatosAlumno(x:t_dato_alumnos);
-var
-    i:byte;
-begin
-  clrscr;
-  with x do
+PROCEDURE MUESTRADATOSALUMNO(X:T_DATO_ALUMNOS);
+VAR
+    I:BYTE;
+BEGIN
+  CLRSCR;
+  WITH X DO
     BEGIN
       GOTOXY(45,5);
       TEXTCOLOR(RED);
@@ -131,17 +131,17 @@ begin
       TEXTCOLOR (GREEN);
       WRITE('NUMERO DE LEGAJO: ');
       TEXTCOLOR(WHITE);
-      WRITE(num_legajo);
+      WRITE(NUM_LEGAJO);
       GOTOXY(45,9);
       TEXTCOLOR (GREEN);
       WRITE('NOMBRE Y APELLIDO: ');
       TEXTCOLOR(WHITE);
-      WRITE(apynom);
+      WRITE(APYNOM);
       GOTOXY(45,11);
       TEXTCOLOR (GREEN);
       WRITE('FECHA DE NACIMIENTO: ');
       TEXTCOLOR(WHITE);
-      WRITE(fecha_nac.dia,'/',fecha_nac.mes,'/',fecha_nac.anio);
+      WRITE(FECHA_NAC.DIA,'/',FECHA_NAC.MES,'/',FECHA_NAC.ANIO);
       GOTOXY(45,13);
       TEXTCOLOR (GREEN);
       WRITE('ESTADO: ');
@@ -152,247 +152,247 @@ begin
       WRITELN('DISCAPACIDAD/ES:');
       TEXTCOLOR(WHITE);
       GOTOXY(45,17);
-      WRITE('Problemas del habla y lenguaje: ');
+      WRITE('PROBLEMAS DEL HABLA Y LENGUAJE: ');
       TEXTCOLOR(GREEN);
       WRITELN(DISCAPACIDAD[1]);
       TEXTCOLOR(WHITE);
       GOTOXY(45,19);
-      WRITE('Dificultad para escribir: ');
+      WRITE('DIFICULTAD PARA ESCRIBIR: ');
       TEXTCOLOR(GREEN);
       WRITELN(DISCAPACIDAD[2]);
       TEXTCOLOR(WHITE);
       GOTOXY(45,21);
-      WRITE('Dificultades de aprendizaje visual: ');
+      WRITE('DIFICULTADES DE APRENDIZAJE VISUAL: ');
       TEXTCOLOR(GREEN);
       WRITELN(DISCAPACIDAD[3]);
       TEXTCOLOR(WHITE);
       GOTOXY(45,23);
-      WRITE('Memoria y otras dificultades del pensamiento: ');
+      WRITE('MEMORIA Y OTRAS DIFICULTADES DEL PENSAMIENTO: ');
       TEXTCOLOR(GREEN);
       WRITELN(DISCAPACIDAD[4]);
       TEXTCOLOR(WHITE);
       GOTOXY(45,25);
-      WRITE('Destrezas sociales inadecuadas: ');
+      WRITE('DESTREZAS SOCIALES INADECUADAS: ');
       TEXTCOLOR(GREEN);
       WRITELN(DISCAPACIDAD[5]);
     END;
-end;
+END;
 
-procedure ConsultaAlumnos(var raizapynom, raizlegajo: t_punt_arbol ; VAR archivoAlumno:t_archivo_alumnos);
-var
-  buscado: string;
-  pos: integer;
-  x: t_dato_alumnos;
-begin
-  clrscr;
-  gotoxy(47,10);
-  writeln('**CONSULTA ALUMNO POR APELLIDO Y NOMBRE**');
-  textcolor(green);
-  gotoxy(45,12);
-  write('INGRESE NOMBRE Y APELLIDO O LEGAJO DEL ALUMNO: ');
-  textcolor(white);
-  readln(buscado);
-  pos := Preorden(raizapynom, buscado);
-  if pos = -1 then
-      POS := PREORDEN(raizlegajo, buscado);
-  begin
-    seek(archivoAlumno, pos);
-    read(archivoAlumno, x);
-    MuestraDatosAlumno(x);
-  end;
-  readkey;
-  clrscr;
-end;
-
-
-
-procedure BajaAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
-var
-  buscado: string;
-  pos: integer;
-  x: t_dato_alumnos;
-begin
-  clrscr;
-  textcolor(white);
-  gotoxy(60,10);
-  writeln('**BAJA ALUMNO**');
-  textcolor(green);
-  gotoxy(45,12);
-  write('INGRESE APELLIDO Y NOMBRE O LEGAJO DEL ALUMNO: ');
-  textcolor(white);
-  readln(buscado);
-  pos := Preorden(raizapynom, buscado);
-  if pos = -1 then
-    POS := PREORDEN(raizlegajo, buscado);
-  begin
-    // Leer el registro del archivo de alumnos en la posición pos
-    seek(archivoAlumno, pos);
-    read(archivoAlumno, x);
-    
-    if not x.estado then
-      begin
-        gotoxy(45,14);
-        writeln('ALUMNO YA DADO DE BAJA')
-      end
-    else
-      begin
-        x.estado := false;
-        // Sobreescribir el registro en el archivo de alumnos
-        seek(archivoAlumno, pos);
-        write(archivoAlumno, x);
-        gotoxy(45,16);
-        writeln('ALUMNO DADO DE BAJA CORRECTAMENTE');
-      end;
-  end;
-  readkey;
-  clrscr;
-end;
-
-procedure ModificarAlumno(var raizapynom, raizlegajo: t_punt_arbol; var archivoAlumno: t_archivo_alumnos);
-var
-  buscado: string;
-  pos: integer;
-  x: t_dato_alumnos;
-  opcion: byte;
-  i: byte;
-  arb: t_dato_arbol;
-  disc:char;
-begin
-  clrscr;
-  gotoxy(60,10);
-  writeln('**MODIFICAR ALUMNO**');
-  textcolor(green);
-  gotoxy(45,12);
-  write('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
-  textcolor(white);
-  readln(buscado);
-  pos := Preorden(raizapynom, buscado);
-  if pos = -1 then
-    pos := Preorden(raizlegajo, buscado);
-  begin
-    // Leer el registro del archivo de alumnos en la posición pos
-    seek(archivoAlumno, pos);
-    read(archivoAlumno, x);
-    
-    // Mostrar los datos actuales del alumno
-    clrscr;
-    MuestraDatosAlumno(x);
-    readkey;
-    clrscr;
-    textcolor(red);
-    gotoxy(45,10);
-    writeln('QUE CAMPO DESEA MODIFICAR?');  //agregar opcion 0 que sea volver hacia atras
-    textcolor(green);
-    gotoxy(45,12);
-    write('1- ');
-    textcolor(white);
-    writeln('NOMBRE Y APELLIDO');
-    textcolor(green);
-    gotoxy(45,14);
-    write('2- ');
-    textcolor(white);
-    writeln('FECHA DE NACIMIENTO');
-    textcolor(green);
-    gotoxy(45,16);
-    write('3- ');
-    textcolor(white);
-    writeln('DISCAPACIDAD');
-    textcolor(green);
-    gotoxy(45,18);
-    write('4- ');
-    textcolor(white);
-    writeln('ESTADO');
-    textcolor(green);
-    gotoxy(45,20);
-    write('RESPUESTA: ');
-    textcolor(white);
-    readln(opcion);
-    case opcion of
-      1:
-        begin
-          clrscr;
-          textcolor(green);
-          gotoxy(45,10);
-          write('INGRESE NUEVO NOMBRE Y APELLIDO: ');
-          textcolor(white);
-          readln(x.apynom);
-          arb.clave := x.apynom;
-          AGREGAR_ARBOL(raizapynom, arb);
-        end;
-      2:
-        begin
-          clrscr;
-          textcolor(red);
-          gotoxy(45,10);
-          writeln('Ingrese Fecha de nacimiento. Ej: 08/09/2001');
-          textcolor(green);
-          gotoxy(45,12);
-          write('Ingrese dia: ');
-          textcolor(white);
-          readln(X.fecha_nac.dia);
-          textcolor(green);
-          gotoxy(45,14);
-          write('Ingrese mes: ');
-          textcolor(white);
-          readln(X.fecha_nac.mes);
-          textcolor(green);
-          gotoxy(45,16);
-          write('Ingrese año de nacimiento: ');
-          textcolor(white);
-          readln(X.fecha_nac.anio);
-        end;
-      3:
-        begin
-          clrscr;
-          gotoxy(45,10);
-          writeln('INGRESE DISCAPACIDAD: ');
-          textcolor(red);
-          gotoxy(45,12);
-          writeln('Oprima T si la tiene y F si no la tiene');
-            for i:= 1 to 5 do
-            begin
-                textcolor(green);
-                gotoxy(45,14);
-                write('Discapacidad ', i, ' :');
-                textcolor(white);
-                readln(disc);
-                if UpCase(disc) = 'T' then
-                X.discapacidad[i]:=true
-                else
-                X.discapacidad[i]:=false;
-            end;
-        end;
-      4:
-        begin
-          clrscr;
-          textcolor(red);
-          gotoxy(45,10);
-          writeln('SE CAMBIO EL ESTADO DEL ALUMNO');
-          x.estado := not x.estado;
-        end;
-    end;
-    
-    // Sobreescribir el registro en el archivo de alumnos
-    seek(archivoAlumno, pos);
-    write(archivoAlumno, x);
-    textcolor(white);
-    gotoxy(45,20);
-    writeln('ALUMNO MODIFICADO CORRECTAMENTE');
-  end;
-  readkey;
-  clrscr;
-end;
-
-PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR x: T_DATO_ALUMNOS);
-var
-  fecha:string;
+PROCEDURE CONSULTAALUMNOS(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL ; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS);
+VAR
+  BUSCADO: STRING;
+  POS: INTEGER;
+  X: T_DATO_ALUMNOS;
 BEGIN
-  fecha:=(IntToStr(x.fecha_nac.dia)) + ' / ' + (IntToStr(x.fecha_nac.mes)) + ' / ' + (IntToStr(x.fecha_nac.anio));
+  CLRSCR;
+  GOTOXY(47,10);
+  WRITELN('**CONSULTA ALUMNO POR APELLIDO Y NOMBRE**');
+  TEXTCOLOR(GREEN);
+  GOTOXY(45,12);
+  WRITE('INGRESE NOMBRE Y APELLIDO O LEGAJO DEL ALUMNO: ');
+  TEXTCOLOR(WHITE);
+  READLN(BUSCADO);
+  POS := PREORDEN(RAIZAPYNOM, BUSCADO);
+  IF POS = -1 THEN
+      POS := PREORDEN(RAIZLEGAJO, BUSCADO);
+  BEGIN
+    SEEK(ARCHIVOALUMNO, POS);
+    READ(ARCHIVOALUMNO, X);
+    MUESTRADATOSALUMNO(X);
+  END;
+  READKEY;
+  CLRSCR;
+END;
+
+
+
+PROCEDURE BAJAALUMNO(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS);
+VAR
+  BUSCADO: STRING;
+  POS: INTEGER;
+  X: T_DATO_ALUMNOS;
+BEGIN
+  CLRSCR;
+  TEXTCOLOR(WHITE);
+  GOTOXY(60,10);
+  WRITELN('**BAJA ALUMNO**');
+  TEXTCOLOR(GREEN);
+  GOTOXY(45,12);
+  WRITE('INGRESE APELLIDO Y NOMBRE O LEGAJO DEL ALUMNO: ');
+  TEXTCOLOR(WHITE);
+  READLN(BUSCADO);
+  POS := PREORDEN(RAIZAPYNOM, BUSCADO);
+  IF POS = -1 THEN
+    POS := PREORDEN(RAIZLEGAJO, BUSCADO);
+  BEGIN
+    // LEER EL REGISTRO DEL ARCHIVO DE ALUMNOS EN LA POSICIÓN POS
+    SEEK(ARCHIVOALUMNO, POS);
+    READ(ARCHIVOALUMNO, X);
+
+    IF NOT X.ESTADO THEN
+      BEGIN
+        GOTOXY(45,14);
+        WRITELN('ALUMNO YA DADO DE BAJA')
+      END
+    ELSE
+      BEGIN
+        X.ESTADO := FALSE;
+        // SOBREESCRIBIR EL REGISTRO EN EL ARCHIVO DE ALUMNOS
+        SEEK(ARCHIVOALUMNO, POS);
+        WRITE(ARCHIVOALUMNO, X);
+        GOTOXY(45,16);
+        WRITELN('ALUMNO DADO DE BAJA CORRECTAMENTE');
+      END;
+  END;
+  READKEY;
+  CLRSCR;
+END;
+
+PROCEDURE MODIFICARALUMNO(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS);
+VAR
+  BUSCADO: STRING;
+  POS: INTEGER;
+  X: T_DATO_ALUMNOS;
+  OPCION: BYTE;
+  I: BYTE;
+  ARB: T_DATO_ARBOL;
+  DISC:CHAR;
+BEGIN
+  CLRSCR;
+  GOTOXY(60,10);
+  WRITELN('**MODIFICAR ALUMNO**');
+  TEXTCOLOR(GREEN);
+  GOTOXY(45,12);
+  WRITE('INGRESE APELLIDO Y NOMBRE DEL ALUMNO: ');
+  TEXTCOLOR(WHITE);
+  READLN(BUSCADO);
+  POS := PREORDEN(RAIZAPYNOM, BUSCADO);
+  IF POS = -1 THEN
+    POS := PREORDEN(RAIZLEGAJO, BUSCADO);
+  BEGIN
+    // LEER EL REGISTRO DEL ARCHIVO DE ALUMNOS EN LA POSICIÓN POS
+    SEEK(ARCHIVOALUMNO, POS);
+    READ(ARCHIVOALUMNO, X);
+
+    // MOSTRAR LOS DATOS ACTUALES DEL ALUMNO
+    CLRSCR;
+    MUESTRADATOSALUMNO(X);
+    READKEY;
+    CLRSCR;
+    TEXTCOLOR(RED);
+    GOTOXY(45,10);
+    WRITELN('QUE CAMPO DESEA MODIFICAR?');  //AGREGAR OPCION 0 QUE SEA VOLVER HACIA ATRAS
+    TEXTCOLOR(GREEN);
+    GOTOXY(45,12);
+    WRITE('1- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('NOMBRE Y APELLIDO');
+    TEXTCOLOR(GREEN);
+    GOTOXY(45,14);
+    WRITE('2- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('FECHA DE NACIMIENTO');
+    TEXTCOLOR(GREEN);
+    GOTOXY(45,16);
+    WRITE('3- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('DISCAPACIDAD');
+    TEXTCOLOR(GREEN);
+    GOTOXY(45,18);
+    WRITE('4- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('ESTADO');
+    TEXTCOLOR(GREEN);
+    GOTOXY(45,20);
+    WRITE('RESPUESTA: ');
+    TEXTCOLOR(WHITE);
+    READLN(OPCION);
+    CASE OPCION OF
+      1:
+        BEGIN
+          CLRSCR;
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,10);
+          WRITE('INGRESE NUEVO NOMBRE Y APELLIDO: ');
+          TEXTCOLOR(WHITE);
+          READLN(X.APYNOM);
+          ARB.CLAVE := X.APYNOM;
+          AGREGAR_ARBOL(RAIZAPYNOM, ARB);
+        END;
+      2:
+        BEGIN
+          CLRSCR;
+          TEXTCOLOR(RED);
+          GOTOXY(45,10);
+          WRITELN('INGRESE FECHA DE NACIMIENTO. EJ: 08/09/2001');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,12);
+          WRITE('INGRESE DIA: ');
+          TEXTCOLOR(WHITE);
+          READLN(X.FECHA_NAC.DIA);
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE MES: ');
+          TEXTCOLOR(WHITE);
+          READLN(X.FECHA_NAC.MES);
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITE('INGRESE AÑO DE NACIMIENTO: ');
+          TEXTCOLOR(WHITE);
+          READLN(X.FECHA_NAC.ANIO);
+        END;
+      3:
+        BEGIN
+          CLRSCR;
+          GOTOXY(45,10);
+          WRITELN('INGRESE DISCAPACIDAD: ');
+          TEXTCOLOR(RED);
+          GOTOXY(45,12);
+          WRITELN('OPRIMA T SI LA TIENE Y F SI NO LA TIENE');
+            FOR I:= 1 TO 5 DO
+            BEGIN
+                TEXTCOLOR(GREEN);
+                GOTOXY(45,14);
+                WRITE('DISCAPACIDAD ', I, ' :');
+                TEXTCOLOR(WHITE);
+                READLN(DISC);
+                IF UPCASE(DISC) = 'T' THEN
+                X.DISCAPACIDAD[I]:=TRUE
+                ELSE
+                X.DISCAPACIDAD[I]:=FALSE;
+            END;
+        END;
+      4:
+        BEGIN
+          CLRSCR;
+          TEXTCOLOR(RED);
+          GOTOXY(45,10);
+          WRITELN('SE CAMBIO EL ESTADO DEL ALUMNO');
+          X.ESTADO := NOT X.ESTADO;
+        END;
+    END;
+
+    // SOBREESCRIBIR EL REGISTRO EN EL ARCHIVO DE ALUMNOS
+    SEEK(ARCHIVOALUMNO, POS);
+    WRITE(ARCHIVOALUMNO, X);
+    TEXTCOLOR(WHITE);
+    GOTOXY(45,20);
+    WRITELN('ALUMNO MODIFICADO CORRECTAMENTE');
+  END;
+  READKEY;
+  CLRSCR;
+END;
+
+PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR X: T_DATO_ALUMNOS);
+VAR
+  FECHA:STRING;
+BEGIN
+  FECHA:=(INTTOSTR(X.FECHA_NAC.DIA)) + ' / ' + (INTTOSTR(X.FECHA_NAC.MES)) + ' / ' + (INTTOSTR(X.FECHA_NAC.ANIO));
   WITH X DO
   BEGIN
-    WRITE(num_legajo:10, apynom:30, fecha:20, estado:10, discapacidad[1]:10, discapacidad[2]:10, discapacidad[3]:10, discapacidad[4]:10, discapacidad[5]:10);
+    WRITE(NUM_LEGAJO:10, APYNOM:28, FECHA:20, ESTADO:10, DISCAPACIDAD[1]:12, DISCAPACIDAD[2]:10, DISCAPACIDAD[3]:10, DISCAPACIDAD[4]:10, DISCAPACIDAD[5]:10);
     WRITELN;
   END;
 END;
 
-end.
+END.
