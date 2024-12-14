@@ -5,7 +5,7 @@ UNIT MANEJOEVAL;
 INTERFACE
 
 USES
-    CRT, ARCHIVOEVAL, UNITARBOL,SYSUTILS ;
+    CRT, ARCHIVOEVAL, UNITARBOL,SYSUTILS, VALIDACIONES ;
 
 PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL);
 PROCEDURE PASAR_DATOS_EVAL (VAR ARCH: T_ARCHIVO_EVAL; VAR RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL);
@@ -45,6 +45,7 @@ END;
 PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL);
 VAR
    I:BYTE;
+   FECHA:STRING;
 BEGIN
      CLRSCR;
      GOTOXY(50,10);
@@ -69,7 +70,33 @@ BEGIN
      WRITE('INGRESE AÑO DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.ANIO);
-     TEXTCOLOR(RED);
+     FECHA:=(INTTOSTR(X.FECHA_EVAL.DIA)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.MES)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.ANIO));
+           WHILE NOT  EsFechaValida(Fecha) DO
+           BEGIN
+             CLRSCR;
+             TEXTCOLOR(RED);
+             GOTOXY(45,10);
+             WRITELN('POR FAVOR REVISE LA COHERENCIA DE SUS DATOS INGRESADOR');
+             GOTOXY(45,12);
+             WRITELN('RECUERDE QUE NO PUEDE INGRESAR UNA FECHA POSTERIOR A LA DE HOY');
+           GOTOXY(45,14);
+           TEXTCOLOR(GREEN);
+           WRITE('INGRESE DIA DE EVALUACIÓN: ');
+           TEXTCOLOR(WHITE);
+           READLN(X.FECHA_EVAL.DIA);
+           TEXTCOLOR(GREEN);
+           GOTOXY(45,16);
+           WRITE('INGRESE MES DE EVALUACIÓN: ');
+           TEXTCOLOR(WHITE);
+           READLN(X.FECHA_EVAL.MES);
+           TEXTCOLOR(GREEN);
+           GOTOXY(45,18);
+           WRITE('INGRESE AÑO DE EVALUACIÓN: ');
+           TEXTCOLOR(WHITE);
+           READLN(X.FECHA_EVAL.ANIO);
+           FECHA:=(INTTOSTR(X.FECHA_EVAL.DIA)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.MES)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.ANIO));
+           END;
+
      GOTOXY(45,20);
      WRITELN('INGRESE LAS VALORACIONES: ');
      FOR I:=1 TO 5 DO
@@ -209,6 +236,13 @@ BEGIN
   WRITE('INGRESE FECHA DD/MM/AAAA: ');
   TEXTCOLOR(WHITE);
   READLN(FECHA);
+  WHILE NOT  EsFechaValida(Fecha) DO
+  begin
+       clrscr;
+       writeln('FECHA INGRESADA NO VALIDA. POR FAVOR REVISE SUS DATOS');
+       WRITE('NUEVA FECHA: ');
+       READLN(FECHA);
+  end;
   POS := BUSCAREVALUACION(RAIZLEGAJO,ARCHIVOEVAL,LEGAJO,FECHA);
   IF POS = -1 THEN
     BEGIN
@@ -257,10 +291,54 @@ BEGIN
           BEGIN
             CLRSCR;
             TEXTCOLOR(GREEN);
-            GOTOXY(42,12);
+            GOTOXY(40,12);
             WRITE('INGRESE LA NUEVA FECHA DE LA EVALUACION (DD/MM/AAAA): ');
             TEXTCOLOR(WHITE);
-            READLN(X.FECHA_EVAL.DIA, X.FECHA_EVAL.MES, X.FECHA_EVAL.ANIO);    //BREAK
+            GOTOXY(92,12);
+            WRITE();
+            GOTOXY(94,12);
+            READ(X.FECHA_EVAL.DIA);
+            GOTOXY(96,12);
+            TEXTCOLOR(GREEN);
+            WRITE('/');
+            GOTOXY(98,12);
+            TEXTCOLOR(WHITE);
+            READ(X.FECHA_EVAL.MES);
+            GOTOXY(100,12);
+            TEXTCOLOR(GREEN);
+            WRITE('/');
+            TEXTCOLOR(WHITE);
+            READ(X.FECHA_EVAL.ANIO);
+            FECHA:=(INTTOSTR(X.FECHA_EVAL.DIA)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.MES)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.ANIO));
+           WHILE NOT  EsFechaValida(Fecha) DO
+           BEGIN
+             CLRSCR;
+             TEXTCOLOR(RED);
+             GOTOXY(40,10);
+             WRITELN('POR FAVOR REVISE LA COHERENCIA DE SUS DATOS INGRESADOR');
+             GOTOXY(40,12);
+             WRITELN('RECUERDE QUE NO PUEDE INGRESAR UNA FECHA POSTERIOR A LA DE HOY');
+             GOTOXY(40,14);
+             TEXTCOLOR(GREEN);
+             WRITE('INGRESE LA NUEVA FECHA DE LA EVALUACION (DD/MM/AAAA): ');
+             TEXTCOLOR(WHITE);
+              GOTOXY(92,14);
+              WRITE();
+              GOTOXY(94,14);
+              READ(X.FECHA_EVAL.DIA);
+              GOTOXY(96,14);
+              TEXTCOLOR(GREEN);
+              WRITE('/');
+              GOTOXY(98,14);
+              TEXTCOLOR(WHITE);
+              READ(X.FECHA_EVAL.MES);
+              GOTOXY(100,14);
+              TEXTCOLOR(GREEN);
+              WRITE('/');
+              TEXTCOLOR(WHITE);
+              READ(X.FECHA_EVAL.ANIO);
+           FECHA:=(INTTOSTR(X.FECHA_EVAL.DIA)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.MES)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.ANIO));
+           END;
           END;
           2:
           BEGIN
