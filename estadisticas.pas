@@ -1,18 +1,20 @@
-  unit estadisticas;
+  UNIT ESTADISTICAS;
 
   {$CODEPAGE UTF8}
 
-  interface
+  INTERFACE
 
-  uses
-    Crt, SysUtils, ARCHIVOEVAL;
+  USES
+    CRT, SYSUTILS, ARCHIVOEVAL;
 
-  procedure evaluacionesPorFecha(var ARCHIVOEVAL:T_ARCHIVO_EVAL);
+  PROCEDURE EVALUACIONESPORFECHA(VAR ARCHIVOEVAL:T_ARCHIVO_EVAL);
   FUNCTION CONVERTIR_FECHA(X:STRING):INTEGER;
-  function cantidad_evaluaciones_por_fecha (var archivoEval:t_archivo_eval; FF,FI:INTEGER):integer;
-  PROCEDURE compararValoracionesPorFecha(var archivoEval: T_ARCHIVO_EVAL);
+  FUNCTION CANTIDAD_EVALUACIONES_POR_FECHA (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; FF,FI:INTEGER):INTEGER;
+  PROCEDURE COMPARARVALORACIONESPORFECHA(VAR ARCHIVOEVAL: T_ARCHIVO_EVAL);
+  PROCEDURE MOSTRARRESULTADO(FECHAINICIO, FECHAFIN: STRING; MAXSUMATORIA, MAXVALORACION: INTEGER);
+  PROCEDURE OBTENERSUMATORIAS(VAR ARCHIVOEVAL: T_ARCHIVO_EVAL; FECHAINICIO, FECHAFIN: STRING; VAR SUMATORIAS: ARRAY OF INTEGER);
 
-  implementation
+  IMPLEMENTATION
   FUNCTION CONVERTIR_FECHA(X:STRING):INTEGER; //CONVIERTE LAS FECHAS DE FORMATO DD/MM/AAAA A N° DE DIAS
     VAR D,M,A:INTEGER;
     BEGIN
@@ -22,100 +24,130 @@
       CONVERTIR_FECHA:= ((A*365)+(M*30)+D);
     END;
 
-  function cantidad_evaluaciones_por_fecha (var archivoEval:t_archivo_eval; FF,FI:INTEGER):integer;
-  var
-     x:t_dato_eval;
-     cont,fechaendias,I:integer;
-     fecha:string;
-     begin
-       cont:=0;
-        for i:=0 to FileSize(archivoEval)-1 do
-            begin
-            seek(archivoEval,i);
-            read(archivoEval,x);
+  FUNCTION CANTIDAD_EVALUACIONES_POR_FECHA (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; FF,FI:INTEGER):INTEGER;
+  VAR
+     X:T_DATO_EVAL;
+     CONT,FECHAENDIAS,I:INTEGER;
+     FECHA:STRING;
+     BEGIN
+       CONT:=0;
+        FOR I:=0 TO FILESIZE(ARCHIVOEVAL)-1 DO
+            BEGIN
+            SEEK(ARCHIVOEVAL,I);
+            READ(ARCHIVOEVAL,X);
              FECHA:=(INTTOSTR(X.FECHA_EVAL.DIA))+'/'+(INTTOSTR(X.FECHA_EVAL.MES))+'/'+(INTTOSTR(X.FECHA_EVAL.ANIO));
-             FechaEnDias:=CONVERTIR_FECHA(FECHA);
+             FECHAENDIAS:=CONVERTIR_FECHA(FECHA);
              IF (FECHAENDIAS>=FI) AND (FF>=FECHAENDIAS) THEN
-                cont:=cont+1;
+                CONT:=CONT+1;
 
-     end;
-        cantidad_evaluaciones_por_fecha:=cont;
-     end;
+     END;
+        CANTIDAD_EVALUACIONES_POR_FECHA:=CONT;
+     END;
 
-  procedure evaluacionesPorFecha(var ARCHIVOEVAL:T_ARCHIVO_EVAL);
-  var
-     cont:integer;
-     fecha_inicio,fecha_fin:string;
+  PROCEDURE EVALUACIONESPORFECHA(VAR ARCHIVOEVAL:T_ARCHIVO_EVAL);
+  VAR
+     CONT:INTEGER;
+     FECHA_INICIO,FECHA_FIN:STRING;
      FI,FF:INTEGER;
-     begin
-       writeln('Ingrese fecha de inicio DD/MM/AAAA');
-       readln(fecha_inicio);
-       FI:=CONVERTIR_FECHA(Fecha_inicio);
-       writeln('Ingrese fecha de fin DD/MM/AAAA');
-       readln(fecha_fin);
-       FF:= CONVERTIR_FECHA(Fecha_fin);
-       cont:=CANTIDAD_EVALUACIONES_POR_FECHA(ARCHIVOEVAL,FF,FI);
-       writeln('La cantidad de evaluaciones realizadadas entre: ', fecha_inicio, ' y ', fecha_fin,' fueron de: ', cont);
+     BEGIN
+       WRITELN('INGRESE FECHA DE INICIO DD/MM/AAAA');
+       READLN(FECHA_INICIO);
+       FI:=CONVERTIR_FECHA(FECHA_INICIO);
+       WRITELN('INGRESE FECHA DE FIN DD/MM/AAAA');
+       READLN(FECHA_FIN);
+       FF:= CONVERTIR_FECHA(FECHA_FIN);
+       CONT:=CANTIDAD_EVALUACIONES_POR_FECHA(ARCHIVOEVAL,FF,FI);
+       WRITELN('LA CANTIDAD DE EVALUACIONES REALIZADADAS ENTRE: ', FECHA_INICIO, ' Y ', FECHA_FIN,' FUERON DE: ', CONT);
 
-     end;
+     END;
 
-  FUNCTION ObtenerNombreDiscapacidad(valoracion: INTEGER): STRING;
+  FUNCTION OBTENERNOMBREDISCAPACIDAD(VALORACION: INTEGER): STRING;
   BEGIN
-    CASE valoracion OF
-      1: ObtenerNombreDiscapacidad := 'Problemas del habla y lenguaje';
-      2: ObtenerNombreDiscapacidad := 'Dificultad para escribir';
-      3: ObtenerNombreDiscapacidad := 'Dificultades de aprendizaje visual';
-      4: ObtenerNombreDiscapacidad := 'Memoria y otras dificultades del pensamiento';
-      5: ObtenerNombreDiscapacidad := 'Destrezas sociales inadecuadas';
+    CASE VALORACION OF
+      1: OBTENERNOMBREDISCAPACIDAD := 'PROBLEMAS DEL HABLA Y LENGUAJE';
+      2: OBTENERNOMBREDISCAPACIDAD := 'DIFICULTAD PARA ESCRIBIR';
+      3: OBTENERNOMBREDISCAPACIDAD := 'DIFICULTADES DE APRENDIZAJE VISUAL';
+      4: OBTENERNOMBREDISCAPACIDAD := 'MEMORIA Y OTRAS DIFICULTADES DEL PENSAMIENTO';
+      5: OBTENERNOMBREDISCAPACIDAD := 'DESTREZAS SOCIALES INADECUADAS';
   END;
-  end;
+  END;
 
-  PROCEDURE compararValoracionesPorFecha(var archivoEval: T_ARCHIVO_EVAL);
-VAR
-  sumatorias: ARRAY[1..5] OF INTEGER;
-  fechaInicioDias, fechaFinDias, i, j, fechaEnDias, maxSumatoria, maxValoracion: INTEGER;
-  x: T_DATO_EVAL;
-  fechaInicio, fechaFin, fecha,maxDiscapacidad: STRING ;
+  PROCEDURE MOSTRARRESULTADO(FECHAINICIO, FECHAFIN: STRING; MAXSUMATORIA, MAXVALORACION: INTEGER);
 BEGIN
-  maxSumatoria := 0;
-  maxValoracion := 0;
-
-  writeln('Ingrese fecha de inicio DD/MM/AAAA');
-  readln(fechaInicio);
-  writeln('Ingrese fecha de fin DD/MM/AAAA');
-  readln(fechaFin);
-
-  fechaInicioDias := CONVERTIR_FECHA(fechaInicio);
-  fechaFinDias := CONVERTIR_FECHA(fechaFin);
-
-  FOR j := 1 TO 5 DO
-    sumatorias[j] := 0;
-
-  FOR i := 0 TO FileSize(archivoEval) - 1 DO
-  BEGIN
-    SEEK(archivoEval, i);
-    READ(archivoEval, x);
-
-    fecha := (INTTOSTR(x.FECHA_EVAL.DIA)) + '/' + (INTTOSTR(x.FECHA_EVAL.MES)) + '/' + (INTTOSTR(x.FECHA_EVAL.ANIO));
-    fechaEnDias := CONVERTIR_FECHA(fecha);
-
-    IF (fechaEnDias >= fechaInicioDias) AND (fechaEnDias <= fechaFinDias) THEN
-    BEGIN
-      FOR j := 1 TO 5 DO
-        sumatorias[j] := sumatorias[j] + x.VALORACION[j];
-    END;
-  END;
-
-  FOR j := 1 TO 5 DO       // Encontrar la valoración con la mayor sumatoria
-  BEGIN
-    IF sumatorias[j] > maxSumatoria THEN
-    BEGIN
-      maxSumatoria := sumatorias[j];
-      maxValoracion := j;
-    END;
-  END;
-
-  WRITELN('La valoración con la mayor sumatoria entre ', fechaInicio, ' y ', fechaFin, ' es la discapacidad: ', ObtenerNombreDiscapacidad(maxValoracion) , ' con una sumatoria de ', maxSumatoria);
+  IF MAXVALORACION <> 0 THEN
+  WRITELN('LA VALORACIÓN CON LA MAYOR SUMATORIA ENTRE ', FECHAINICIO, ' Y ', FECHAFIN, ' ES LA DE LA DIFICULTAD ', OBTENERNOMBREDISCAPACIDAD(MAXVALORACION), ' CON UNA SUMATORIA DE ', MAXSUMATORIA)
+  ELSE
+      WRITELN('NO ES POSIBLE DETERMINAR LA MAYOR VALUACION PARA UNA DIFICULTAD ENTRE LAS FECHAS INGRESADAS');
 END;
 
-  end.
+  PROCEDURE ENCONTRARMAXSUMATORIA(SUMATORIAS: ARRAY OF INTEGER; VAR MAXSUMATORIA, MAXVALORACION: INTEGER);
+VAR
+  J: INTEGER;
+BEGIN
+  MAXSUMATORIA := 0;
+  MAXVALORACION := 0;
+  FOR J := 1 TO 5 DO
+  BEGIN
+    IF SUMATORIAS[J] > MAXSUMATORIA THEN
+    BEGIN
+      MAXSUMATORIA := SUMATORIAS[J];
+      MAXVALORACION := J;
+    END;
+  END;
+END;
+
+  PROCEDURE COMPARARVALORACIONESPORFECHA(VAR ARCHIVOEVAL: T_ARCHIVO_EVAL);
+VAR
+  SUMATORIAS: ARRAY[1..5] OF INTEGER;
+  FECHAINICIODIAS, FECHAFINDIAS, I, J, FECHAENDIAS, MAXSUMATORIA, MAXVALORACION: INTEGER;
+  X: T_DATO_EVAL;
+  FECHAINICIO, FECHAFIN, FECHA,MAXDISCAPACIDAD: STRING ;
+BEGIN
+  MAXSUMATORIA := 0;
+  MAXVALORACION := 0;
+
+  WRITELN('INGRESE FECHA DE INICIO DD/MM/AAAA');
+  READLN(FECHAINICIO);
+  WRITELN('INGRESE FECHA DE FIN DD/MM/AAAA');
+  READLN(FECHAFIN);
+
+  OBTENERSUMATORIAS( ARCHIVOEVAL, FECHAINICIO, FECHAFIN,  SUMATORIAS);
+
+  ENCONTRARMAXSUMATORIA(SUMATORIAS, MAXSUMATORIA, MAXVALORACION);
+
+  MOSTRARRESULTADO(FECHAINICIO, FECHAFIN, MAXSUMATORIA, MAXVALORACION);
+END;
+
+  PROCEDURE OBTENERSUMATORIAS(VAR ARCHIVOEVAL: T_ARCHIVO_EVAL; FECHAINICIO, FECHAFIN: STRING; VAR SUMATORIAS: ARRAY OF INTEGER);
+VAR
+  FECHAINICIODIAS, FECHAFINDIAS: INTEGER;
+  I, J: INTEGER;
+  X: T_DATO_EVAL;
+  FECHA: STRING;
+  FECHAENDIAS: INTEGER;
+BEGIN
+  FECHAINICIODIAS := CONVERTIR_FECHA(FECHAINICIO);
+  FECHAFINDIAS := CONVERTIR_FECHA(FECHAFIN);
+
+  FOR J := 1 TO 5 DO
+    SUMATORIAS[J] := 0;
+
+  FOR I := 0 TO FILESIZE(ARCHIVOEVAL) - 1 DO
+  BEGIN
+    SEEK(ARCHIVOEVAL, I);
+    READ(ARCHIVOEVAL, X);
+
+    FECHA := (INTTOSTR(X.FECHA_EVAL.DIA)) + '/' + (INTTOSTR(X.FECHA_EVAL.MES)) + '/' + (INTTOSTR(X.FECHA_EVAL.ANIO));
+    FECHAENDIAS := CONVERTIR_FECHA(FECHA);
+
+    IF (FECHAENDIAS >= FECHAINICIODIAS) AND (FECHAENDIAS <= FECHAFINDIAS) THEN
+    BEGIN
+      // SUMAR VALORACIONES
+      FOR J := 1 TO 5 DO
+        SUMATORIAS[J] := SUMATORIAS[J] + X.VALORACION[J];
+    END;
+  END;
+END;
+
+
+  END.
