@@ -31,6 +31,7 @@ VAR
 BEGIN
   SEEK(ARCH, POS);
   READ(ARCH, X);
+  if x.estado then
   MUESTRA_REGISTRO_POR_TABLA(X);
 END;
 
