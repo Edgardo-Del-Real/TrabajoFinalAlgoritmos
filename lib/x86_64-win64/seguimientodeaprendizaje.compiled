@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1449427374"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -l -vewnhibq -FiC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\lib\x86_64-win64 -FuC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\ -FUC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\lib\x86_64-win64\ -FEC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\ -oC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\seguimientodeaprendizaje.exe seguimientodeaprendizaje.lpr"/>
+</CONFIG>
