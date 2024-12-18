@@ -46,6 +46,7 @@ PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL);
 VAR
    I:BYTE;
    FECHA:STRING;
+   VALORACION:INTEGER;
 BEGIN
      CLRSCR;
      GOTOXY(50,10);
@@ -96,16 +97,37 @@ BEGIN
            READLN(X.FECHA_EVAL.ANIO);
            FECHA:=(INTTOSTR(X.FECHA_EVAL.DIA)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.MES)) + ' / ' + (INTTOSTR(X.FECHA_EVAL.ANIO));
            END;
-
+                              
      GOTOXY(45,20);
      WRITELN('INGRESE LAS VALORACIONES: ');
      FOR I:=1 TO 5 DO
        BEGIN
-         TEXTCOLOR(GREEN);
-         GOTOXY(45,22);
-         WRITE('VALORACIÓN ', I, ': ');
-         TEXTCOLOR(WHITE);
-         READLN(X.VALORACION[I]);
+          CLRSCR;
+          VALORACION := 0;
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITELN('EN UNA ESCALA DEL 1 AL 4, INGRESE EL VALOR ADECUADO A LA DISCAPACIDAD');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITELN('DONDE 1 ES EL VALOR MÍNIMO Y 4 EL MÁXIMO');
+          GOTOXY(45,22);
+          WRITE('VALORACIÓN ', I, ': ');
+          TEXTCOLOR(WHITE);
+          READLN(VALORACION);
+          WHILE (VALORACION < 1) OR (VALORACION > 4) DO
+          BEGIN
+            CLRSCR;
+            TEXTCOLOR(RED);
+            GOTOXY(45,10);
+            WRITELN('POR FAVOR REVISE LA COHERENCIA DE SUS DATOS INGRESADOR');
+            GOTOXY(45,12);
+            WRITELN('RECUERDE QUE EL VALOR DEBE ESTAR ENTRE 1 Y 4');
+            GOTOXY(45,22);
+            WRITE('VALORACIÓN ', I, ': ');
+            TEXTCOLOR(WHITE);
+            READLN(VALORACION);
+          END;
+          X.VALORACION[I] := VALORACION;
        END;
      TEXTCOLOR(GREEN);
      GOTOXY(45,24);
