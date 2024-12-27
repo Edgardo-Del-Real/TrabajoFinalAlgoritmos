@@ -5,7 +5,7 @@ INTERFACE
 USES
   CRT;
 CONST
-  RUTA = 'C:\Users\lucia\OneDrive\Escritorio.DAT';
+  RUTA = 'D:\Martin\Escritorio.DAT';
 TYPE
   T_FECHA = RECORD
     DIA:1..31;

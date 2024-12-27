@@ -1,40 +1,47 @@
-UNIT archivoEval;
+UNIT ARCHIVOEVAL;
 {$CODEPAGE UTF8}
 
 INTERFACE
-USES
-  crt;
-CONST
-    RUTA='C:\Users\GAMER\Desktop.dat';
-TYPE
-  t_fecha = record
-    dia:string[2];
-    mes:string[2];
-    anio:byte;
-  end;
-  t_dato_eval = record
-    num_legajo:string[8];
-    fecha_eval:t_fecha;
-    valSegDif: array [1..5] of integer;
-    obs:string[255];
-  end;
-  t_archivo_eval = file of t_dato_eval;
 
-Procedure crear_abrir2 (VAR arch:t_archivo_eval);
-Procedure cerrar2 (VAR arch:t_archivo_eval);
+USES
+  CRT;
+
+CONST
+    RUTA = 'C:\Users\lucia\OneDrive\Escritorio\TrabajoFinalAlgoritmos - copia.DAT';
+
+TYPE
+  T_FECHA = RECORD
+    DIA:1..31;
+    MES:1..12;
+    ANIO:WORD;
+  END;
+
+  T_DATO_EVAL = RECORD
+    NUM_LEGAJO:STRING[8];
+    FECHA_EVAL:T_FECHA;
+    VALORACION: ARRAY [1..5] OF INTEGER;
+    OBS:STRING[255];
+  END;
+
+  T_ARCHIVO_EVAL = FILE OF T_DATO_EVAL;
+
+PROCEDURE CREAR_ABRIR2 (VAR ARCH:T_ARCHIVO_EVAL);
+PROCEDURE CERRAR2 (VAR ARCH:T_ARCHIVO_EVAL);
 
 IMPLEMENTATION
-Procedure crear_abrir2 (VAR arch:t_archivo_eval);
-begin
-    assign(arch, ruta);
+
+PROCEDURE CREAR_ABRIR2 (VAR ARCH:T_ARCHIVO_EVAL);
+BEGIN
+    ASSIGN(ARCH, RUTA);
     {$I-}
-    reset(arch);
+    RESET(ARCH);
     {$I+}
-    {If ioresult<>0 then
-        rewrite(arch);}
-end;
-Procedure cerrar2 (VAR arch:t_archivo_eval);
-begin
-    close(arch);
-end;
-end.
+    IF IORESULT<>0 THEN
+        REWRITE(ARCH);
+END;
+
+PROCEDURE CERRAR2 (VAR ARCH:T_ARCHIVO_EVAL);
+BEGIN
+    CLOSE(ARCH);
+END;
+END.

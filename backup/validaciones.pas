@@ -5,7 +5,7 @@ unit VALIDACIONES;
 interface
 
 uses
-CRT, SYSUTILS, unitarbol;
+CRT, SYSUTILS;
 function EsFechaValida(FechaStr: string): Boolean;
 function EsCadena(input: string): boolean;
 //PROCEDURE VALIDACION_CLAVE(VAR RESPUESTA,BUSCADO: STRING; VAR POS: INTEGER;RAIZLEGAJO, RAIZAPYNOM: T_PUNT_ARBOL);

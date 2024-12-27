@@ -7,7 +7,7 @@ USES
   CRT;
 
 CONST
-    RUTA = 'C:\Users\lucia\OneDrive\Escritorio\TrabajoFinalAlgoritmos - copia.DAT';
+    RUTA = 'C:\TPFinal\TPFINAL2\TrabajoFinalAlgoritmos.DAT';
 
 TYPE
   T_FECHA = RECORD

@@ -100,7 +100,7 @@ BEGIN
                               
      GOTOXY(45,20);
      WRITELN('INGRESE LAS VALORACIONES: ');
-     FOR I:=1 TO 5 DO                                 //esto hay que validar
+     FOR I:=1 TO 5 DO
        BEGIN
           CLRSCR;
           VALORACION := 0;
@@ -399,7 +399,7 @@ BEGIN
             WRITE('INGRESE LA NUEVA VALORACION (1-5): ');
             FOR I:= 1 TO 5 DO
               TEXTCOLOR(WHITE);
-              READLN(X.VALORACION[I]);       //reveer esto, hacer que solo se modifique 1 por vez y si esta disponible.
+              READLN(X.VALORACION[I]);
           END;
           3:
           BEGIN
