@@ -13,6 +13,9 @@ PROCEDURE MOSTRAR_REGISTRO_POR_POSICION(VAR ARCH:T_ARCHIVO_ALUMNOS; POS: WORD);
 PROCEDURE LISTADO_POR_ENFERMEDAD (VAR ARCH:T_ARCHIVO_ALUMNOS);
 PROCEDURE CONSULTAEVALDEALUMNO(VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
 PROCEDURE MOSTRAR_ENCABEZADO_TABLA_ARCHIVO;
+procedure inorden_apynom(var RAIZ: T_PUNT_ARBOL; var ARCH:T_ARCHIVO_ALUMNOS; var y:integer);
+procedure recuperar_alumno(var ARCH:T_ARCHIVO_ALUMNOS;pos:integer;var X:T_DATO_ALUMNOS);
+procedure generar_arbol(var raiz:t_punt_arbol;var ARCH:T_ARCHIVO_ALUMNOS);
 
 IMPLEMENTATION
 
@@ -40,6 +43,7 @@ BEGIN
   IF RAIZ <> NIL THEN
   BEGIN
     MOSTRAR_EN_ORDEN(ARCH, RAIZ^.SAI);
+    RESET(ARCH);
     MOSTRAR_REGISTRO_POR_POSICION(ARCH, RAIZ^.INFO.POSARCH);
     MOSTRAR_EN_ORDEN(ARCH, RAIZ^.SAD);
   END;
@@ -53,6 +57,49 @@ MOSTRAR_EN_ORDEN(ARCH,RAIZAPYNOM);
 READKEY;
 CLRSCR;
 END;
+
+
+procedure inorden_apynom(var RAIZ: T_PUNT_ARBOL; var ARCH:T_ARCHIVO_ALUMNOS; var y:integer);
+var
+  X:T_DATO_ALUMNOS;
+begin
+  if raiz <> nil then
+  begin
+    inorden_apynom(raiz^.sai,ARCH,y);
+    recuperar_alumno(ARCH,raiz^.info.POSARCH,X);
+
+    if x.estado then
+    MUESTRA_REGISTRO_POR_TABLA (X);
+
+    inorden_apynom(raiz^.sad,ARCH,y);
+  end;
+end;
+
+procedure recuperar_alumno(var ARCH:T_ARCHIVO_ALUMNOS;pos:integer;var X:T_DATO_ALUMNOS);
+begin
+  //reset(ARCH);
+  seek(ARCH,pos);
+  read(ARCH,X);
+  //close(ARCH);
+end;
+
+procedure generar_arbol(var raiz:t_punt_arbol;var ARCH:T_ARCHIVO_ALUMNOS);
+var
+  x:T_DATO_ALUMNOS;
+  E:t_dato_arbol;
+begin
+  crear_arbol(raiz);
+  //reset(ARCH);
+  seek(ARCH,0);
+  while (not EOF(ARCH)) do
+  begin
+    read(ARCH,x);
+    E.clave:=x.APYNOM;
+    E.POSARCH:=(filepos(ARCH)-1);
+    agregar_arbol(raiz,E);
+  end;
+  //close(ARCH);
+end;
 
 
 PROCEDURE LISTADO_POR_ENFERMEDAD (VAR ARCH:T_ARCHIVO_ALUMNOS);
