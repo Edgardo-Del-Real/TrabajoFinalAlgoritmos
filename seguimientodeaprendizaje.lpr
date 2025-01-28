@@ -7,7 +7,8 @@ begin
 
 
    {
-          1) unificar los metodos de las fechas
+
+          1)falta validar fecha de opcion 2 de estadisticas
           2) validar para cargar evaluaciones solo para discapacidades existentes
           3) manejo de pantalla
           4) agregar al arbol ni bien se da de alta un alumno   (PREGUNTAR PROFE)

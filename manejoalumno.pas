@@ -88,7 +88,9 @@ BEGIN
         WRITE('INGRESE NOMBRE Y APELLIDO: ');
         TEXTCOLOR(WHITE);
         READLN(APYNOM);
+        apynom:=upCase(apynom);
         TEXTCOLOR(RED);
+
 
         while not EsCadena(APYNOM) do
         begin
@@ -101,6 +103,7 @@ BEGIN
             WRITE('INGRESE NOMBRE Y APELLIDO: ');
             TEXTCOLOR(WHITE);
             READLN(APYNOM);
+            apynom:=upCase(apynom);
         end;
 
         TEXTCOLOR(RED);
@@ -121,9 +124,9 @@ BEGIN
         WRITE('INGRESE AÑO DE NACIMIENTO: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.ANIO);
-        FECHA:=(INTTOSTR(X.FECHA_NAC.DIA)) + ' / ' + (INTTOSTR(X.FECHA_NAC.MES)) + ' / ' + (INTTOSTR(X.FECHA_NAC.ANIO));
+        FECHA:=(X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
 
-              while not EsFechaValida(fecha) do
+              while not EsFechaValida(fecha) and ((EsNumero(FECHA_NAC.DIA) and (EsNumero(FECHA_NAC.MES) and (EsNumero(FECHA_NAC.ANIO))))) do
               begin
               CLRSCR;
               TEXTCOLOR(RED);
@@ -146,7 +149,7 @@ BEGIN
               WRITE('INGRESE AÑO DE NACIMIENTO: ');
               TEXTCOLOR(WHITE);
               READLN(FECHA_NAC.ANIO);
-              FECHA:=(INTTOSTR(X.FECHA_NAC.DIA)) + ' / ' + (INTTOSTR(X.FECHA_NAC.MES)) + ' / ' + (INTTOSTR(X.FECHA_NAC.ANIO));
+              FECHA:=(X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
               end;
 
 
@@ -366,7 +369,7 @@ BEGIN
     MUESTRADATOSALUMNO(X);
     TEXTCOLOR(RED);
     GOTOXY(80,10);
-    WRITELN('QUE CAMPO DESEA MODIFICAR?');  //AGREGAR OPCION 0 QUE SEA VOLVER HACIA ATRAS
+    WRITELN('QUE CAMPO DESEA MODIFICAR?');
     TEXTCOLOR(GREEN);
     GOTOXY(75,12);
     WRITE('1- ');
@@ -410,7 +413,7 @@ BEGIN
         end;
         END;
       2:
-        BEGIN
+        BEGIN         //FALTA VALIDAR
           CLRSCR;
           TEXTCOLOR(RED);
           GOTOXY(45,10);
@@ -478,7 +481,7 @@ PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR X: T_DATO_ALUMNOS);
 VAR
   FECHA:STRING;
 BEGIN
-  FECHA:=(INTTOSTR(X.FECHA_NAC.DIA)) + ' / ' + (INTTOSTR(X.FECHA_NAC.MES)) + ' / ' + (INTTOSTR(X.FECHA_NAC.ANIO));
+  FECHA:=(X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
   WITH X DO
   BEGIN
     WRITE(NUM_LEGAJO:10, APYNOM:28, FECHA:20, ESTADO:10, DISCAPACIDAD[1]:12, DISCAPACIDAD[2]:10, DISCAPACIDAD[3]:10, DISCAPACIDAD[4]:10, DISCAPACIDAD[5]:10);

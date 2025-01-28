@@ -7,13 +7,13 @@ USES
   CRT;
 
 CONST
-    RUTA = 'C:\TPFinal\TPFINAL2\TrabajoFinalAlgoritmos.DAT';
+    RUTA = 'C:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos.DAT';
 
 TYPE
   T_FECHA = RECORD
-    DIA:1..31;
-    MES:1..12;
-    ANIO:WORD;
+    DIA:string[2];
+    MES:string[2];
+    ANIO:string[4];
   END;
 
   T_DATO_EVAL = RECORD

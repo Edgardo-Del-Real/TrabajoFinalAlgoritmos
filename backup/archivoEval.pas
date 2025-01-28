@@ -7,12 +7,12 @@ USES
   CRT;
 
 CONST
-    RUTA = 'C:\Users\lucia\OneDrive\Escritorio\TrabajoFinalAlgoritmos - copia.DAT';
+    RUTA = 'C:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos.DAT';
 
 TYPE
   T_FECHA = RECORD
-    DIA:1..31;
-    MES:1..12;
+    DIA:string;
+    MES:string;
     ANIO:WORD;
   END;
 

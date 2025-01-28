@@ -5,12 +5,12 @@ INTERFACE
 USES
   CRT;
 CONST
-  RUTA = 'C:\Users\lucia\OneDrive\Escritorio.DAT';
+  RUTA = 'C:\Users\GAMER\Desktop.DAT';
 TYPE
   T_FECHA = RECORD
-    DIA:1..31;
-    MES:1..12;
-    ANIO:WORD;
+    DIA:string;
+    MES:string;
+    ANIO:string;
   END;
   T_DATO_ALUMNOS = RECORD
     NUM_LEGAJO:STRING[8];
