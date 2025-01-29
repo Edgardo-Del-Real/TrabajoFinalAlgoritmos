@@ -57,7 +57,7 @@ END;
 
 PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS);
 VAR
-    DISC:CHAR;
+    DISC:string;
     I:BYTE;
     FECHA:STRING;
 BEGIN
@@ -106,6 +106,7 @@ BEGIN
             apynom:=upCase(apynom);
         end;
 
+        repeat
         TEXTCOLOR(RED);
         GOTOXY(45,16);
         WRITELN('INGRESE FECHA DE NACIMIENTO. EJ: 08/09/2001');
@@ -114,58 +115,99 @@ BEGIN
         WRITE('INGRESE DIA: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.DIA);
+          while not(EsNumero(FECHA_NAC.DIA)) do
+          begin
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,18);
+          WRITE('INGRESE EL DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(FECHA_NAC.DIA);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
         TEXTCOLOR(GREEN);
         GOTOXY(45,20);
         WRITE('INGRESE MES: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.MES);
+         while not(EsNumero(FECHA_NAC.MES)) do
+          begin
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,20);
+          WRITE('INGRESE EL MES: ');
+          TEXTCOLOR(WHITE);
+          readln(FECHA_NAC.MES);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
         TEXTCOLOR(GREEN);
         GOTOXY(45,22);
         WRITE('INGRESE AÑO DE NACIMIENTO: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.ANIO);
+
+          while not(EsNumero(FECHA_NAC.ANIO)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,22);
+          WRITE('INGRESE EL AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(FECHA_NAC.ANIO);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
         FECHA:=(X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
 
-              while not EsFechaValida(fecha) and ((EsNumero(FECHA_NAC.DIA) and (EsNumero(FECHA_NAC.MES) and (EsNumero(FECHA_NAC.ANIO))))) do
-              begin
-              CLRSCR;
-              TEXTCOLOR(RED);
-              GOTOXY(45,16);
-              WRITELN('FECHA INGRESADA INVALIDA. POR FAVOR REVISE COHERENCIA DE SUS DATOS');
-              TEXTCOLOR(GREEN);
-              WRITELN('DEBE CARGAR 1 DATO POR VEZ');
-              TEXTCOLOR(GREEN);
-              GOTOXY(45,18);
-              WRITE('INGRESE DIA: ');
-              TEXTCOLOR(WHITE);
-              READLN(FECHA_NAC.DIA);
-              TEXTCOLOR(GREEN);
-              GOTOXY(45,20);
-              WRITE('INGRESE MES: ');
-              TEXTCOLOR(WHITE);
-              READLN(FECHA_NAC.MES);
-              TEXTCOLOR(GREEN);
-              GOTOXY(45,22);
-              WRITE('INGRESE AÑO DE NACIMIENTO: ');
-              TEXTCOLOR(WHITE);
-              READLN(FECHA_NAC.ANIO);
-              FECHA:=(X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
-              end;
+       if not EsFechaValida(FECHA) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHA);
 
 
         FOR I:=1 TO 5 DO
         BEGIN
               CLRSCR;
-              GOTOXY(45,24);
+              GOTOXY(25,10);
               WRITE('AHORA SELECCIONE LAS DISCAPACIDADES, ');
               TEXTCOLOR(RED);
               WRITELN('OPRIMA T SI LA TIENE Y F SI NO LA TIENE');
               TEXTCOLOR(GREEN);
-              GOTOXY(45,27);
+              GOTOXY(42,14);
               WRITE(DISCAPACIDADES[I],': ');
-              writeln();
               TEXTCOLOR(WHITE);
               READLN(DISC);
+              while (upcase(disc) <> 'T') and (upcase(disc) <> 'F') do
+              begin
+              GOTOXY(25,12);
+              TEXTCOLOR(RED);
+              WRITELN('ENTRADA INVALIDA. LIMITESE A INGRESAR T O F');
+              TEXTCOLOR(GREEN);
+              GOTOXY(42,14);
+              WRITE(DISCAPACIDADES[I],': ');
+              TEXTCOLOR(WHITE);
+              READLN(DISC);
+              end;
               IF UPCASE(DISC) = 'T' THEN
                   DISCAPACIDAD[I]:=TRUE             //solo falta esta validacion de alumnos
               ELSE

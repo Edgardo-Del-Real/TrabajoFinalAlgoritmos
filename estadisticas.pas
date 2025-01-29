@@ -105,7 +105,7 @@ VAR
           writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
           GOTOXY(45,18);
-          WRITE('INGRESE EL AÑO: ');
+          WRITE('INGRESE EL AÑO: ');       //1)falta validar fecha de opcion 2 de estadisticas
           TEXTCOLOR(WHITE);
           readln(ANIO);
           GOTOXY(40,10);
@@ -159,7 +159,7 @@ VAR
       WRITE('INGRESE EL AÑO: ');
       TEXTCOLOR(WHITE);
       READLN(ANIO);
-     while not(EsNumero(DIA)) do
+     while not(EsNumero(ANIO)) do
           begin
           GOTOXY(40,10);
           TEXTCOLOR(RED);
@@ -176,8 +176,13 @@ VAR
      FECHA_FIN := DIA + '/' + MES + '/' + ANIO;
      FF:= CONVERTIR_FECHA(FECHA_FIN);
      CONT:= CANTIDAD_EVALUACIONES_POR_FECHA(ARCHIVOEVAL,FF,FI);
-     gotoxy(30,20);
-     WRITE('LA CANTIDAD DE EVALUACIONES REALIZADADAS ENTRE: ', FECHA_INICIO, ' Y ', FECHA_FIN,' FUERON DE: ');
+     CLRSCR;
+     TEXTCOLOR(LIGHTBLUE);
+     gotoxy(52,14);
+     WRITE('** RESULTADO **');
+     TEXTCOLOR(WHITE);
+     gotoxy(18,16);
+     WRITE('LA CANTIDAD DE EVALUACIONES REALIZADADAS ENTRE EL ', FECHA_INICIO, ' Y ', FECHA_FIN,' FUERON DE: ');
      TEXTCOLOR(GREEN);
      WRITELN(CONT);
      readkey;
@@ -197,9 +202,18 @@ END;
 PROCEDURE MOSTRARRESULTADO(FECHAINICIO, FECHAFIN: STRING; MAXSUMATORIA, MAXVALORACION: INTEGER);
 BEGIN
 IF MAXVALORACION <> 0 THEN
-WRITELN('LA VALORACIÓN CON LA MAYOR SUMATORIA ENTRE ', FECHAINICIO, ' Y ', FECHAFIN, ' ES LA DE LA DIFICULTAD ', OBTENERNOMBREDISCAPACIDAD(MAXVALORACION), ' CON UNA SUMATORIA DE ', MAXSUMATORIA)
+   begin
+    CLRSCR;
+    GOTOXY(18,14);
+    WRITELN('LA VALORACIÓN CON LA MAYOR SUMATORIA ENTRE ', FECHAINICIO, ' Y ', FECHAFIN, ' ES LA DE LA DIFICULTAD ', OBTENERNOMBREDISCAPACIDAD(MAXVALORACION), ' CON UNA SUMATORIA DE ', MAXSUMATORIA);
+   end
 ELSE
+    CLRSCR;
+    TEXTCOLOR(RED);
+    GOTOXY(18,14);
     WRITELN('NO ES POSIBLE DETERMINAR LA MAYOR VALUACION PARA UNA DIFICULTAD ENTRE LAS FECHAS INGRESADAS');
+    TEXTCOLOR(WHITE);
+    GOTOXY(36,17);
     WRITELN('PRESIONE <<ENTER>> PARA TERMINAR DE VISUALIZAR');
 readkey;
 END;
@@ -229,43 +243,161 @@ FECHAINICIO, FECHAFIN, FECHA,MAXDISCAPACIDAD, DIA, MES, ANIO: STRING ;
 BEGIN
 MAXSUMATORIA := 0;
 MAXVALORACION := 0;
-clrscr;
-WRITELN('INGRESE FECHA POR CAMPO');
-TEXTCOLOR(GREEN);                                             //falta validar fecha de 1 dato por vez
+    clrscr;
+    repeat
+    TEXTCOLOR(GREEN);
+    GOTOXY(38,12);
+    WRITELN('INGRESE FECHA DE INICIO POR CAMPO');
+    TEXTCOLOR(GREEN);
     GOTOXY(45,14);
     WRITE('INGRESE EL DIA: ');
     TEXTCOLOR(WHITE);
     READLN(DIA);
+         while not(EsNumero(DIA)) do
+          begin
+          GOTOXY(40,10);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE EL DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(DIA);
+          GOTOXY(40,10);
+          writeln('                                                                                             ');
+          end;
+
     TEXTCOLOR(GREEN);
     GOTOXY(45,16);
     WRITE('INGRESE EL MES: ');
     TEXTCOLOR(WHITE);
     READLN(MES);
+          while not(EsNumero(MES)) do
+          begin
+          GOTOXY(40,10);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITE('INGRESE EL MES: ');
+          TEXTCOLOR(WHITE);
+          readln(MES);
+          GOTOXY(40,10);
+          writeln('                                                                                             ');
+          end;
+
     TEXTCOLOR(GREEN);
     GOTOXY(45,18);
     WRITE('INGRESE EL AÑO: ');
     TEXTCOLOR(WHITE);
     READLN(ANIO);
+         while not(EsNumero(ANIO)) do
+          begin
+          GOTOXY(40,10);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,18);
+          WRITE('INGRESE EL AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(ANIO);
+          GOTOXY(40,10);
+          writeln('                                                                                             ');
+          end;
+
      FECHAINICIO := DIA + '/' + MES + '/' + ANIO;
      clrscr;
 
-WRITELN('INGRESE FECHA POR CAMPO');
-TEXTCOLOR(GREEN);                                             //falta validar fecha
+     if not EsFechaValida(FECHAINICIO) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHAINICIO);
+
+    repeat
+    TEXTCOLOR(GREEN);
+    GOTOXY(38,12);
+    WRITELN('INGRESE FECHA DE FIN POR CAMPO');
     GOTOXY(45,14);
     WRITE('INGRESE EL DIA: ');
     TEXTCOLOR(WHITE);
     READLN(DIA);
+         while not(EsNumero(DIA)) do
+          begin
+          GOTOXY(40,10);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE EL DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(DIA);
+          GOTOXY(40,10);
+          writeln('                                                                                             ');
+          end;
+
     TEXTCOLOR(GREEN);
     GOTOXY(45,16);
     WRITE('INGRESE EL MES: ');
     TEXTCOLOR(WHITE);
     READLN(MES);
+         while not(EsNumero(MES)) do
+          begin
+          GOTOXY(40,10);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITE('INGRESE EL MES: ');
+          TEXTCOLOR(WHITE);
+          readln(MES);
+          GOTOXY(40,10);
+          writeln('                                                                                             ');
+          end;
+
+
     TEXTCOLOR(GREEN);
     GOTOXY(45,18);
     WRITE('INGRESE EL AÑO: ');
     TEXTCOLOR(WHITE);
     READLN(ANIO);
+         while not(EsNumero(ANIO)) do
+          begin
+          GOTOXY(40,10);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,18);
+          WRITE('INGRESE EL AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(ANIO);
+          GOTOXY(40,10);
+          writeln('                                                                                             ');
+          end;
+
      FECHAFIN := DIA + '/' + MES + '/' + ANIO;
+
+        if not EsFechaValida(FECHAFIN) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHAFIN);
 
 OBTENERSUMATORIAS( ARCHIVOEVAL, FECHAINICIO, FECHAFIN,  SUMATORIAS);
 
