@@ -59,6 +59,7 @@ CLRSCR;
 REPEAT
 
   CLRSCR;
+  MOSTRAR_NOMBRE_ALUMNO(ARCHIVOALUMNO, POS); // Llamar al nuevo procedimiento
   TEXTCOLOR(WHITE);
   GOTOXY(50,10);
   WRITE('**BIENVENIDO AL ');
@@ -107,7 +108,7 @@ VAR
   x:t_dato_eval;
   x2:t_dato_alumnos;
   RESPUESTA:STRING;
-  POS:INTEGER;
+  POS,POSALUMNO:INTEGER;
 BEGIN
 
 CLRSCR;
@@ -143,6 +144,7 @@ CLRSCR;
   REPEAT
 
   CLRSCR;
+  MOSTRAR_NOMBRE_ALUMNO (ARCHIVOALUMNO, POS);
   PASAR_DATOS_EVAL (archivoEval,RAIZLEGAJO,RAIZFECHA);
   TEXTCOLOR(WHITE);
   GOTOXY(48,10);
@@ -175,9 +177,9 @@ CLRSCR;
        TEXTCOLOR(WHITE);
        READLN(OPCION);
        CASE OPCION OF
-            1:DarAltaEval(archivoEval,x);
-            2:modificarEval(raizfecha, raizlegajo,archivoEval);
-            3:ConsultaEvaluacion(raizlegajo,archivoEval);
+            1:DarAltaEval(archivoEval,x,ARCHIVOALUMNO,POS);
+            2:modificarEval(raizfecha, raizlegajo,archivoEval,ARCHIVOALUMNO,POS);
+            3:ConsultaEvaluacion(raizlegajo,archivoEval,ARCHIVOALUMNO,POS);
        END;
   UNTIL OPCION = 0 ;
   CLRSCR;
