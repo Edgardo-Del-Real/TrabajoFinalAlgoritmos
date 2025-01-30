@@ -77,47 +77,75 @@ BEGIN
       SEEK(archivoAlumno, POS);
       READ(archivoAlumno, Y);
      X.NUM_LEGAJO :=  Y.NUM_LEGAJO;
+     REPEAT
      TEXTCOLOR(GREEN);
      GOTOXY(45,14);
      WRITE('INGRESE DIA DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.DIA);
+     while not(EsNumero(X.FECHA_EVAL.DIA)) do
+          begin
+         GOTOXY(45,10);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE EL DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(X.FECHA_EVAL.DIA);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
      TEXTCOLOR(GREEN);
      GOTOXY(45,16);
      WRITE('INGRESE MES DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.MES);
+     while not(EsNumero(X.FECHA_EVAL.MES)) do
+          begin
+         GOTOXY(45,10);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITE('INGRESE MES DE EVALUACIÓN: ');
+          TEXTCOLOR(WHITE);
+          readln(X.FECHA_EVAL.MES);
+          GOTOXY(45,10);
+          writeln('                                                                                             ');
+          end;
      TEXTCOLOR(GREEN);
      GOTOXY(45,18);
      WRITE('INGRESE AÑO DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.ANIO);
+     while not(EsNumero(X.FECHA_EVAL.ANIO)) do
+          begin
+         GOTOXY(45,10);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,18);
+          WRITE('INGRESE AÑO DE EVALUACIÓN: ');
+          TEXTCOLOR(WHITE);
+          readln(X.FECHA_EVAL.ANIO);
+          GOTOXY(45,10);
+          writeln('                                                                                             ');
+          end;
      FECHA:=(X.FECHA_EVAL.DIA) + ' / ' + (X.FECHA_EVAL.MES) + ' / ' + (X.FECHA_EVAL.ANIO);
-           WHILE NOT  EsFechaValida(Fecha) DO
-           BEGIN
-             CLRSCR;
-             TEXTCOLOR(RED);
-             GOTOXY(45,10);
-             WRITELN('POR FAVOR REVISE LA COHERENCIA DE SUS DATOS INGRESADOR');
-             GOTOXY(45,12);
-             WRITELN('RECUERDE QUE NO PUEDE INGRESAR UNA FECHA POSTERIOR A LA DE HOY');
-           GOTOXY(45,14);
-           TEXTCOLOR(GREEN);
-           WRITE('INGRESE DIA DE EVALUACIÓN: ');
-           TEXTCOLOR(WHITE);
-           READLN(X.FECHA_EVAL.DIA);
-           TEXTCOLOR(GREEN);
-           GOTOXY(45,16);
-           WRITE('INGRESE MES DE EVALUACIÓN: ');
-           TEXTCOLOR(WHITE);
-           READLN(X.FECHA_EVAL.MES);
-           TEXTCOLOR(GREEN);
-           GOTOXY(45,18);
-           WRITE('INGRESE AÑO DE EVALUACIÓN: ');
-           TEXTCOLOR(WHITE);
-           READLN(X.FECHA_EVAL.ANIO);
-           FECHA:=(X.FECHA_EVAL.DIA) + ' / ' + (X.FECHA_EVAL.MES) + ' / ' + (X.FECHA_EVAL.ANIO);
-           END;
+           if not EsFechaValida(FECHA) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHA);
 
      GOTOXY(45,20);
      WRITELN('INGRESE LAS VALORACIONES: ');
@@ -416,6 +444,7 @@ BEGIN
         CASE OPCION OF
           1:
           BEGIN
+            REPEAT
             CLRSCR;
             TEXTCOLOR(GREEN);
             GOTOXY(40,12);
@@ -425,43 +454,73 @@ BEGIN
              WRITE('INGRESE EL DIA: ');
              TEXTCOLOR(WHITE);
              READLN(DIA);
+             while not(EsNumero(DIA)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(DIA);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
+
              TEXTCOLOR(GREEN);
              GOTOXY(45,16);
              WRITE('INGRESE EL MES: ');
              TEXTCOLOR(WHITE);
              READLN(MES);
+             while not(EsNumero(MES)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE MES: ');
+          TEXTCOLOR(WHITE);
+          readln(MES);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
              TEXTCOLOR(GREEN);
              GOTOXY(45,18);
              WRITE('INGRESE EL AÑO: ');
              TEXTCOLOR(WHITE);
              READLN(ANIO);
-             FECHA := DIA + '/' + MES + '/' + ANIO;
-           WHILE NOT  EsFechaValida(Fecha) DO
-           BEGIN
-           clrscr;
-           TEXTCOLOR(RED);
-            GOTOXY(45,11);
-            writeln('FECHA INGRESADA NO VALIDA. POR FAVOR REVISE SUS DATOS');
-            GOTOXY(42,12);
-            WRITELN( 'RECUERDE DAR DIA, MES Y AÑO DE LA EVALUACION POR SEPARADO');
-            TEXTCOLOR(GREEN);
-            GOTOXY(45,14);
-            WRITE('INGRESE EL DIA: ');
-            TEXTCOLOR(WHITE);
-            READLN(DIA);
-            TEXTCOLOR(GREEN);
-            GOTOXY(45,16);
-            WRITE('INGRESE EL MES: ');
-            TEXTCOLOR(WHITE);
-            READLN(MES);
-            TEXTCOLOR(GREEN);
-            GOTOXY(45,18);
-            WRITE('INGRESE EL AÑO: ');
-            TEXTCOLOR(WHITE);
-            READLN(ANIO);
-            FECHA := DIA + '/' + MES + '/' + ANIO;
+             while not(EsNumero(ANIO)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(ANIO);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
 
-           END;
+             FECHA := DIA + '/' + MES + '/' + ANIO;
+           if not EsFechaValida(FECHA) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHA);
           END;
           2:
           BEGIN

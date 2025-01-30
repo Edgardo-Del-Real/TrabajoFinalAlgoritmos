@@ -5,12 +5,12 @@ INTERFACE
 USES
   CRT;
 CONST
-  RUTA = 'C:\Users\GAMER\Desktop.DAT';
+  RUTA = 'D:\Martin\Escritorio.DAT';
 TYPE
   T_FECHA = RECORD
-    DIA:string;
-    MES:string;
-    ANIO:string;
+    DIA:string[2];
+    MES:string[2];
+    ANIO:string[4];
   END;
   T_DATO_ALUMNOS = RECORD
     NUM_LEGAJO:STRING[8];

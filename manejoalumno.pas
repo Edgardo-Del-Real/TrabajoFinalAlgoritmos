@@ -210,7 +210,7 @@ BEGIN
               READLN(DISC);
               end;
               IF UPCASE(DISC) = 'T' THEN
-                  DISCAPACIDAD[I]:=TRUE             //solo falta esta validacion de alumnos
+                  DISCAPACIDAD[I]:=TRUE
               ELSE
                   DISCAPACIDAD[I]:=FALSE;
         END;
@@ -384,7 +384,7 @@ BEGIN
 
 PROCEDURE MODIFICARALUMNO(VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS; POS:INTEGER);
 VAR
-  BUSCADO: STRING;
+  BUSCADO,FECHA_AUX: STRING;
   X: T_DATO_ALUMNOS;
   OPCION: BYTE;
   I: BYTE;
@@ -456,7 +456,8 @@ BEGIN
         end;
         END;
       2:
-        BEGIN         //FALTA VALIDAR
+        BEGIN
+        REPEAT
           CLRSCR;
           TEXTCOLOR(RED);
           GOTOXY(45,10);
@@ -466,16 +467,76 @@ BEGIN
           WRITE('INGRESE DIA: ');
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.DIA);
+
+             while not(EsNumero(X.FECHA_NAC.DIA)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,12);
+          WRITE('INGRESE DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(X.FECHA_NAC.ANIO);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
           TEXTCOLOR(GREEN);
           GOTOXY(45,14);
           WRITE('INGRESE MES: ');
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.MES);
+
+             while not(EsNumero(X.FECHA_NAC.ANIO)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE MES: ');
+          TEXTCOLOR(WHITE);
+          readln(X.FECHA_NAC.MES);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
           TEXTCOLOR(GREEN);
           GOTOXY(45,16);
           WRITE('INGRESE AÑO DE NACIMIENTO: ');
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.ANIO);
+           while not(EsNumero(X.FECHA_NAC.ANIO)) do
+          begin
+         GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITE('INGRESE EL AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(X.FECHA_NAC.ANIO);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
+           FECHA_AUX:= X.FECHA_NAC.DIA + '/' + X.FECHA_NAC.MES + '/' + X.FECHA_NAC.ANIO;
+           if not EsFechaValida(FECHA_AUX) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHA_AUX);
+
+
         END;
      { 3:
         BEGIN

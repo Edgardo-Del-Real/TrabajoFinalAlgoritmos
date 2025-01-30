@@ -53,6 +53,7 @@ VAR
    FECHA_INICIO,FECHA_FIN,DIA,MES,ANIO:STRING;
    FI,FF:INTEGER;
    BEGIN
+      repeat
    CLRSCR;
    TEXTCOLOR(GREEN);
    gotoxy(45,12);
@@ -113,8 +114,22 @@ VAR
           end;
 
      FECHA_INICIO := DIA + '/' + MES + '/' + ANIO;
+        if not EsFechaValida(FECHA_INICIO) then
+            begin
+              CLRSCR;
+              TEXTCOLOR(RED);
+              GOTOXY(30,15);
+              writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+              TEXTCOLOR(WHITE);
+              GOTOXY(43,17);
+              writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+              READKEY;
+              CLRSCR;
+            end;
+           until EsFechaValida(FECHA_INICIO);
 
      FI:=CONVERTIR_FECHA(FECHA_INICIO);
+     REPEAT
      clrscr;
      TEXTCOLOR(GREEN);
       GOTOXY(45,12);
@@ -174,6 +189,21 @@ VAR
           end;
 
      FECHA_FIN := DIA + '/' + MES + '/' + ANIO;
+      if not EsFechaValida(FECHA_FIN) then
+     begin
+       CLRSCR;
+       TEXTCOLOR(RED);
+       GOTOXY(30,15);
+       writeln('FECHA INVALIDA. VUELVA A INGRESAR CORRECTAMENTE LOS DATOS');
+       TEXTCOLOR(WHITE);
+       GOTOXY(43,17);
+       writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+       READKEY;
+       CLRSCR;
+     end;
+    until EsFechaValida(FECHA_FIN);
+
+
      FF:= CONVERTIR_FECHA(FECHA_FIN);
      CONT:= CANTIDAD_EVALUACIONES_POR_FECHA(ARCHIVOEVAL,FF,FI);
      CLRSCR;

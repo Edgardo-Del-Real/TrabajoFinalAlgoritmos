@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1449427374"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -l -vewnhibq -FiC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\lib\x86_64-win64 -FuC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\ -FUC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\lib\x86_64-win64\ -FEC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\ -oC:\Users\GAMER\Desktop\TrabajoFinalAlgoritmos\seguimientodeaprendizaje.exe seguimientodeaprendizaje.lpr"/>
+  <Compiler Value="C:\lazarus\fpc\3.2.2\bin\x86_64-win64\fpc.exe" Date="1488546183"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -gw2 -godwarfsets -gl -l -vewnhibq &quot;-FiC:\Users\lucia\OneDrive\Escritorio\Trabajo final - Algoritmos\Trabajo Final Algoritmos\TrabajoFinalAlgoritmos\lib\x86_64-win64&quot; &quot;-FuC:\Users\lucia\OneDrive\Escritorio\Trabajo final - Algoritmos\Trabajo Final Algoritmos\TrabajoFinalAlgoritmos\&quot; &quot;-FUC:\Users\lucia\OneDrive\Escritorio\Trabajo final - Algoritmos\Trabajo Final Algoritmos\TrabajoFinalAlgoritmos\lib\x86_64-win64\&quot; &quot;-FEC:\Users\lucia\OneDrive\Escritorio\Trabajo final - Algoritmos\Trabajo Final Algoritmos\TrabajoFinalAlgoritmos\&quot; &quot;-oC:\Users\lucia\OneDrive\Escritorio\Trabajo final - Algoritmos\Trabajo Final Algoritmos\TrabajoFinalAlgoritmos\seguimientodeaprendizaje.exe&quot; seguimientodeaprendizaje.lpr"/>
 </CONFIG>
