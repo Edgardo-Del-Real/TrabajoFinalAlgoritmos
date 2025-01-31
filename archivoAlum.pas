@@ -5,7 +5,7 @@ INTERFACE
 USES
   CRT;
 CONST
-  RUTA = 'D:\Martin\Escritorio.DAT';
+  RUTA = 'C:\Users\GAMER\Desktop.DAT';
 TYPE
   T_FECHA = RECORD
     DIA:string[2];
