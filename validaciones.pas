@@ -7,12 +7,30 @@ interface
 uses
 CRT, SYSUTILS, unitarbol;
 function EsFechaValida(FechaStr: string): Boolean;
+function validarFechaDiaMes(diaMes: string): boolean;
+function validarFechaAnio(anio: string): boolean;
 function EsCadena(input: string): boolean;
 function EsNumero(input: string): boolean;
  PROCEDURE INGRESAR_CLAVE (VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL; VAR POS:INTEGER; VAR CLAVE:STRING);
  PROCEDURE VALIDACION_CLAVE(VAR RESPUESTA: STRING; VAR POS: INTEGER;RAIZLEGAJO, RAIZAPYNOM: T_PUNT_ARBOL; VAR CLAVE:STRING);
 
 implementation
+ function validarFechaDiaMes(diaMes: string): boolean;
+ begin
+     if esNumero(diaMes) and (Length(diaMes) = 2) then
+         validarFechaDiaMes := True
+     else
+         validarFechaDiaMes := False;
+ end;
+
+ function validarFechaAnio(anio: string): boolean;
+ begin
+     if esNumero(anio) and (Length(anio) = 4) then
+         validarFechaAnio := True
+     else
+         validarFechaAnio := False;
+ end;
+
 
 PROCEDURE INGRESAR_CLAVE (VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL; VAR POS:INTEGER; VAR CLAVE:STRING);
 BEGIN

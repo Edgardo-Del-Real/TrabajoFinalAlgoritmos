@@ -24,6 +24,7 @@ VAR
   pos: integer;
   CLAVE: STRING;
 BEGIN
+generar_arbol_legajo(raizlegajo,archivoalumno);
   CLRSCR;
   TEXTCOLOR(RED);
   GOTOXY(40,3);
@@ -299,7 +300,7 @@ BEGIN
        GOTOXY(45,20);
        WRITE('RESPUESTA: ');
        TEXTCOLOR(WHITE);
-       READLN(OPCION);
+       READLN(OPCION);     //VALIDAR RESPUESTA
        CASE OPCION OF
             1:evaluacionesPorFecha(ARCHIVOEVAL);
             2:compararValoracionesPorFecha(ARCHIVOEVAL);

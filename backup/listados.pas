@@ -108,7 +108,7 @@ var
   E:t_dato_arbol;
 begin
   crear_arbol(raiz);
-  //reset(ARCH);
+  reset(ARCH);
   seek(ARCH,0);
   while (not EOF(ARCH)) do
   begin
@@ -117,7 +117,7 @@ begin
     E.POSARCH:=(filepos(ARCH)-1);
     agregar_arbol(raiz,E);
   end;
-  //close(ARCH);
+  close(ARCH);
 end;
 
 

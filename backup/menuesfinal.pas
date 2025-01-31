@@ -74,7 +74,6 @@ BEGIN
     END
     ELSE
     BEGIN
-     clrscr;
       GOTOXY(20,27);
       TEXTCOLOR(WHITE);
       WRITELN('PARA TERMINAR DE VISUALIZAR LOS DATOS Y PROCEDER AL MENU DE BM <<PRESIONE ENTER>>');
@@ -300,7 +299,7 @@ BEGIN
        GOTOXY(45,20);
        WRITE('RESPUESTA: ');
        TEXTCOLOR(WHITE);
-       READLN(OPCION);
+       READLN(OPCION);     //VALIDAR RESPUESTA
        CASE OPCION OF
             1:evaluacionesPorFecha(ARCHIVOEVAL);
             2:compararValoracionesPorFecha(ARCHIVOEVAL);
