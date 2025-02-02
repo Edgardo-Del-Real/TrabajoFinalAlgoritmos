@@ -91,7 +91,7 @@ BEGIN
         TEXTCOLOR(RED);
 
 
-        while not EsCadena(APYNOM) do
+        while not EsCadena(APYNOM) and (apynom = '') do
         begin
             CLRSCR;
             TEXTCOLOR(RED);
@@ -240,7 +240,7 @@ BEGIN
     BEGIN
       CLRSCR;
       GOTOXY(10,5);
-      TEXTCOLOR(RED);
+      TEXTCOLOR(YELLOW);
       WRITELN('DATOS ACTUALES DEL ALUMNO');
       GOTOXY(10,7);
       TEXTCOLOR (GREEN);
@@ -290,9 +290,10 @@ BEGIN
       WRITE('DESTREZAS SOCIALES INADECUADAS: ');
       TEXTCOLOR(GREEN);
       WRITELN(DISCAPACIDAD[5]);
-      READKEY;
+      TEXTCOLOR(WHITE);
     END;
 END;
+
 
 procedure MOSTRARALUMNO (VAR ARCH:T_ARCHIVO_ALUMNOS ; POS:INTEGER);
 VAR
@@ -302,6 +303,10 @@ RESET(ARCH);
 SEEK(ARCH, POS);
 READ(ARCH, X);
 MUESTRADATOSALUMNO(X);
+GOTOXY(70,15);
+TEXTCOLOR(YELLOW);
+WRITE('OPRIMA <<ENTER>> PARA CONTINUAR ');
+READKEY;
 end;
 
 
@@ -430,7 +435,7 @@ BEGIN
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.DIA);
 
-             while not(EsNumero(X.FECHA_NAC.DIA)) do
+             while not(validarFechaDiaMes(X.FECHA_NAC.DIA)) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
@@ -439,7 +444,7 @@ BEGIN
           GOTOXY(45,12);
           WRITE('INGRESE DIA: ');
           TEXTCOLOR(WHITE);
-          readln(X.FECHA_NAC.ANIO);
+          readln(X.FECHA_NAC.DIA);
           GOTOXY(45,24);
           writeln('                                                                                             ');
           end;
@@ -450,7 +455,7 @@ BEGIN
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.MES);
 
-             while not(EsNumero(X.FECHA_NAC.ANIO)) do
+             while not validarFechaDiaMes(X.FECHA_NAC.MES) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
@@ -466,17 +471,17 @@ BEGIN
 
           TEXTCOLOR(GREEN);
           GOTOXY(45,16);
-          WRITE('INGRESE AÑO DE NACIMIENTO: ');
+          WRITE('INGRESE AÑO: ');
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.ANIO);
-           while not(EsNumero(X.FECHA_NAC.ANIO)) do
+           while not validarFechaAnio(X.FECHA_NAC.ANIO) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
           writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
           GOTOXY(45,16);
-          WRITE('INGRESE EL AÑO: ');
+          WRITE('INGRESE AÑO: ');
           TEXTCOLOR(WHITE);
           readln(X.FECHA_NAC.ANIO);
           GOTOXY(45,24);
@@ -500,42 +505,14 @@ BEGIN
 
 
         END;
-     { 3:
-        BEGIN
-          CLRSCR;
-          GOTOXY(45,10);
-          WRITELN('INGRESE DISCAPACIDAD: ');
-          TEXTCOLOR(RED);
-          GOTOXY(45,12);
-          WRITELN('OPRIMA T SI LA TIENE Y F SI NO LA TIENE');
-            FOR I:= 1 TO 5 DO
-            BEGIN
-                TEXTCOLOR(GREEN);
-                GOTOXY(45,14);
-                WRITE('DISCAPACIDAD ', I, ' :');
-                TEXTCOLOR(WHITE);
-                READLN(DISC);
-                IF UPCASE(DISC) = 'T' THEN
-                X.DISCAPACIDAD[I]:=TRUE
-                ELSE
-                X.DISCAPACIDAD[I]:=FALSE;
-            END;
-        END;
-      4:
-        BEGIN
-          CLRSCR;
-          TEXTCOLOR(RED);
-          GOTOXY(45,10);
-          WRITELN('SE CAMBIO EL ESTADO DEL ALUMNO');
-          X.ESTADO := NOT X.ESTADO;
-        END; }
     END;
     UNTIL opcion = 0;
 
     SEEK(ARCHIVOALUMNO, POS);
     WRITE(ARCHIVOALUMNO, X);
     TEXTCOLOR(WHITE);
-    GOTOXY(45,20);
+    CLRSCR;
+    GOTOXY(45,15);
     WRITELN('ALUMNO MODIFICADO CORRECTAMENTE');
     READKEY;
     CLRSCR;

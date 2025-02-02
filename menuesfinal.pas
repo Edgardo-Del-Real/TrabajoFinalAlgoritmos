@@ -27,12 +27,12 @@ BEGIN
 generar_arbol_legajo(raizlegajo,archivoalumno);
   CLRSCR;
   TEXTCOLOR(RED);
-  GOTOXY(40,3);
+  GOTOXY(52,10);
   WRITELN('¡¡ ATENCIÓN !! ');
-  GOTOXY(12,4);
+  GOTOXY(30,11);
   TEXTCOLOR(WHITE);
-  WRITELN(' ------------------------------------------------------------------- ');
-  GOTOXY(12,5);
+  WRITELN(' --------------------------------------------------------- ');
+  GOTOXY(25,12);
   TEXTCOLOR(RED);
   WRITELN(' PARA PODER ACCEDER AL MENU DEBERA INGRESAR LA CLAVE CORRESPONDIENTE ');
   TEXTCOLOR(LIGHTBLUE);
@@ -58,12 +58,18 @@ generar_arbol_legajo(raizlegajo,archivoalumno);
     IF NOT x.ESTADO THEN
     BEGIN
       clrscr;
-      GOTOXY(35,10);
+      GOTOXY(35,9);
       TEXTCOLOR(RED);
-      WRITELN('EL ALUMNO SE ENCUENTRA DADO DE BAJA.');
+      WRITELN('¡ATENCIÓN! EL ALUMNO SE ENCUENTRA DADO DE BAJA');
       TEXTCOLOR(GREEN);
-      GOTOXY(35,12);
-      WRITE('¿DESEA DARLO DE ALTA NUEVAMENTE? (S/N): ');
+      GOTOXY(40,12);
+      WRITELN('¿DESEA DARLO DE ALTA NUEVAMENTE? : ');
+      GOTOXY(35,15);
+      TEXTCOLOR(WHITE);
+      WRITELN('S -> SÍ, DESEO DARLO DE ALTA OTRA VEZ');
+      GOTOXY(35,17);
+      WRITELN('N -> NO, DESEO VOLVER AL MENÚ PRINCIPAL');
+      GOTOXY(75,12);
       textcolor(white);
       READLN(RESPUESTA);
       IF UPCASE(RESPUESTA) = 'S' THEN
@@ -75,11 +81,6 @@ generar_arbol_legajo(raizlegajo,archivoalumno);
     END
     ELSE
     BEGIN
-      GOTOXY(20,27);
-      TEXTCOLOR(WHITE);
-      WRITELN('PARA TERMINAR DE VISUALIZAR LOS DATOS Y PROCEDER AL MENU DE BM <<PRESIONE ENTER>>');
-      READKEY;
-      CLRSCR;
       REPEAT
         CLRSCR;
         MOSTRAR_NOMBRE_ALUMNO(ARCHIVOALUMNO, POS);
@@ -128,7 +129,7 @@ END;
 
 PROCEDURE MENUSEGUIMIENTO (var RAIZAPYNOM,RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL; var archivoEval:t_archivo_eval; var ARCHIVOALUMNO:t_archivo_alumnos);
 VAR
-  OPCION:0..3;
+  OPCION:STRING;
   x:t_dato_eval;
   x2:t_dato_alumnos;
   RESPUESTA:STRING;
@@ -136,16 +137,17 @@ VAR
   CLAVE:STRING;
 BEGIN
 
+
 CLRSCR;
 TEXTCOLOR(RED);
-GOTOXY(40,3);
+GOTOXY(52,10);
 WRITELN('¡¡ ATENCIÓN !! ');
-GOTOXY(12,4);
+GOTOXY(30,11);
 TEXTCOLOR(WHITE);
-WRITELN(' ------------------------------------------------------------------- ');
-GOTOXY(12,5);
+WRITELN(' --------------------------------------------------------- ');
+GOTOXY(25,12);
 TEXTCOLOR(RED);
-WRITELN(' PARA PODER ACCEDER AL MENU DEBERA INGRESER LA CLAVE CORRESPONDIENTE ');
+WRITELN(' PARA PODER ACCEDER AL MENU DEBERA INGRESAR LA CLAVE CORRESPONDIENTE ');
 TEXTCOLOR(LIGHTBLUE);
 VALIDACION_CLAVE (RESPUESTA, POS, RAIZLEGAJO, RAIZAPYNOM, CLAVE);
 IF RESPUESTA = 'S' THEN
@@ -156,15 +158,29 @@ PASAR_DATOS(ARCHIVOALUMNO,RAIZLEGAJO,RAIZAPYNOM);
 END;
 IF RESPUESTA = 'C' THEN
 BEGIN
-//CLRSCR;
+
+ SEEK(ARCHIVOALUMNO,POS);
+ READ(ARCHIVOALUMNO,X2);
+ 
+ IF NOT(X2.ESTADO) THEN
+ BEGIN
+  CLRSCR;
+  GOTOXY(30,12);
+  TEXTCOLOR(RED);
+  WRITELN('NO SE PUEDE ACCEDER AL MENU DE SEGUIMIENTO DE UN ALUMNO DADO DE BAJA');
+  GOTOXY(45,15);
+  TEXTCOLOR(YELLOW);
+  WRITE('OPRIMA <<ENTER>> PARA CONTINUAR ');
+  READKEY;
+ end
+
+ ELSE
+ BEGIN
         GOTOXY(20,2);
         TEXTCOLOR(WHITE);
         WRITELN('A CONTINUACIÓN PODRA OBSERVAR LOS DATOS REGISTRADOS DEL ALUMNO SOLICITADO ');
         TEXTCOLOR(WHITE);
         MOSTRARALUMNO (archivoAlumno, POS);
-        GOTOXY(10,28);
-        TEXTCOLOR(RED);
-        WRITELN ('PARA TERMINAR DE VISUALIZAR LOS DATOS Y PROCEDER AL MENU DE ALTA Y MODIFICACION <<PRESIONE ENTER>>');
         READKEY;
   REPEAT
 
@@ -201,14 +217,25 @@ BEGIN
        WRITE('RESPUESTA: ');
        TEXTCOLOR(WHITE);
        READLN(OPCION);
-       CASE OPCION OF
-            1:DarAltaEval(archivoEval,x,ARCHIVOALUMNO,POS);
-            2:modificarEval(raizfecha, raizlegajo,archivoEval,ARCHIVOALUMNO,POS);
-            3:ConsultaEvaluacion(raizlegajo,archivoEval,ARCHIVOALUMNO,POS);
+       while not esNumero(OPCION) or (OPCION < '0') or (OPCION > '3') do
+       BEGIN
+       GOTOXY(62,20);
+       WRITE('                                                         ');
+       TEXTCOLOR(GREEN);
+       GOTOXY(52,20);
+       WRITE('RESPUESTA: ');
+       TEXTCOLOR(WHITE);
+       READLN(OPCION);
        END;
-  UNTIL OPCION = 0 ;
+       CASE OPCION OF
+            '1':DarAltaEval(archivoEval,x,ARCHIVOALUMNO,POS);
+            '2':modificarEval(raizfecha, raizlegajo,archivoEval,ARCHIVOALUMNO,POS);
+            '3':ConsultaEvaluacion(raizlegajo,archivoEval,ARCHIVOALUMNO,POS);
+       END;
+  UNTIL OPCION = '0' ;
   CLRSCR;
 END;
+ end;
 
 end;
 
@@ -251,11 +278,10 @@ BEGIN
        READLN(OPCION);
        CASE OPCION OF
             1:begin
-             generar_arbol(RAIZAPYNOM,ARCH);
+             generar_arbol(RAIZAPYNOM,ARCH);             // CREAR PROCEDIMIENTO APARTE PARA NO TENER QUE LLAMAR A TODO DENTRO DEL CASE
              CLRSCR;
              MOSTRAR_ENCABEZADO_TABLA;
              inorden_apynom(RAIZAPYNOM, ARCH, y);
-             {listado_apynom (ARCH, RAIZAPYNOM);}
              READKEY;
             end;
             2: ConsultaEvalDeAlumno(ARCH2,RAIZLEGAJO, RAIZAPYNOM);

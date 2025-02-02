@@ -5,7 +5,8 @@ unit VALIDACIONES;
 interface
 
 uses
-CRT, SYSUTILS, unitarbol;
+CRT, SYSUTILS, unitarbol, archivoEVal;
+function fechaExistente (var archivoeval:T_ARCHIVO_EVAL; fecha:string;legajo:string):boolean;
 function EsFechaValida(FechaStr: string): Boolean;
 function validarFechaDiaMes(diaMes: string): boolean;
 function validarFechaAnio(anio: string): boolean;
@@ -31,13 +32,35 @@ implementation
          validarFechaAnio := False;
  end;
 
+function fechaExistente (var archivoeval:T_ARCHIVO_EVAL; fecha:string; legajo:string):boolean;
+var
+x:t_dato_Eval;
+fechaAux:string;
+i:byte;
+begin
+    fechaExistente:=false;
+    for i:=0 to fileSize(archivoEVal)-1 do
+    begin
+        seek(archivoEVal,i);
+        read(archivoEval,x);
+        if x.NUM_LEGAJO = legajo then
+            begin
+               FECHAAux:=(X.FECHA_EVAL.DIA) + ' / ' + (X.FECHA_EVAL.MES) + ' / ' + (X.FECHA_EVAL.ANIO);
+            end;
+        if fechaAux = fecha then
+            fechaExistente:=true;
+    end;
+end;
 
 PROCEDURE INGRESAR_CLAVE (VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL; VAR POS:INTEGER; VAR CLAVE:STRING);
 BEGIN
- GOTOXY(12,7);
+REPEAT
+ TEXTCOLOR(LIGHTBLUE);
+ GOTOXY(40,15);
  WRITE ('INGRESAR CLAVE DEL ALUMNO: ');
  textcolor(white);
   READLN (CLAVE);
+ UNTIL CLAVE <> '';
   POS := PREORDEN(RAIZLEGAJO, CLAVE);
    IF POS = -1 THEN
      POS := PREORDEN(RAIZAPYNOM, CLAVE);
@@ -56,6 +79,10 @@ BEGIN
     IF POS = -1 THEN
     BEGIN
       CLRSCR;
+      
+      GOTOXY(30,24);
+      TEXTCOLOR(WHITE);
+      WRITE('PRESIONE <<ENTER>> PARA REGRESAR AL MENU PRINCIPAL');
       GOTOXY(10,9);
       TEXTCOLOR(RED);
       WRITELN('SI USTED ESTA VIENDO ESTO ES PORQUE OCURRIO UN ERROR. POR FAVOR VERIFIQUE LOS DATOS PROPORCIONADOS');
@@ -85,6 +112,7 @@ BEGIN
       TEXTCOLOR(LIGHTBLUE);
       READLN(RESPUESTA);
       RESPUESTA := UPPERCASE(RESPUESTA);
+
       CLRSCR;
     END
     ELSE
