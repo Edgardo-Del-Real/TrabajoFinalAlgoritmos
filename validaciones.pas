@@ -14,6 +14,10 @@ function EsCadena(input: string): boolean;
 function EsNumero(input: string): boolean;
  PROCEDURE INGRESAR_CLAVE (VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL; VAR POS:INTEGER; VAR CLAVE:STRING);
  PROCEDURE VALIDACION_CLAVE(VAR RESPUESTA: STRING; VAR POS: INTEGER;RAIZLEGAJO, RAIZAPYNOM: T_PUNT_ARBOL; VAR CLAVE:STRING);
+ PROCEDURE PantallaCarga;
+ PROCEDURE PantallaCarga2;
+ procedure MostrarPantallaInicio;
+
 
 implementation
  function validarFechaDiaMes(diaMes: string): boolean;
@@ -175,344 +179,119 @@ end;
    EsNumero := true;
  end;
 
-// FUNCTION mayus(S: string): string;
-// VAR
-// i: integer;
-// BEGIN
-// IF Length(S) > 0 THEN
-// S[1] := UpCase(S[1]);
-// FOR i := 2 TO Length(S) DO
-// IF S[i] <> ' ' THEN
-//   S[i] := LowerCase(S[i])
-// ELSE
-//   // Hace que la primera letra de la palabra sea en Mayuscula
-//   IF (i + 1 <= Length(S)) AND (S[i + 1] <> ' ') THEN
-//     S[i + 1] := UpCase(S[i + 1]);
-// mayus := S;
-// END;
 
-// procedure validar_valor(var a:string;minimo:longint;maximo:longint;var retorno:longint;msg:string);
-// var aux,i:integer; r:longint;
-// begin
-//   repeat
-//   clrscr;
-//   writeln(msg);
-//   readln(a);
-//   //VALIDA SI EL DATO ES UN NUMERO
-//   val(a,r,i);
-//   //SI EL DATO ES UN NUMERO ENTONCES VALIDA SI ESTA DENTRO DEL RANGO
-//   clrscr;
-//   if i=0 then
-//   begin
-//    if (r>=minimo) and (r<=maximo) then
-//      begin
-//        retorno:=r ;
-//        aux:=-1;
-//      end
-//   end
-//   else
-//     begin
-//        aux:=0;
-//     end;
+ PROCEDURE PantallaCarga;
+VAR
+  i, centroX, centroY, anchoConsola, altoConsola: INTEGER;
+BEGIN
+  CLRSCR;
+  anchoConsola := 120;
+  altoConsola := 35;
+  centroX := (anchoConsola DIV 2) - 20;
+  centroY := (altoConsola DIV 2) - 3;
 
-//    clrscr;
-//    write(msg);
+  TEXTCOLOR(WHITE);
+  GOTOXY(centroX, centroY);
+  WRITE('CERRANDO EL PROGRAMA, POR FAVOR ESPERE ...');
+  TEXTCOLOR(GREEN);
 
-//    until(aux=-1);
-//    clrscr;
-//   end;
+  GOTOXY(centroX, centroY + 2);
+  WRITE('[');
+  GOTOXY(centroX + 40, centroY + 2);
+  WRITE(']');
 
-// procedure LongIntToString(numero: LongInt; var cadena: String);
-// begin
-//   Str(numero, cadena);
-// end;
+  FOR i := centroX + 1 TO centroX + 39 DO
+  BEGIN
+    GOTOXY(i, centroY + 2);
+    WRITE('-');
+    DELAY(50);
+  END;
 
-// procedure validar_caracter(a:char;valido1:char;valido2:char; var retorno:char;msg:string);
-// var
-// r:real;
-// i:integer;
-// aux:integer;
-// begin
-//   aux:=0;
+  GOTOXY(centroX + 10, centroY + 4);
+  TEXTCOLOR(WHITE);
+  WRITELN('  CARGA COMPLETA!  ');
+  DELAY(500);
+END;
 
-//   repeat
-//   a:=readkey;
-//   //VALIDA SI EL DATO ES UN CARACTER
-//   val(a,r,i);
-//   if(i<>0) then
-//   begin
-//   //SI EL DATO ES UN CARACTER ENTONCES COMPARA EL DATO CON LOS VALIDOS INGRESADOS
-//   if (upcase(a)=valido1) or (upcase(a)=valido2) then
-//   begin
-//   //writeln('uno');
-//   retorno:=a;
-//   aux:=-1;
-//   end;
-//   clrscr;
-//   writeln('seleccione "',valido1,'" o "',valido2,'" ');
-//   writeln(msg);
-//   end
-//   else
-//   begin
-//   //writeln('dos');
-//   clrscr;
-//   writeln('seleccione "',valido1,'" o "',valido2,'" ');
-//   writeln(msg);
-//   aux:=0;
-//   end;
-//   until(aux=-1);
-//   //writeln('tres');
-//   //readkey;
-//   clrscr;
-// end;
+PROCEDURE PantallaCarga2;
+VAR
+  i, centroX, centroY, anchoConsola, altoConsola: INTEGER;
+BEGIN
+  CLRSCR;
+  anchoConsola := 120;
+  altoConsola := 35;
+  centroX := (anchoConsola DIV 2) - 20;
+  centroY := (altoConsola DIV 2) - 3;
 
-// procedure validar_string_caracter(a:string;var retorno:string;msg:string);
-// var
-//   r:real;
-//   i,x,y:integer;
-//   aux:integer;
+  TEXTCOLOR(WHITE);
+  GOTOXY(centroX, centroY);
+  WRITE('CONFIRMANDO DATOS, POR FAVOR ESPERE ...');
+  TEXTCOLOR(GREEN);
 
-// begin
-//   aux:=0;
+  GOTOXY(centroX, centroY + 2);
+  WRITE('[');
+  GOTOXY(centroX + 40, centroY + 2);
+  WRITE(']');
 
-//   repeat
+  FOR i := centroX + 1 TO centroX + 39 DO
+  BEGIN
+    GOTOXY(i, centroY + 2);
+    WRITE('-');
+    DELAY(100);
+  END;
 
-//   {clrscr;}
-//   {gotoxy(0,y-1);}
-//   //DelLine;
-//   write(msg);
-//   x:=WhereX;
-//   y:=WhereY;
-//   readln(a);
-
-//   //VALIDA SI EL DATO ES STRING
-//   val(a,r,i);
-//   if(i<>0) then
-//   begin
-//   retorno:=a;
-//   aux:=-1;
-//   end
-
-//   else
-//   begin
-//   {clrscr;}
-//   //write(msg);
-//   gotoxy(1,y);
-//   clreol;
-//   aux:=0;
-//   gotoxy(1,y);
-//   clreol;
-//   end;
-//   if (a='') then
-//   begin
-//   gotoxy(1,y);
-//   clreol;
-//   end;
-//   until(aux=-1) and (a<>'');
-//   //readkey;
-//   //clrscr;
-// end;
-
-// procedure validar_convertir(var a:string;minimo:longint;maximo:longint;var retorno:string;msg:string);
-// var ret:longint;
-// begin
-//   validar_valor(a,minimo,maximo,ret,msg);
-//   LongIntToString(ret,a);
-//   retorno:=a;
-
-// end;
-
-// procedure validar_string_numerico(var a:string;var retorno:string;msg:string);
-// var r:real; i:integer; aux,x,y:integer;
-
-// begin
-//   aux:=0;
-//   repeat
-//   //clrscr;
-//   write(msg);
-//   x:=WhereX;
-//   y:=WhereY;
-//   readln(a);
-
-//   val(a,r,i);
-//   if(i=0) then
-//   begin
-//   retorno:=a;
-//   aux:=-1;
-//   end
-
-//   else
-//   begin
-//   //clrscr;
-//   //write(msg);
-//   gotoxy(1,y);
-//   DelLine;
-//   aux:=0;
-//   end;
-
-//   until(aux=-1);
-//   //readkey;
-//   //clrscr;
-// end;
-
-// procedure validar_cadena(var str: string; caracter: Char;var retorno:string;msg:string);
-// var
-//   i,x,y: Integer;
-//   encontrado: Boolean;
-// begin
-//   repeat
-//   //clrscr;
-//   write(msg);
-//   x:=WhereX;
-//   y:=WhereY;
-//   readln(str);
-//   encontrado := False;
-
-//   // Recorrer el string
-//   for i := 1 to Length(str) do
-//   begin
-//     // Verificar si el carácter actual es igual al carácter buscado
-//     if str[i] = caracter then
-//     begin
-//       encontrado := True;
-//       retorno:=str;
-//     end;
-//   end;
-//   if encontrado=false then
-//   begin
-//   gotoxy(1,y);
-//   DelLine;
-//   end;
-//   until encontrado=true;
-//    //clrscr;
-// end;
-
-// procedure validar_fecha(fechas:fecha;var dia,mes,anio:integer;msg:string);
-// var
-//   r1,r2,r3,x,y,x2,y2:integer;
-//   aux:real;
-//   i1,i2,i3:integer;
-//   dia_aux,mes_aux,anio_aux:string;
-// begin
-
-//  repeat
-//  aux:=1;
-//  repeat
-//  x:=Wherex;
-//  y:=WhereY;
-//  writeln(msg);
-//  writeln('dia');
-//  readln(dia_aux);
-//  val(dia_aux,r1,i1);
-//  writeln('mes');
-//  readln(mes_aux);
-//  val(mes_aux,r2,i2);
-//  writeln('anio');
-//  readln(anio_aux);
-//  val(anio_aux,r3,i3);
-//  //clrscr;
-//  gotoxy(1,y);
-//  DelLine;
-//  //gotoxy(1,y+1);
-//  DelLine;
-//  //gotoxy(1,y+2);
-//  DelLine;
-//  //gotoxy(1,y+3);
-//  DelLine;
-//  //gotoxy(1,y+4);
-//  DelLine;
-//  //gotoxy(1,y+5);
-//  DelLine;
-//  //gotoxy(1,y+6);
-//  DelLine;
-//  //if (i1<>0 or i2<>0 or i3<>0) then
-
-//  until (i1=0) and (i2=0) and (i3=0);
-//  {x2:=WhereX;
-//  y2:=WhereY;
-//  gotoxy(1,y-1);
-//  DelLine;
-//  gotoxy(x2,y2);}
-
-//  dia:=r1;
-//  mes:=r2;
-//  anio:=r3;
-//  begin
-//  if (anio>fechas.anio) then
-//      aux:=2
-//  else
-//    if (anio=fechas.anio) then
-//       begin
-//       if (mes=fechas.mes) then
-//          begin
-//          if (dia>fechas.dia) then
-//             aux:=2
-//          end
-//       else
-//           if (mes>fechas.mes)then
-//           begin
-//           aux:=2
-//           end;
-//       end;
-// end;
-
-//  if mes>12 then
-//    aux:=2;
-
-//  if mes in [1,3,5,7,8,10,12]  then
-//       begin
-//     if dia>31 then
-//           aux:=2;
-//        end;
-//  if mes in [4,6,9,11] then
-//        begin
-//        if dia>30 then
-//            aux:=2;
-//        end;
-
-//  if mes=2 then
-//      begin
-//       if dia>29 then
-//      aux:=2;
-//       end;
+  GOTOXY(centroX + 10, centroY + 4);
+  TEXTCOLOR(WHITE);
+  WRITELN('  CARGA EXITOSA !  ');
+  DELAY(500);
+END;
 
 
-//  until (aux=1);
-//  //limpiar todo y mostrar bien
+PROCEDURE MOSTRARPANTALLAINICIO;
+CONST
+    MENSAJES: ARRAY[1..5] OF STRING = (
+        'ANALIZANDO BASES DE DATOS...',
+        'CARGANDO MODULOS PRINCIPALES...',
+        'OPTIMIZANDO RENDIMIENTO...',
+        'VERIFICANDO INTEGRIDAD DE DATOS...',
+        'INICIALIZANDO INTERFAZ...'
+    );
+VAR
+    I, J: INTEGER;
+    MENSAJEINDEX: INTEGER;
+BEGIN
+    CLRSCR;
+    GOTOXY(45, 9);
+    TEXTCOLOR(GREEN);
+    WRITELN('---                    ---');
+    TEXTCOLOR(WHITE);
+    GOTOXY(49, 9);
+    WRITELN('INICIANDO PROGRAMA');
+    GOTOXY(49, 14);
+    WRITELN('POR FAVOR ESPERE...');
 
+    FOR I := 1 TO 20 DO
+    BEGIN
+        MENSAJEINDEX := RANDOM(5) + 1;
+        GOTOXY(45, 18);
+        WRITE(MENSAJES[MENSAJEINDEX], '            ');
 
-// end;
+        GOTOXY(45, 16);
+        WRITE('[');
+        FOR J := 1 TO I DO
+            WRITE('=');
+        FOR J := I + 1 TO 20 DO
+            WRITE(' ');
+        WRITE('] ', I * 5, '%');
 
-// procedure validar_clave(clave:string;var retorno:integer);
-// var
-//   r:real;
-//   i:integer;
-// begin
+        DELAY(400);
+    END;
 
-//  val(clave,r,i);
-
-//  if (i=0) then
-//  retorno:=i
-//  else
-//  retorno:=i;
-// end;
-
-// function EsCadena(input: string): boolean;
-// var
-//   i: integer;
-// begin
-//   // Verificar si todos los caracteres son letras o espacios
-//   for i := 1 to Length(input) do
-//   begin
-//     if not (input[i] in ['A'..'Z', 'a'..'z', ' ']) then
-//     begin
-//       EsCadena := false;
-//       Exit;
-//     end;
-//   end;
-//   EsCadena := true;
-// end;
-
+    GOTOXY(35, 23);
+    TEXTCOLOR(GREEN);
+    WRITELN('CARGA COMPLETA. PRESIONE UNA TECLA PARA CONTINUAR...');
+    READKEY;
+END;
 
 
 end.

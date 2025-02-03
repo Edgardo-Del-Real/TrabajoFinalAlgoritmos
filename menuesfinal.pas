@@ -5,7 +5,7 @@ UNIT MENUESFINAL;
 INTERFACE
 
 USES
-  CRT, ARCHIVOALUM, ARCHIVOEVAL, UNITARBOL, MANEJOALUMNO, MANEJOEVAL, LISTADOS, ESTADISTICAS, VALIDACIONES;
+  CRT, ARCHIVOALUM, ARCHIVOEVAL, UNITARBOL, MANEJOALUMNO, MANEJOEVAL, LISTADOS, ESTADISTICAS, VALIDACIONES,SYSUTILS;
 
 PROCEDURE MENUPRINCIAL ( );
 PROCEDURE MENUESTADISTICAS (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR ARCH:T_ARCHIVO_ALUMNOS);
@@ -16,7 +16,7 @@ PROCEDURE MENULISTADOS (VAR ARCH:T_ARCHIVO_ALUMNOS; RAIZAPYNOM, RAIZLEGAJO:T_PUN
 IMPLEMENTATION
 
 
-PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
+{PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
 VAR
   OPCION: 0..4;
   X: t_dato_alumnos;
@@ -123,10 +123,161 @@ generar_arbol_legajo(raizlegajo,archivoalumno);
       CLRSCR;
     END;
   END;
+END;  }
+
+PROCEDURE MENUALUMNO (var archivoAlumno:t_archivo_alumnos; var RAIZLEGAJO, RAIZAPYNOM:T_PUNT_ARBOL);
+VAR
+  OPCION: INTEGER;
+  X: t_dato_alumnos;
+  RESPUESTA: STRING;
+  POS: INTEGER;
+  CLAVE: STRING;
+  ENTRADA: STRING;
+BEGIN
+  generar_arbol_legajo(raizlegajo,archivoalumno);
+  CLRSCR;
+  TEXTCOLOR(RED);
+  GOTOXY(52,10);
+  WRITELN('¡¡ ATENCIÓN !! ');
+  GOTOXY(30,11);
+  TEXTCOLOR(WHITE);
+  WRITELN(' --------------------------------------------------------- ');
+  GOTOXY(25,12);
+  TEXTCOLOR(RED);
+  WRITELN(' PARA PODER ACCEDER AL MENU DEBERA INGRESAR LA CLAVE CORRESPONDIENTE ');
+  TEXTCOLOR(LIGHTBLUE);
+  VALIDACION_CLAVE(RESPUESTA, POS, RAIZLEGAJO, RAIZAPYNOM, CLAVE);
+
+  IF RESPUESTA = 'S' THEN
+  BEGIN
+    WRITE ('ALTA DE ALUMNOS');
+    DARALTAALUMNO(ARCHIVOALUMNO, X, CLAVE);
+    PASAR_DATOS(ARCHIVOALUMNO, RAIZLEGAJO, RAIZAPYNOM);
+  END
+  ELSE IF RESPUESTA = 'C' THEN
+  BEGIN
+    CLRSCR;
+    GOTOXY(20,5);
+    TEXTCOLOR(WHITE);
+    WRITELN('A CONTINUACIÓN PODRA OBSERVAR LOS DATOS REGISTRADOS DEL ALUMNO SOLICITADO ');
+    MOSTRARALUMNO(archivoAlumno, POS);
+
+    SEEK(archivoAlumno, pos);
+    READ(archivoAlumno, X);
+
+    IF NOT x.ESTADO THEN
+    BEGIN
+      CLRSCR;
+      GOTOXY(35,9);
+      TEXTCOLOR(RED);
+      WRITELN('¡ATENCIÓN! EL ALUMNO SE ENCUENTRA DADO DE BAJA');
+      TEXTCOLOR(GREEN);
+      GOTOXY(40,12);
+      WRITELN('¿DESEA DARLO DE ALTA NUEVAMENTE? : ');
+      GOTOXY(35,15);
+      TEXTCOLOR(WHITE);
+      WRITELN('S -> SÍ, DESEO DARLO DE ALTA OTRA VEZ');
+      GOTOXY(35,17);
+      WRITELN('N -> NO, DESEO VOLVER AL MENÚ PRINCIPAL');
+      GOTOXY(75,12);
+      TEXTCOLOR(WHITE);
+      READLN(RESPUESTA);
+      IF UPCASE(RESPUESTA) = 'S' THEN
+      BEGIN
+        PantallaCarga2;
+        x.estado := True;
+        SEEK(archivoAlumno, pos);
+        WRITE(archivoAlumno, X);
+        CLRSCR;
+        GOTOXY(45,13);
+        TEXTCOLOR(GREEN);
+        WRITELN('ALUMNO DADO DE ALTA CORRECTAMENTE');
+        GOTOXY(45,15);
+        TEXTCOLOR(YELLOW);
+        WRITELN('PRESIONE <<ENTER>> PARA CONTINUAR');
+        READKEY;
+      END;
+    END
+    ELSE
+    BEGIN
+      REPEAT
+        CLRSCR;
+        MOSTRAR_NOMBRE_ALUMNO(ARCHIVOALUMNO, POS);
+        TEXTCOLOR(WHITE);
+        GOTOXY(50,10);
+        WRITE('**BIENVENIDO AL ');
+        TEXTCOLOR(GREEN);
+        WRITELN('MENU DE ALUMNO**');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,12);
+        WRITE('0- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('VOLVER AL MENU PRINCIPAL');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,14);
+        WRITE('1- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('BAJA');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,16);
+        WRITE('2- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('MODIFICACIÓN');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,18);
+        WRITE('3- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('CONSULTA');
+
+        REPEAT
+          TEXTCOLOR(GREEN);
+          GOTOXY(52,20);
+          WRITE('RESPUESTA: ');
+          TEXTCOLOR(WHITE);
+          READLN(ENTRADA);
+
+          IF NOT ESNUMERO(ENTRADA) OR (ENTRADA = '') THEN
+          BEGIN
+            TEXTCOLOR(RED);
+            GOTOXY(46,22);
+            WRITELN('ERROR: INGRESE UN NUMERO ENTRE 0 Y 3.');
+            DELAY(1500);
+            GOTOXY(46,22);
+            CLREOL;
+            GOTOXY(51,20);
+            CLREOL;
+          END
+          ELSE
+          BEGIN
+            OPCION := STRTOINT(ENTRADA);
+            IF (OPCION < 0) OR (OPCION > 3) THEN
+            BEGIN
+              TEXTCOLOR(RED);
+              GOTOXY(47,22);
+              WRITELN('ERROR: OPCION FUERA DE RANGO.');
+              DELAY(2000);
+              GOTOXY(47,22);
+              CLREOL;
+              GOTOXY(51,20);
+              CLREOL;
+            END;
+          END;
+        UNTIL (ESNUMERO(ENTRADA)) AND (OPCION >= 0) AND (OPCION <= 3) AND (ENTRADA <> '');
+
+        CASE OPCION OF
+          1: BAJAALUMNO(archivoAlumno, POS);
+          2: ModificarAlumno(archivoAlumno, POS);
+          3: MOSTRARALUMNO(archivoAlumno, POS);
+        END;
+      UNTIL OPCION = 0;
+      CLRSCR;
+    END;
+  END;
 END;
 
 
 
+{
 PROCEDURE MENUSEGUIMIENTO (var RAIZAPYNOM,RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL; var archivoEval:t_archivo_eval; var ARCHIVOALUMNO:t_archivo_alumnos);
 VAR
   OPCION:STRING;
@@ -237,8 +388,128 @@ BEGIN
 END;
  end;
 
-end;
+end; }
 
+PROCEDURE MENUSEGUIMIENTO (var RAIZAPYNOM,RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL; var archivoEval:t_archivo_eval; var ARCHIVOALUMNO:t_archivo_alumnos);
+VAR
+  OPCION: STRING;
+  x: t_dato_eval;
+  x2: t_dato_alumnos;
+  RESPUESTA: STRING;
+  POS, POSALUMNO: INTEGER;
+  CLAVE: STRING;
+BEGIN
+  CLRSCR;
+  TEXTCOLOR(RED);
+  GOTOXY(52,10);
+  WRITELN('¡¡ ATENCIÓN !! ');
+  GOTOXY(30,11);
+  TEXTCOLOR(WHITE);
+  WRITELN(' --------------------------------------------------------- ');
+  GOTOXY(25,12);
+  TEXTCOLOR(RED);
+  WRITELN(' PARA PODER ACCEDER AL MENU DEBERA INGRESAR LA CLAVE CORRESPONDIENTE ');
+  TEXTCOLOR(LIGHTBLUE);
+  VALIDACION_CLAVE (RESPUESTA, POS, RAIZLEGAJO, RAIZAPYNOM, CLAVE);
+
+  IF RESPUESTA = 'S' THEN
+  BEGIN
+    WRITE ('ALTA DE ALUMNOS');
+    DARALTAALUMNO(ARCHIVOALUMNO, X2, CLAVE);
+    PASAR_DATOS(ARCHIVOALUMNO, RAIZLEGAJO, RAIZAPYNOM);
+  END;
+
+  IF RESPUESTA = 'C' THEN
+  BEGIN
+    SEEK(ARCHIVOALUMNO, POS);
+    READ(ARCHIVOALUMNO, X2);
+
+    IF NOT(X2.ESTADO) THEN
+    BEGIN
+      CLRSCR;
+      GOTOXY(30,12);
+      TEXTCOLOR(RED);
+      WRITELN('NO SE PUEDE ACCEDER AL MENU DE SEGUIMIENTO DE UN ALUMNO DADO DE BAJA');
+      GOTOXY(45,15);
+      TEXTCOLOR(YELLOW);
+      WRITE('OPRIMA <<ENTER>> PARA CONTINUAR ');
+      READKEY;
+    END
+    ELSE
+    BEGIN
+      GOTOXY(20,2);
+      TEXTCOLOR(WHITE);
+      WRITELN('A CONTINUACIÓN PODRA OBSERVAR LOS DATOS REGISTRADOS DEL ALUMNO SOLICITADO ');
+      TEXTCOLOR(WHITE);
+      MOSTRARALUMNO(archivoAlumno, POS);
+
+      REPEAT
+        CLRSCR;
+        MOSTRAR_NOMBRE_ALUMNO(ARCHIVOALUMNO, POS);
+        PASAR_DATOS_EVAL(archivoEval, RAIZLEGAJO, RAIZFECHA);
+        TEXTCOLOR(WHITE);
+        GOTOXY(48,10);
+        WRITE('**BIENVENIDO AL ');
+        TEXTCOLOR(GREEN);
+        WRITELN('MENU DE SEGUIMIENTO**');
+
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,12);
+        WRITE('0- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('VOLVER AL MENU PRINCIPAL');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,14);
+        WRITE('1- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('ALTA');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,16);
+        WRITE('2- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('MODIFICACIÓN');
+        TEXTCOLOR(GREEN);
+        GOTOXY(52,18);
+        WRITE('3- ');
+        TEXTCOLOR(WHITE);
+        WRITELN('CONSULTA');
+
+        REPEAT
+          TEXTCOLOR(GREEN);
+          GOTOXY(52,20);
+          WRITE('RESPUESTA: ');
+          TEXTCOLOR(WHITE);
+          READLN(OPCION);
+
+          IF NOT esNumero(OPCION) OR (OPCION = '') OR (OPCION < '0') OR (OPCION > '3') THEN
+          BEGIN
+            TEXTCOLOR(RED);
+            GOTOXY(47,22);
+            WRITELN('ERROR: INGRESE UN NÚMERO ENTRE 0 Y 3.');
+            DELAY(1500);
+            GOTOXY(47,22);
+            CLREOL;
+            GOTOXY(51,20);
+            CLREOL;
+          END;
+        UNTIL esNumero(OPCION) AND (OPCION >= '0') AND (OPCION <= '3') AND (OPCION <> '');
+
+        CASE OPCION OF
+          '1': DarAltaEval(archivoEval, x, ARCHIVOALUMNO, POS);
+          '2': modificarEval(raizfecha, raizlegajo, archivoEval, ARCHIVOALUMNO, POS);
+          '3': ConsultaEvaluacion(raizlegajo, archivoEval, ARCHIVOALUMNO, POS);
+        END;
+      UNTIL OPCION = '0';
+
+      CLRSCR;
+    END;
+  END;
+END;
+
+
+
+
+{
 PROCEDURE MENULISTADOS (VAR ARCH:T_ARCHIVO_ALUMNOS; RAIZAPYNOM, RAIZLEGAJO:T_PUNT_ARBOL; var ARCH2:T_ARCHIVO_EVAL);
 VAR
   OPCION:0..3;
@@ -289,8 +560,94 @@ BEGIN
        END;
   UNTIL OPCION = 0 ;
   CLRSCR;
-END;
+END;      }
 
+
+PROCEDURE MENULISTADOS (VAR ARCH:T_ARCHIVO_ALUMNOS; RAIZAPYNOM, RAIZLEGAJO:T_PUNT_ARBOL; var ARCH2:T_ARCHIVO_EVAL);
+VAR
+  OPCION: INTEGER;
+  ENTRADA: STRING;
+  Y: INTEGER;
+BEGIN
+  REPEAT
+    CLRSCR;
+    TEXTCOLOR(WHITE);
+    GOTOXY(49,10);
+    WRITE('**BIENVENIDO AL ');
+    TEXTCOLOR(GREEN);
+    WRITELN('MENU DE LISTADOS**');
+    TEXTCOLOR(GREEN);
+    GOTOXY(52,12);
+    WRITE('0- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('VOLVER AL MENU PRINCIPAL');
+    TEXTCOLOR(GREEN);
+    GOTOXY(52,14);
+    WRITE('1- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('NOMBRE Y APELLIDO');
+    TEXTCOLOR(GREEN);
+    GOTOXY(52,16);
+    WRITE('2- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('EVALUACIONES DE UN ALUMNO');
+    TEXTCOLOR(GREEN);
+    GOTOXY(52,18);
+    WRITE('3- ');
+    TEXTCOLOR(WHITE);
+    WRITELN('ALUMNOS CON DETERMINADA DISCAPACIDAD');
+
+    REPEAT
+      TEXTCOLOR(GREEN);
+      GOTOXY(52,20);
+      WRITE('RESPUESTA: ');
+      TEXTCOLOR(WHITE);
+      READLN(ENTRADA);
+
+      IF NOT ESNUMERO(ENTRADA) OR (ENTRADA = '') THEN
+      BEGIN
+        TEXTCOLOR(RED);
+        GOTOXY(46,22);
+        WRITELN('ERROR: INGRESE UN NUMERO ENTRE 0 Y 3.');
+        DELAY(1500);
+        GOTOXY(46,22);
+        CLREOL;
+        GOTOXY(51,20);
+        CLREOL;
+      END
+      ELSE
+      BEGIN
+        OPCION := STRTOINT(ENTRADA);
+        IF (OPCION < 0) OR (OPCION > 3) THEN
+        BEGIN
+          TEXTCOLOR(RED);
+          GOTOXY(47,22);
+          WRITELN('ERROR: OPCION FUERA DE RANGO.');
+          DELAY(2000);
+          GOTOXY(47,22);
+          CLREOL;
+          GOTOXY(51,20);
+          CLREOL;
+        END;
+      END;
+    UNTIL (ESNUMERO(ENTRADA)) AND (OPCION >= 0) AND (OPCION <= 3) AND (ENTRADA <> '');
+
+    CASE OPCION OF
+      1:
+      BEGIN
+        generar_arbol(RAIZAPYNOM, ARCH);
+        CLRSCR;
+        MOSTRAR_ENCABEZADO_TABLA;
+        inorden_apynom(RAIZAPYNOM, ARCH, Y);
+        READKEY;
+      END;
+      2: ConsultaEvalDeAlumno(ARCH2, RAIZLEGAJO, RAIZAPYNOM);
+      3: listado_por_enfermedad(ARCH);
+    END;
+  UNTIL OPCION = 0;
+  CLRSCR;
+END;
+{
 PROCEDURE MENUESTADISTICAS (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR ARCH:T_ARCHIVO_ALUMNOS);
 VAR
    OPCION:0..4;
@@ -334,8 +691,88 @@ BEGIN
        END;
   UNTIL OPCION = 0 ;
   CLRSCR;
+END;       }
+
+PROCEDURE MENUESTADISTICAS (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR ARCH:T_ARCHIVO_ALUMNOS);
+VAR
+   OPCION: INTEGER;
+   ENTRADA: STRING;
+BEGIN
+  REPEAT
+       CLRSCR;
+       TEXTCOLOR(WHITE);
+       GOTOXY(52,10);
+       WRITE('**BIENVENIDO AL ');
+       TEXTCOLOR(GREEN);
+       WRITELN('MENU DE ESTADISTICAS**');
+       TEXTCOLOR(GREEN);
+       GOTOXY(45,12);
+       WRITE('0- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('VOLVER AL MENU PRINCIPAL');
+       TEXTCOLOR(GREEN);
+       GOTOXY(45,14);
+       WRITE('1- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('DISTRIBUCIÓN DE EVALUACIONES POR DISCAPACIDAD');
+       TEXTCOLOR(GREEN);
+       GOTOXY(45,16);
+       WRITE('2- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('DISCAPACIDAD QUE PRESENTAN MAYOR GRADO DE DIFICULTAD');
+       TEXTCOLOR(GREEN);
+       GOTOXY(45,18);
+       WRITE('3- ');
+       TEXTCOLOR(WHITE);
+       WRITELN('CANTIDAD DE ALUMNOS POR UNA DETERMINADA DISCAPACIDAD');
+
+       REPEAT
+         TEXTCOLOR(GREEN);
+         GOTOXY(45,20);
+         WRITE('RESPUESTA: ');
+         TEXTCOLOR(WHITE);
+         READLN(ENTRADA);
+
+         IF NOT ESNUMERO(ENTRADA) OR (ENTRADA = '') THEN
+         BEGIN
+           TEXTCOLOR(RED);
+           GOTOXY(50,22);
+           WRITELN('ERROR: INGRESE UN NUMERO ENTRE 0 Y 3.');
+           DELAY(1500);
+           GOTOXY(50,22);
+           CLREOL;
+           GOTOXY(51,20);
+           CLREOL;
+         END
+         ELSE
+         BEGIN
+           OPCION := STRTOINT(ENTRADA);
+           IF (OPCION < 0) OR (OPCION > 3) THEN
+           BEGIN
+             TEXTCOLOR(RED);
+             GOTOXY(50,22);
+             WRITELN('ERROR: OPCION FUERA DE RANGO.');
+             DELAY(2000);
+             GOTOXY(50,22);
+             CLREOL;
+             GOTOXY(51,20);
+             CLREOL;
+           END;
+         END;
+       UNTIL (ESNUMERO(ENTRADA)) AND (OPCION >= 0) AND (OPCION <= 3) AND (ENTRADA <> '');
+
+       CASE OPCION OF
+            1: evaluacionesPorFecha(ARCHIVOEVAL);
+            2: compararValoracionesPorFecha(ARCHIVOEVAL);
+            3: MUESTRADISCAPACIDADES(ARCH);
+       END;
+  UNTIL OPCION = 0;
+  CLRSCR;
 END;
 
+
+
+{
 PROCEDURE MENUPRINCIAL ();
 VAR
   OPCION:0..4;
@@ -393,7 +830,98 @@ BEGIN
             3:MENULISTADOS (ARCH,RAIZ,RAIZ2,ARCH2);
             4:MENUESTADISTICAS (arch2, ARCH);
        END;
-  UNTIL OPCION = 0 ;
+  UNTIL OPCION = 0;
+  CERRAR(ARCH);
+  CERRAR2(ARCH2);
+END;        }
+
+PROCEDURE MENUPRINCIAL ();
+VAR
+  OPCION: INTEGER;
+  ARCH: T_ARCHIVO_ALUMNOS;
+  ARCH2: T_ARCHIVO_EVAL;
+  RAIZ, RAIZ2, RAIZ3: T_PUNT_ARBOL;
+  CLAVE: STRING;
+  ENTRADA: STRING;
+BEGIN
+  CREAR_ABRIR(ARCH);
+  CREAR_ABRIR2(ARCH2);
+  CREAR_ARBOL(RAIZ);
+  CREAR_ARBOL(RAIZ2);
+  CREAR_ARBOL(RAIZ3);
+  PASAR_DATOS(ARCH, RAIZ, RAIZ2);
+  MostrarPantallaInicio;
+  REPEAT
+    REPEAT
+      clrscr;
+      TEXTCOLOR(WHITE);
+      GOTOXY(40,10);
+      WRITE('**BIENVENIDO A ');
+      TEXTCOLOR(GREEN);
+      WRITELN('SEGUIMIENTO DE APRENDIZAJE**');
+      TEXTCOLOR(GREEN);
+      GOTOXY(52,12);
+      WRITE('1- ');
+      TEXTCOLOR(WHITE);
+      WRITELN('ALUMNO');
+      GOTOXY(52,14);
+      TEXTCOLOR(GREEN);
+      WRITE('2- ');
+      TEXTCOLOR(WHITE);
+      WRITELN('SEGUIMIENTO');
+      GOTOXY(52,16);
+      TEXTCOLOR(GREEN);
+      WRITE('3- ');
+      TEXTCOLOR(WHITE);
+      WRITELN('LISTADOS');
+      GOTOXY(52,18);
+      TEXTCOLOR(GREEN);
+      WRITE('4- ');
+      TEXTCOLOR(WHITE);
+      WRITELN('ESTADISTICAS');
+      GOTOXY(52,20);
+      TEXTCOLOR(GREEN);
+      WRITE('0- ');
+      TEXTCOLOR(WHITE);
+      WRITELN('SALIR DEL PROGRAMA');
+      GOTOXY(52,22);
+      TEXTCOLOR(GREEN);
+      WRITE('RESPUESTA: ');
+      TEXTCOLOR(WHITE);
+      READLN(ENTRADA);
+
+      IF NOT ESNUMERO(ENTRADA) OR (ENTRADA = '') THEN
+      BEGIN
+        TEXTCOLOR(RED);
+        GOTOXY(46,25);
+        WRITELN('ERROR: INGRESE UN NUMERO ENTRE 0 Y 4.');
+        DELAY(1500);
+      END
+      ELSE
+      BEGIN
+        OPCION := STRTOINT(ENTRADA);
+        IF (OPCION < 0) OR (OPCION > 4) THEN
+        BEGIN
+          TEXTCOLOR(RED);
+          GOTOXY(47,25);
+          WRITELN('ERROR: OPCION FUERA DE RANGO.');
+          DELAY(2000);
+        END;
+      END;
+
+    UNTIL (ESNUMERO(ENTRADA)) AND (OPCION >= 0) AND (OPCION <= 4) AND (ENTRADA <> '');
+
+    CASE OPCION OF
+      1: MENUALUMNO(ARCH, RAIZ, RAIZ2);
+      2: MENUSEGUIMIENTO(RAIZ2, RAIZ, RAIZ3, ARCH2, ARCH);
+      3: MENULISTADOS(ARCH, RAIZ, RAIZ2, ARCH2);
+      4: MENUESTADISTICAS(ARCH2, ARCH);
+    END;
+
+  UNTIL OPCION = 0;
+
+  pantallacarga();
+
   CERRAR(ARCH);
   CERRAR2(ARCH2);
 END;
