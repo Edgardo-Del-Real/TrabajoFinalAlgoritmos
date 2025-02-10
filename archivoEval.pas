@@ -1,4 +1,5 @@
 UNIT ARCHIVOEVAL;
+
 {$CODEPAGE UTF8}
 
 INTERFACE
@@ -7,7 +8,7 @@ USES
   CRT;
 
 CONST
-    RUTA = 'C:\TPFinal\TPFINAL2\TrabajoFinalAlgoritmos.DAT';
+    RUTA = 'C:\TPFinal\TrabajoFinalAlgoritmos.DAT';
 
 TYPE
   T_FECHA = RECORD
@@ -44,4 +45,5 @@ PROCEDURE CERRAR2 (VAR ARCH:T_ARCHIVO_EVAL);
 BEGIN
     CLOSE(ARCH);
 END;
+
 END.

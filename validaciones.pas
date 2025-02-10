@@ -1,60 +1,63 @@
-unit VALIDACIONES;
+UNIT VALIDACIONES;
 
 {$CODEPAGE UTF8}
 
-interface
+INTERFACE
 
-uses
-CRT, SYSUTILS, unitarbol, archivoEVal;
-function fechaExistente (var archivoeval:T_ARCHIVO_EVAL; fecha:string;legajo:string):boolean;
-function EsFechaValida(FechaStr: string): Boolean;
-function validarFechaDiaMes(diaMes: string): boolean;
-function validarFechaAnio(anio: string): boolean;
-function EsCadena(input: string): boolean;
-function EsNumero(input: string): boolean;
+USES
+CRT, SYSUTILS, UNITARBOL, ARCHIVOEVAL;
+
+FUNCTION FECHAEXISTENTE (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; FECHA:STRING;LEGAJO:STRING):BOOLEAN;
+FUNCTION ESFECHAVALIDA(FECHASTR: STRING): BOOLEAN;
+FUNCTION VALIDARFECHADIAMES(DIAMES: STRING): BOOLEAN;
+FUNCTION VALIDARFECHAANIO(ANIO: STRING): BOOLEAN;
+FUNCTION ESCADENA(INPUT: STRING): BOOLEAN;
+FUNCTION ESNUMERO(INPUT: STRING): BOOLEAN;
  PROCEDURE INGRESAR_CLAVE (VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL; VAR POS:INTEGER; VAR CLAVE:STRING);
  PROCEDURE VALIDACION_CLAVE(VAR RESPUESTA: STRING; VAR POS: INTEGER;RAIZLEGAJO, RAIZAPYNOM: T_PUNT_ARBOL; VAR CLAVE:STRING);
- PROCEDURE PantallaCarga;
- PROCEDURE PantallaCarga2;
- procedure MostrarPantallaInicio;
+ PROCEDURE PANTALLACARGA;
+ PROCEDURE PANTALLACARGA2;
+ PROCEDURE MOSTRARPANTALLAINICIO;
 
 
-implementation
- function validarFechaDiaMes(diaMes: string): boolean;
- begin
-     if esNumero(diaMes) and (Length(diaMes) = 2) then
-         validarFechaDiaMes := True
-     else
-         validarFechaDiaMes := False;
- end;
+IMPLEMENTATION
+ FUNCTION VALIDARFECHADIAMES(DIAMES: STRING): BOOLEAN;
+ BEGIN
+     IF ESNUMERO(DIAMES) AND (LENGTH(DIAMES) = 2) THEN
+         VALIDARFECHADIAMES := TRUE
+     ELSE
+         VALIDARFECHADIAMES := FALSE;
+ END;
 
- function validarFechaAnio(anio: string): boolean;
- begin
-     if esNumero(anio) and (Length(anio) = 4) then
-         validarFechaAnio := True
-     else
-         validarFechaAnio := False;
- end;
+ FUNCTION VALIDARFECHAANIO(ANIO: STRING): BOOLEAN;
+ BEGIN
+     IF ESNUMERO(ANIO) AND (LENGTH(ANIO) = 4) THEN
+         VALIDARFECHAANIO := TRUE
+     ELSE
+         VALIDARFECHAANIO := FALSE;
+ END;
 
-function fechaExistente (var archivoeval:T_ARCHIVO_EVAL; fecha:string; legajo:string):boolean;
-var
-x:t_dato_Eval;
-fechaAux:string;
-i:byte;
-begin
-    fechaExistente:=false;
-    for i:=0 to fileSize(archivoEVal)-1 do
-    begin
-        seek(archivoEVal,i);
-        read(archivoEval,x);
-        if x.NUM_LEGAJO = legajo then
-            begin
-               FECHAAux:=(X.FECHA_EVAL.DIA) + ' / ' + (X.FECHA_EVAL.MES) + ' / ' + (X.FECHA_EVAL.ANIO);
-            end;
-        if fechaAux = fecha then
-            fechaExistente:=true;
-    end;
-end;
+FUNCTION FECHAEXISTENTE (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; FECHA:STRING; LEGAJO:STRING):BOOLEAN;
+VAR
+X:T_DATO_EVAL;
+FECHAAUX:STRING;
+I:BYTE;
+BEGIN
+    FECHAAUX:='';
+    FECHAEXISTENTE:=FALSE;
+   WHILE NOT EOF(ARCHIVOEVAL) DO
+    BEGIN
+        READ(ARCHIVOEVAL,X);
+        IF X.NUM_LEGAJO = LEGAJO THEN
+            BEGIN
+               FECHAAUX:=(X.FECHA_EVAL.DIA) + ' / ' + (X.FECHA_EVAL.MES) + ' / ' + (X.FECHA_EVAL.ANIO);
+            END;
+        IF FECHAAUX = FECHA THEN
+            FECHAEXISTENTE:=TRUE;
+    END;
+END;
+
+
 
 PROCEDURE INGRESAR_CLAVE (VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL; VAR POS:INTEGER; VAR CLAVE:STRING);
 BEGIN
@@ -62,7 +65,7 @@ REPEAT
  TEXTCOLOR(LIGHTBLUE);
  GOTOXY(40,15);
  WRITE ('INGRESAR CLAVE DEL ALUMNO: ');
- textcolor(white);
+ TEXTCOLOR(WHITE);
   READLN (CLAVE);
  UNTIL CLAVE <> '';
   POS := PREORDEN(RAIZLEGAJO, CLAVE);
@@ -78,46 +81,32 @@ BEGIN
   RESPUESTA := 'R';
   WHILE (RESPUESTA = 'R') AND (INTENTO < 3) DO
   BEGIN
-    INC(INTENTO);  // INCREMENTAMOS EL CONTADOR DE INTENTOS
+    INC(INTENTO);
     INGRESAR_CLAVE(RAIZLEGAJO, RAIZAPYNOM, POS, CLAVE);
     IF POS = -1 THEN
     BEGIN
-      CLRSCR;
-      
-      GOTOXY(30,24);
-      TEXTCOLOR(WHITE);
-      WRITE('PRESIONE <<ENTER>> PARA REGRESAR AL MENU PRINCIPAL');
-      GOTOXY(10,9);
-      TEXTCOLOR(RED);
-      WRITELN('SI USTED ESTA VIENDO ESTO ES PORQUE OCURRIO UN ERROR. POR FAVOR VERIFIQUE LOS DATOS PROPORCIONADOS');
-      GOTOXY(10,10);
-      TEXTCOLOR(WHITE);
-      WRITELN('---------------------------------------------------------------------------------------------------');
-      GOTOXY(20,12);
-      TEXTCOLOR(LIGHTBLUE);
+
+      GOTOXY(40,17);
+      TEXTCOLOR(LIGHTRED);
       WRITE('ERROR: ');
+      IF NOT ESNUMERO(CLAVE) THEN
+      BEGIN
       TEXTCOLOR(WHITE);
-      WRITE('LA CLAVE INGRESADA NO SE ENCUENTRA CARGADA EN EL SISTEMA');
-      GOTOXY(20,14);
-      TEXTCOLOR(WHITE);
-      WRITELN('¿ESTÁ INTENTANDO INGRESAR UN NUEVO ALUMNO? O ¿HUBO ALGÚN ERROR CON LA CLAVE?');
-      GOTOXY(20,16);
-      WRITE('SI DESEA CARGAR UN NUEVO ALUMNO, ');
+      WRITE('LA CLAVE ES INVALIDA');
+      END
+      ELSE
+      BEGIN
+      WRITE('CLAVE INEXISTENTE. PARA CARGAR PRESIONE S ');
+      GOTOXY(40,19);
       TEXTCOLOR(LIGHTBLUE);
-      WRITE('PRESIONE S');
-      GOTOXY(20,18);
+      WRITE('PARA VOLVER AL MENU PRESIONE <<ENTER>>');
+      GOTOXY(40,21);
       TEXTCOLOR(WHITE);
-      WRITE('SI DESEA CORREGIR LA CLAVE, TENDRA 3 INTENTOS MAS, ');
-      TEXTCOLOR(LIGHTBLUE);
-      WRITE('PRESIONE R');
-      GOTOXY(20,20);
-      TEXTCOLOR(WHITE);
-      WRITE('REPUESTA: ');
+      WRITE('RESPUESTA: ');
       TEXTCOLOR(LIGHTBLUE);
       READLN(RESPUESTA);
       RESPUESTA := UPPERCASE(RESPUESTA);
-
-      CLRSCR;
+      END;
     END
     ELSE
       RESPUESTA := 'C';  // SALIMOS DEL BUCLE SI LA CLAVE ES VÁLIDA
@@ -127,120 +116,123 @@ BEGIN
     WRITELN('SE HAN AGOTADO LOS INTENTOS PERMITIDOS. POR FAVOR, CONTACTE AL ADMINISTRADOR DEL SISTEMA.');
 END;
 
-function EsFechaValida(FechaStr: string): Boolean;
-var
-  Fecha: TDateTime;
-  FechaActual: TDateTime;
-begin
-  FechaActual := Date;
-  if TryStrToDate(FechaStr, Fecha) then
-  begin
-    if Fecha > FechaActual then
-      Result := False
-    else
-      Result := True;
-  end
-  else
-    Result := False;
-end;
-
-function EsCadena(input: string): boolean;
-var
-  i: integer;
-  stop: boolean;
-begin
-  EsCadena := true;
-  stop := false;
-  i := 1;
-  while( i <= Length(input)) and (not stop) do
-  begin
-    if not (UPCASE(input[i]) in ['A'..'Z', ' ']) then
-    begin
-      EsCadena := false;
-      stop := true;
-    end;
-    inc(i);
-  end;
-end;
-
- function EsNumero(input: string): boolean;
- var
-   i: integer;
- begin
-   // Verificar si todos los caracteres son dígitos
-   for i := 1 to Length(input) do
-   begin
-     if not (input[i] in ['0'..'9']) then
-     begin
-       EsNumero := false;
-       Exit;
-     end;
-   end;
-   EsNumero := true;
- end;
-
-
- PROCEDURE PantallaCarga;
+FUNCTION ESFECHAVALIDA(FECHASTR: STRING): BOOLEAN;
 VAR
-  i, centroX, centroY, anchoConsola, altoConsola: INTEGER;
+  FECHA: TDATETIME;
+  FECHAACTUAL: TDATETIME;
+BEGIN
+  FECHAACTUAL := DATE;
+  IF TRYSTRTODATE(FECHASTR, FECHA) THEN
+  BEGIN
+    IF FECHA > FECHAACTUAL THEN
+      RESULT := FALSE
+    ELSE
+      RESULT := TRUE;
+  END
+  ELSE
+    RESULT := FALSE;
+END;
+
+FUNCTION ESCADENA(INPUT: STRING): BOOLEAN;
+VAR
+  I: INTEGER;
+  STOP: BOOLEAN;
+BEGIN
+  ESCADENA := (LENGTH(INPUT) > 0);
+  STOP := NOT ESCADENA;
+  I := 1;
+
+  WHILE (I <= LENGTH(INPUT)) AND (NOT STOP) DO
+  BEGIN
+    IF NOT (UPCASE(INPUT[I]) IN ['A'..'Z', ' ']) THEN
+    BEGIN
+      ESCADENA := FALSE;
+      STOP := TRUE;
+    END;
+    INC(I);
+  END;
+END;
+
+FUNCTION ESNUMERO(INPUT: STRING): BOOLEAN;
+VAR
+  I: INTEGER;
+  ESVALIDO: BOOLEAN;
+BEGIN
+  ESVALIDO := (LENGTH(INPUT) > 0);
+  I := 1;
+
+  WHILE (I <= LENGTH(INPUT)) AND ESVALIDO DO
+  BEGIN
+    IF NOT (INPUT[I] IN ['0'..'9']) THEN
+      ESVALIDO := FALSE;
+    INC(I);
+  END;
+
+  ESNUMERO := ESVALIDO;
+END;
+
+
+ PROCEDURE PANTALLACARGA;
+VAR
+  I, CENTROX, CENTROY, ANCHOCONSOLA, ALTOCONSOLA: INTEGER;
 BEGIN
   CLRSCR;
-  anchoConsola := 120;
-  altoConsola := 35;
-  centroX := (anchoConsola DIV 2) - 20;
-  centroY := (altoConsola DIV 2) - 3;
+  ANCHOCONSOLA := 120;
+  ALTOCONSOLA := 35;
+  CENTROX := (ANCHOCONSOLA DIV 2) - 20;
+  CENTROY := (ALTOCONSOLA DIV 2) - 3;
 
   TEXTCOLOR(WHITE);
-  GOTOXY(centroX, centroY);
+  GOTOXY(CENTROX, CENTROY);
   WRITE('CERRANDO EL PROGRAMA, POR FAVOR ESPERE ...');
   TEXTCOLOR(GREEN);
 
-  GOTOXY(centroX, centroY + 2);
+  GOTOXY(CENTROX, CENTROY + 2);
   WRITE('[');
-  GOTOXY(centroX + 40, centroY + 2);
+  GOTOXY(CENTROX + 40, CENTROY + 2);
   WRITE(']');
 
-  FOR i := centroX + 1 TO centroX + 39 DO
+  FOR I := CENTROX + 1 TO CENTROX + 39 DO
   BEGIN
-    GOTOXY(i, centroY + 2);
+    GOTOXY(I, CENTROY + 2);
     WRITE('-');
     DELAY(50);
   END;
 
-  GOTOXY(centroX + 10, centroY + 4);
+  GOTOXY(CENTROX + 10, CENTROY + 4);
   TEXTCOLOR(WHITE);
   WRITELN('  CARGA COMPLETA!  ');
   DELAY(500);
 END;
 
-PROCEDURE PantallaCarga2;
+PROCEDURE PANTALLACARGA2;
 VAR
-  i, centroX, centroY, anchoConsola, altoConsola: INTEGER;
+  I, CENTROX, CENTROY, ANCHOCONSOLA, ALTOCONSOLA: INTEGER;
 BEGIN
   CLRSCR;
-  anchoConsola := 120;
-  altoConsola := 35;
-  centroX := (anchoConsola DIV 2) - 20;
-  centroY := (altoConsola DIV 2) - 3;
+  ANCHOCONSOLA := 120;
+  ALTOCONSOLA := 35;
+  CENTROX := (ANCHOCONSOLA DIV 2) - 20;
+  CENTROY := (ALTOCONSOLA DIV 2) - 3;
 
   TEXTCOLOR(WHITE);
-  GOTOXY(centroX, centroY);
+  GOTOXY(CENTROX, CENTROY);
   WRITE('CONFIRMANDO DATOS, POR FAVOR ESPERE ...');
   TEXTCOLOR(GREEN);
 
-  GOTOXY(centroX, centroY + 2);
+  GOTOXY(CENTROX, CENTROY + 2);
   WRITE('[');
-  GOTOXY(centroX + 40, centroY + 2);
+  GOTOXY(CENTROX + 40, CENTROY + 2);
   WRITE(']');
 
-  FOR i := centroX + 1 TO centroX + 39 DO
+  FOR I := CENTROX + 1 TO CENTROX + 39 DO
   BEGIN
-    GOTOXY(i, centroY + 2);
+    GOTOXY(I, CENTROY + 2);
     WRITE('-');
     DELAY(100);
   END;
 
-  GOTOXY(centroX + 10, centroY + 4);
+  GOTOXY(CENTROX + 10, CENTROY + 4);
   TEXTCOLOR(WHITE);
   WRITELN('  CARGA EXITOSA !  ');
   DELAY(500);
@@ -294,4 +286,4 @@ BEGIN
 END;
 
 
-end.
+END.

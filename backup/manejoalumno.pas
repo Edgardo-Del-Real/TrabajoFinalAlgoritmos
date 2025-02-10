@@ -16,19 +16,19 @@ INTERFACE
            'MEMORIA Y OTRAS DIFICULTADES DEL PENSAMIENTO',
            'DESTREZAS SOCIALES INADECUADAS');
 
-PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS);
+
+PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS; CLAVE:STRING; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS);
 PROCEDURE PASAR_DATOS (VAR ARCH: T_ARCHIVO_ALUMNOS; VAR RAIZLEGAJO,RAIZAPYNOM:T_PUNT_ARBOL);
 PROCEDURE CARGARALUMNO(VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR FINARCH:CARDINAL; X:T_DATO_ALUMNOS);
-PROCEDURE DARALTAALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR X:T_DATO_ALUMNOS);
+PROCEDURE DARALTAALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR X:T_DATO_ALUMNOS; CLAVE:STRING);
 PROCEDURE MUESTRADATOSALUMNO(X:T_DATO_ALUMNOS);
-//PROCEDURE CONSULTAALUMNOS(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL ; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS);
-// PROCEDURE BAJAALUMNO(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS);
-//PROCEDURE MODIFICARALUMNO(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS);
 PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR X: T_DATO_ALUMNOS);
 procedure MOSTRARALUMNO (VAR ARCH:T_ARCHIVO_ALUMNOS ; POS:INTEGER);
 PROCEDURE BAJAALUMNO(VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS; POS: INTEGER);
 PROCEDURE MODIFICARALUMNO(VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS; POS:INTEGER);
 PROCEDURE MOSTRAR_NOMBRE_ALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; POS:INTEGER);
+FUNCTION MostrarSiNo(condicion: BOOLEAN):sTRING;
+FUNCTION MostrarEstado(condicion: BOOLEAN):string;
 
 IMPLEMENTATION
 
@@ -56,34 +56,58 @@ BEGIN
   END;
 END;
 
-PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS);
+PROCEDURE CARGARDATOSALUMNO (VAR X:T_DATO_ALUMNOS; CLAVE:STRING; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS);
 VAR
     DISC:string;
     I:BYTE;
     FECHA:STRING;
-BEGIN
-  CLRSCR;
-  WITH X DO
+    POS:INTEGER;
+    Y:T_DATO_ALUMNOS;
+    existe:boolean;
+  BEGIN
+      CLRSCR;
+      WITH X DO
       BEGIN
-        TEXTCOLOR(WHITE);
-        GOTOXY(50,10);
-        WRITELN('**ALTA ALUMNO**');
-        TEXTCOLOR(GREEN);
-        GOTOXY(45,12);
-        WRITE('INGRESE NUMERO DE LEGAJO: ');
-        TEXTCOLOR(WHITE);
-        READLN(NUM_LEGAJO);
+          TEXTCOLOR(WHITE);
+          GOTOXY(50,10);
+          WRITELN('**ALTA ALUMNO**');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,12);
+          WRITE('NUMERO DE LEGAJO: ', CLAVE);
+          NUM_LEGAJO := CLAVE;
 
-        while not EsNumero(NUM_LEGAJO) do
-        begin
-        clrscr;
-        TEXTCOLOR(GREEN);
-        GOTOXY(45,12);
-        WRITE('HUBO UN ERROR. INGRESE NUEVAMENTE SU NUMERO DE LEGAJO: ');
-        TEXTCOLOR(WHITE);
-        READLN(NUM_LEGAJO);
-        end;
+          REPEAT
+              IF NOT EsNumero(NUM_LEGAJO) THEN
+              BEGIN
+                  CLRSCR;
+                  TEXTCOLOR(GREEN);
+                  GOTOXY(42, 12);
+                  WRITE('HUBO UN ERROR. INGRESE NUEVAMENTE SU NUMERO DE LEGAJO: ');
+                  TEXTCOLOR(WHITE);
+                  READLN(NUM_LEGAJO);
+              END;
+          UNTIL EsNumero(NUM_LEGAJO);
 
+          REPEAT
+              RESET(ARCHIVOALUMNO);
+              EXISTE := FALSE;
+
+              WHILE NOT EOF(ARCHIVOALUMNO) DO
+              BEGIN
+                  READ(ARCHIVOALUMNO, Y);
+                  IF NUM_LEGAJO = Y.NUM_LEGAJO THEN
+                      EXISTE := TRUE;
+              END;
+
+              IF EXISTE THEN
+              BEGIN
+                  CLRSCR;
+                  GOTOXY(42, 12);
+                  WRITE('HUBO UN ERROR. LEGAJO YA EXISTENTE. INGRESE UN NUEVO LEGAJO: ');
+                  TEXTCOLOR(WHITE);
+                  READLN(NUM_LEGAJO);
+              END;
+          UNTIL NOT EXISTE;
         TEXTCOLOR(GREEN);
         GOTOXY(45,14);
         WRITE('INGRESE NOMBRE Y APELLIDO: ');
@@ -93,7 +117,7 @@ BEGIN
         TEXTCOLOR(RED);
 
 
-        while not EsCadena(APYNOM) do
+        while not EsCadena(APYNOM) and (apynom = '') do
         begin
             CLRSCR;
             TEXTCOLOR(RED);
@@ -116,14 +140,14 @@ BEGIN
         WRITE('INGRESE DIA: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.DIA);
-          while not(EsNumero(FECHA_NAC.DIA)) do
+          while not(validarFechaDiaMes(FECHA_NAC.DIA)) do
           begin
           GOTOXY(45,24);
           TEXTCOLOR(RED);
           writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
           GOTOXY(45,18);
-          WRITE('INGRESE EL DIA: ');
+          WRITE('INGRESE DIA: ');
           TEXTCOLOR(WHITE);
           readln(FECHA_NAC.DIA);
           GOTOXY(45,24);
@@ -135,14 +159,14 @@ BEGIN
         WRITE('INGRESE MES: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.MES);
-         while not(EsNumero(FECHA_NAC.MES)) do
+         while not(validarFechaDiaMes(FECHA_NAC.MES)) do
           begin
           GOTOXY(45,24);
           TEXTCOLOR(RED);
           writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
           GOTOXY(45,20);
-          WRITE('INGRESE EL MES: ');
+          WRITE('INGRESE MES: ');
           TEXTCOLOR(WHITE);
           readln(FECHA_NAC.MES);
           GOTOXY(45,24);
@@ -151,18 +175,18 @@ BEGIN
 
         TEXTCOLOR(GREEN);
         GOTOXY(45,22);
-        WRITE('INGRESE AÑO DE NACIMIENTO: ');
+        WRITE('INGRESE AÑO: ');
         TEXTCOLOR(WHITE);
         READLN(FECHA_NAC.ANIO);
 
-          while not(EsNumero(FECHA_NAC.ANIO)) do
+          while not(validarFechaAnio(FECHA_NAC.ANIO)) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
           writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
           GOTOXY(45,22);
-          WRITE('INGRESE EL AÑO: ');
+          WRITE('INGRESE AÑO: ');
           TEXTCOLOR(WHITE);
           readln(FECHA_NAC.ANIO);
           GOTOXY(45,24);
@@ -215,8 +239,8 @@ BEGIN
                   DISCAPACIDAD[I]:=FALSE;
         END;
         ESTADO:= TRUE;
-      END;
-  CLRSCR;
+        CLRSCR;
+      end;
 END;
 
 PROCEDURE CARGARALUMNO(VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR FINARCH:CARDINAL; X:T_DATO_ALUMNOS);
@@ -225,24 +249,26 @@ SEEK(ARCHIVOALUMNO, FINARCH);
 WRITE(ARCHIVOALUMNO,X);
 END;
 
-PROCEDURE DARALTAALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR X:T_DATO_ALUMNOS);
+PROCEDURE DARALTAALUMNO (VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; VAR X:T_DATO_ALUMNOS; CLAVE:STRING);
 VAR
     FINARCH:CARDINAL;
 BEGIN
-    CARGARDATOSALUMNO(X);
+    CARGARDATOSALUMNO(X,CLAVE,ARCHIVOALUMNO);
     FINARCH:= FILESIZE(ARCHIVOALUMNO);
     CARGARALUMNO(ARCHIVOALUMNO, FINARCH, X);
 END;
 
-PROCEDURE MUESTRADATOSALUMNO(X:T_DATO_ALUMNOS);
+ PROCEDURE MUESTRADATOSALUMNO(X:T_DATO_ALUMNOS);
 VAR
     I:BYTE;
+    EstadoStr: STRING;
+    Disc1, Disc2, Disc3, Disc4, Disc5: STRING;
 BEGIN
   WITH X DO
     BEGIN
       CLRSCR;
       GOTOXY(10,5);
-      TEXTCOLOR(RED);
+      TEXTCOLOR(YELLOW);
       WRITELN('DATOS ACTUALES DEL ALUMNO');
       GOTOXY(10,7);
       TEXTCOLOR (GREEN);
@@ -263,7 +289,8 @@ BEGIN
       TEXTCOLOR (GREEN);
       WRITE('ESTADO: ');
       TEXTCOLOR(WHITE);
-      WRITE(ESTADO);
+      EstadoStr := MostrarEstado(ESTADO);
+      WRITE(EstadoStr); WRITELN;
       GOTOXY(10,15);
       TEXTCOLOR(GREEN);
       WRITELN('DISCAPACIDAD/ES:');
@@ -271,66 +298,53 @@ BEGIN
       GOTOXY(10,17);
       WRITE('PROBLEMAS DEL HABLA Y LENGUAJE: ');
       TEXTCOLOR(GREEN);
-      WRITELN(DISCAPACIDAD[1]);
+      Disc1 := MostrarSiNo(DISCAPACIDAD[1]);
+      WRITE(Disc1); WRITELN;
       TEXTCOLOR(WHITE);
       GOTOXY(10,19);
       WRITE('DIFICULTAD PARA ESCRIBIR: ');
       TEXTCOLOR(GREEN);
-      WRITELN(DISCAPACIDAD[2]);
+      Disc2 := MostrarSiNo(DISCAPACIDAD[2]);
+      WRITE(Disc2); WRITELN;
       TEXTCOLOR(WHITE);
       GOTOXY(10,21);
       WRITE('DIFICULTADES DE APRENDIZAJE VISUAL: ');
       TEXTCOLOR(GREEN);
-      WRITELN(DISCAPACIDAD[3]);
+      Disc3 := MostrarSiNo(DISCAPACIDAD[3]);
+      WRITE(Disc3); WRITELN;
       TEXTCOLOR(WHITE);
       GOTOXY(10,23);
       WRITE('MEMORIA Y OTRAS DIFICULTADES DEL PENSAMIENTO: ');
       TEXTCOLOR(GREEN);
-      WRITELN(DISCAPACIDAD[4]);
+      Disc4 := MostrarSiNo(DISCAPACIDAD[4]);
+      WRITE(Disc4); WRITELN;
       TEXTCOLOR(WHITE);
       GOTOXY(10,25);
       WRITE('DESTREZAS SOCIALES INADECUADAS: ');
       TEXTCOLOR(GREEN);
-      WRITELN(DISCAPACIDAD[5]);
-      READKEY;
+      Disc5 := MostrarSiNo(DISCAPACIDAD[5]);
+      WRITE(Disc5); WRITELN;
+      TEXTCOLOR(WHITE);
     END;
 END;
 
-{PROCEDURE CONSULTAALUMNOS(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL ; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS);
-VAR
-  BUSCADO: STRING;
-  POS: INTEGER;
-  X: T_DATO_ALUMNOS;
+FUNCTION MostrarEstado(condicion: BOOLEAN):string;
 BEGIN
-  CLRSCR;
-  GOTOXY(47,10);
-  WRITELN('**CONSULTA ALUMNO POR LEGAJO**');
-  TEXTCOLOR(GREEN);
-  GOTOXY(45,12);
-  WRITE('INGRESE LEGAJO DEL ALUMNO: ');
-  TEXTCOLOR(WHITE);
-  READLN(BUSCADO);
+  IF condicion THEN
+   MostrarEstado :=  'ACTIVO'
+  ELSE
+     MostrarEstado :=  'INACTIVO';
+END;
 
-  while not esnumero(buscado) do
-  begin
-    clrscr;
-  TEXTCOLOR(GREEN);
-  GOTOXY(45,12);
-  WRITE('HUBO UN ERROR. INGRESE NUEVAMENTE EL LEGAJO DEL ALUMNO: ');
-  TEXTCOLOR(WHITE);
-  READLN(BUSCADO);
-  end;
 
-  POS := PREORDEN(RAIZAPYNOM, BUSCADO);
-  IF POS = -1 THEN
-      POS := PREORDEN(RAIZLEGAJO, BUSCADO);
-  BEGIN
-    CLRSCR;
-    MOSTRARALUMNO (ARCHIVOALUMNO, POS);
-  END;
-  READKEY;
-  CLRSCR;
-END;         }
+FUNCTION MostrarSiNo(condicion: BOOLEAN):string;
+BEGIN
+  IF condicion THEN
+    MostrarSiNo :=  'SI'
+  ELSE
+    MostrarSiNo :=  'NO';
+END;
+
 
 procedure MOSTRARALUMNO (VAR ARCH:T_ARCHIVO_ALUMNOS ; POS:INTEGER);
 VAR
@@ -340,8 +354,11 @@ RESET(ARCH);
 SEEK(ARCH, POS);
 READ(ARCH, X);
 MUESTRADATOSALUMNO(X);
+{GOTOXY(70,15);
+TEXTCOLOR(YELLOW);
+WRITE('OPRIMA <<ENTER>> PARA CONTINUAR ');
+READKEY; }
 end;
-
 
 PROCEDURE BAJAALUMNO(VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS; POS: INTEGER);
 VAR
@@ -349,50 +366,73 @@ VAR
   X: T_DATO_ALUMNOS;
   op: char;
 BEGIN
-    CLRSCR;
+    //CLRSCR;
     SEEK(ARCHIVOALUMNO, POS);
     READ(ARCHIVOALUMNO, X);
 
     IF NOT X.ESTADO THEN
       BEGIN
-        GOTOXY(50,14);
+        GOTOXY(72,30);
         TEXTCOLOR(RED);
         WRITELN('ALUMNO YA DADO DE BAJA');
         READKEY;
       END
     ELSE
       BEGIN
-        GOTOXY(45,14);
-        WRITELN('ESTA SEGURO QUE QUIERE DAR DE BAJA A: ', X.APYNOM);
-        GOTOXY(45,15);
-        WRITE('RESPONDA S/N: ');
-        READLN(OP);
-        IF UPCASE(OP) = 'S' THEN
+        TEXTCOLOR(GREEN);
+        GOTOXY(55,25);
+        WRITE('¿SEGURO QUE QUIERE DAR DE BAJA A ' );
+        TEXTCOLOR(YELLOW);
+        WRITE( X.APYNOM );
+        TEXTCOLOR(GREEN);
+        WRITE(' ? S/N');
+
+        REPEAT
+          TEXTCOLOR(GREEN);
+          GOTOXY(55,27);
+          WRITE('RESPUESTA: ');
+          TEXTCOLOR(WHITE);
+          READLN(OP);
+            GOTOXY(55,25);
+        WRITE('                                                                                ' );
+          GOTOXY(55,27);
+          WRITE('                                                                        ');
+          OP := UPCASE(OP);
+          IF (OP <> 'S') AND (OP <> 'N') THEN
+            BEGIN
+              GOTOXY(60,23);
+              TEXTCOLOR(RED);
+              WRITELN('** INGRESE UNA OPCIÓN VÁLIDA: S o N **');
+              TEXTCOLOR(WHITE);
+              DELAY(2000);
+              GOTOXY(55,23);
+              CLREOL;
+              GOTOXY(55,21);
+              CLREOL;
+            END;
+        UNTIL (OP = 'S') OR (OP = 'N');
+
+        IF OP = 'S' THEN
           BEGIN
-           X.ESTADO := FALSE;
-           // SOBREESCRIBIR EL REGISTRO EN EL ARCHIVO DE ALUMNOS
-           SEEK(ARCHIVOALUMNO, POS);
-           WRITE(ARCHIVOALUMNO, X);
-           GOTOXY(45,17);
-           WRITELN('ALUMNO DADO DE BAJA CORRECTAMENTE');
-           GOTOXY(45,19);
-           WRITELN('PRESIONE "ENTER" PARA CONTINUAR');
-           READKEY;
+            PantallaCarga2;
+            X.ESTADO := FALSE;
+            SEEK(ARCHIVOALUMNO, POS);
+            WRITE(ARCHIVOALUMNO, X);
+            CLRSCR;
           END;
       END;
-  END;
+END;
 
 PROCEDURE MODIFICARALUMNO(VAR ARCHIVOALUMNO: T_ARCHIVO_ALUMNOS; POS:INTEGER);
 VAR
   BUSCADO,FECHA_AUX: STRING;
   X: T_DATO_ALUMNOS;
-  OPCION: BYTE;
+  OPCION: STRING;
   I: BYTE;
   ARB: T_DATO_ARBOL;
   DISC:CHAR;
 BEGIN
 
-    // LEER EL REGISTRO DEL ARCHIVO DE ALUMNOS EN LA POSICIÓN POS
     SEEK(ARCHIVOALUMNO, POS);
     READ(ARCHIVOALUMNO, X);
 
@@ -406,7 +446,6 @@ BEGIN
       end
     ELSE
     BEGIN
-    // MOSTRAR LOS DATOS ACTUALES DEL ALUMNO
     CLRSCR;
     repeat
     MUESTRADATOSALUMNO(X);
@@ -428,13 +467,45 @@ BEGIN
     WRITE('0- ');
     TEXTCOLOR(WHITE);
     WRITELN('VOLVER A MENU ALUMNO');
+
+    REPEAT
     TEXTCOLOR(GREEN);
     GOTOXY(75,18);
     WRITE('RESPUESTA: ');
     TEXTCOLOR(WHITE);
     READLN(OPCION);
+
+     IF NOT ESNUMERO(OPCION) OR (OPCION = '') THEN
+      BEGIN
+        TEXTCOLOR(RED);
+        GOTOXY(75,22);
+        WRITELN('ERROR: INGRESE UN NUMERO ENTRE 0 Y 3.');
+        DELAY(1500);
+        GOTOXY(75,22);
+        CLREOL;
+        GOTOXY(84,18);
+        CLREOL;
+      END
+      ELSE
+      BEGIN
+        IF (OPCION < '0') OR (OPCION > '2') THEN
+        BEGIN
+          TEXTCOLOR(RED);
+          GOTOXY(77,22);
+          WRITELN('ERROR: OPCION FUERA DE RANGO.');
+          DELAY(2000);
+          GOTOXY(77,22);
+          CLREOL;
+          GOTOXY(86,18);
+          CLREOL;
+        END;
+      END;
+    UNTIL (ESNUMERO(OPCION)) AND (OPCION >= '0') AND (OPCION <= '2') AND (OPCION <> '');
+
+
+
     CASE OPCION OF
-      1:
+      '1':
         BEGIN
           CLRSCR;
           TEXTCOLOR(GREEN);
@@ -455,7 +526,7 @@ BEGIN
             READLN(X.APYNOM);
         end;
         END;
-      2:
+      '2':
         BEGIN
         REPEAT
           CLRSCR;
@@ -468,7 +539,7 @@ BEGIN
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.DIA);
 
-             while not(EsNumero(X.FECHA_NAC.DIA)) do
+             while not(validarFechaDiaMes(X.FECHA_NAC.DIA)) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
@@ -477,7 +548,7 @@ BEGIN
           GOTOXY(45,12);
           WRITE('INGRESE DIA: ');
           TEXTCOLOR(WHITE);
-          readln(X.FECHA_NAC.ANIO);
+          readln(X.FECHA_NAC.DIA);
           GOTOXY(45,24);
           writeln('                                                                                             ');
           end;
@@ -488,7 +559,7 @@ BEGIN
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.MES);
 
-             while not(EsNumero(X.FECHA_NAC.ANIO)) do
+             while not validarFechaDiaMes(X.FECHA_NAC.MES) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
@@ -497,24 +568,24 @@ BEGIN
           GOTOXY(45,14);
           WRITE('INGRESE MES: ');
           TEXTCOLOR(WHITE);
-          readln(FECHA_NAC.MES);
+          readln(X.FECHA_NAC.MES);
           GOTOXY(45,24);
           writeln('                                                                                             ');
           end;
 
           TEXTCOLOR(GREEN);
           GOTOXY(45,16);
-          WRITE('INGRESE AÑO DE NACIMIENTO: ');
+          WRITE('INGRESE AÑO: ');
           TEXTCOLOR(WHITE);
           READLN(X.FECHA_NAC.ANIO);
-           while not(EsNumero(X.FECHA_NAC.ANIO)) do
+           while not validarFechaAnio(X.FECHA_NAC.ANIO) do
           begin
          GOTOXY(45,24);
           TEXTCOLOR(RED);
           writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
           GOTOXY(45,16);
-          WRITE('INGRESE EL AÑO: ');
+          WRITE('INGRESE AÑO: ');
           TEXTCOLOR(WHITE);
           readln(X.FECHA_NAC.ANIO);
           GOTOXY(45,24);
@@ -538,57 +609,41 @@ BEGIN
 
 
         END;
-     { 3:
-        BEGIN
-          CLRSCR;
-          GOTOXY(45,10);
-          WRITELN('INGRESE DISCAPACIDAD: ');
-          TEXTCOLOR(RED);
-          GOTOXY(45,12);
-          WRITELN('OPRIMA T SI LA TIENE Y F SI NO LA TIENE');
-            FOR I:= 1 TO 5 DO
-            BEGIN
-                TEXTCOLOR(GREEN);
-                GOTOXY(45,14);
-                WRITE('DISCAPACIDAD ', I, ' :');
-                TEXTCOLOR(WHITE);
-                READLN(DISC);
-                IF UPCASE(DISC) = 'T' THEN
-                X.DISCAPACIDAD[I]:=TRUE
-                ELSE
-                X.DISCAPACIDAD[I]:=FALSE;
-            END;
-        END;
-      4:
-        BEGIN
-          CLRSCR;
-          TEXTCOLOR(RED);
-          GOTOXY(45,10);
-          WRITELN('SE CAMBIO EL ESTADO DEL ALUMNO');
-          X.ESTADO := NOT X.ESTADO;
-        END; }
     END;
-    UNTIL opcion = 0;
+    UNTIL opcion = '0';
 
     SEEK(ARCHIVOALUMNO, POS);
     WRITE(ARCHIVOALUMNO, X);
-    TEXTCOLOR(WHITE);
-    GOTOXY(45,20);
+    PantallaCarga2;
+    CLRSCR;
+    GOTOXY(45,13);
+    TEXTCOLOR(GREEN);
     WRITELN('ALUMNO MODIFICADO CORRECTAMENTE');
+    GOTOXY(45,15);
+    TEXTCOLOR(YELLOW);
+    WRITELN('PRESIONE <<ENTER>> PARA CONTINUAR');
     READKEY;
     CLRSCR;
   END;
 
 end;
 
+
 PROCEDURE MUESTRA_REGISTRO_POR_TABLA (VAR X: T_DATO_ALUMNOS);
 VAR
-  FECHA:STRING;
+  FECHA, EstadoStr, Disc1, Disc2, Disc3, Disc4, Disc5: STRING;
 BEGIN
-  FECHA:=(X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
+  FECHA := (X.FECHA_NAC.DIA) + ' / ' + (X.FECHA_NAC.MES) + ' / ' + (X.FECHA_NAC.ANIO);
+  EstadoStr := MostrarEstado(X.ESTADO);
+  Disc1 := MostrarSiNo(X.DISCAPACIDAD[1]);
+  Disc2 := MostrarSiNo(X.DISCAPACIDAD[2]);
+  Disc3 := MostrarSiNo(X.DISCAPACIDAD[3]);
+  Disc4 := MostrarSiNo(X.DISCAPACIDAD[4]);
+  Disc5 := MostrarSiNo(X.DISCAPACIDAD[5]);
+
   WITH X DO
   BEGIN
-    WRITE(NUM_LEGAJO:10, APYNOM:28, FECHA:20, ESTADO:10, DISCAPACIDAD[1]:12, DISCAPACIDAD[2]:10, DISCAPACIDAD[3]:10, DISCAPACIDAD[4]:10, DISCAPACIDAD[5]:10);
+    WRITE(NUM_LEGAJO:10, APYNOM:28, FECHA:20, EstadoStr:10, Disc1:12, Disc2:10, Disc3:10, Disc4:10, Disc5:10);
     WRITELN;
   END;
 END;

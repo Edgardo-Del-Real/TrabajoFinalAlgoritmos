@@ -5,9 +5,9 @@ UNIT MANEJOEVAL;
 INTERFACE
 
 USES
-    CRT, ARCHIVOEVAL, UNITARBOL,SYSUTILS, VALIDACIONES, ARCHIVOALUM, ESTADISTICAS ;
+    CRT, ARCHIVOEVAL, UNITARBOL, SYSUTILS, VALIDACIONES, ARCHIVOALUM, ESTADISTICAS ;
 
-PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL; VAR archivoAlumno:T_ARCHIVO_ALUMNOS; POS:INTEGER);
+PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL; VAR archivoAlumno:T_ARCHIVO_ALUMNOS; var archivoEval:T_ARCHIVO_eval; POS:INTEGER);
 PROCEDURE PASAR_DATOS_EVAL (VAR ARCH: T_ARCHIVO_EVAL; VAR RAIZLEGAJO,RAIZFECHA:T_PUNT_ARBOL);
 PROCEDURE DARALTAEVAL (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR X:T_DATO_EVAL; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; POS:INTEGER);
 PROCEDURE CARGARALTAEVAL (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR X:T_DATO_EVAL);
@@ -28,104 +28,101 @@ VAR
   FECHA: STRING;
 BEGIN
   I := 0;
-  IF FILESIZE(ARCH) = 0 THEN
   BEGIN
-    WRITELN('El archivo está vacío.');
-    EXIT;
-  END;
-
-  WHILE (I < FILESIZE(ARCH)) AND NOT EOF(ARCH) DO
-  BEGIN
-    SEEK(ARCH, I);
-    READ(ARCH, X);
-
-    // Validar los datos de la fecha
-    IF ((STRTOINT(X.FECHA_EVAL.ANIO)) > 0) AND ((STRTOINT(X.FECHA_EVAL.MES)) IN [1..12]) AND (STRTOINT(X.FECHA_EVAL.DIA) IN [1..31]) THEN
+    WHILE (I < FILESIZE(ARCH)) AND NOT EOF(ARCH) DO
     BEGIN
-      FECHA := (X.FECHA_EVAL.ANIO) + (X.FECHA_EVAL.MES) + (X.FECHA_EVAL.DIA);
-      R.CLAVE := FECHA;
-      R.POSARCH := I;
-      AGREGAR_ARBOL(RAIZFECHA, R);
-    END
-    ELSE
-    BEGIN
-      WRITELN('Fecha inválida en el registro: ', I);
+      SEEK(ARCH, I);
+      READ(ARCH, X);
+
+      // Validar los datos de la fecha
+      IF (validarFechaAnio(X.FECHA_EVAL.ANIO)) AND (validarFechaDiaMes(X.FECHA_EVAL.MES)) AND (validarFechaDiaMes(X.FECHA_EVAL.DIA)) THEN
+      BEGIN
+        FECHA := (X.FECHA_EVAL.ANIO) + (X.FECHA_EVAL.MES) + (X.FECHA_EVAL.DIA);
+        R.CLAVE := FECHA;
+        R.POSARCH := I;
+        AGREGAR_ARBOL(RAIZFECHA, R);
+      END
+      ELSE
+      BEGIN
+        WRITELN('Fecha inválida en el registro: ', I);
+      END;
+
+      I := I + 1;
     END;
-
-    I := I + 1;
   END;
 END;
 
 
-PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL; VAR archivoAlumno:T_ARCHIVO_ALUMNOS; POS:INTEGER);
+
+PROCEDURE CARGARDATOSEVAL (VAR X:T_DATO_EVAL; VAR archivoAlumno:T_ARCHIVO_ALUMNOS; var archivoEval:T_ARCHIVO_eval; POS:INTEGER);
 VAR
    I:BYTE;
-   FECHA:STRING;
-   VALORACION:INTEGER;
+   FECHA,ENTRADA:STRING;
+   VALORACION:STRING;
    Y:T_DATO_ALUMNOS;
+   legajo:string;
 BEGIN
      CLRSCR;
-     GOTOXY(50,10);
+     GOTOXY(50,2);
      WRITELN('**DAR ALTA EVALUACIÓN**');
      TEXTCOLOR(GREEN);
-     GOTOXY(45,12);
-      // RESET(archivoAlumno);
+     GOTOXY(45,4);
       SEEK(archivoAlumno, POS);
       READ(archivoAlumno, Y);
      X.NUM_LEGAJO :=  Y.NUM_LEGAJO;
      REPEAT
      TEXTCOLOR(GREEN);
-     GOTOXY(45,14);
+     GOTOXY(45,6);
      WRITE('INGRESE DIA DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.DIA);
-     while not(EsNumero(X.FECHA_EVAL.DIA)) do
+     while not validarFechaDiaMes(x.fecha_eval.dia) do
           begin
-         GOTOXY(45,10);
+         GOTOXY(45,2);
           TEXTCOLOR(RED);
           writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
-          GOTOXY(45,14);
-          WRITE('INGRESE EL DIA: ');
+          GOTOXY(45,6);
+          WRITE('INGRESE DIA DE EVALUACIÓN: ');
           TEXTCOLOR(WHITE);
           readln(X.FECHA_EVAL.DIA);
-          GOTOXY(45,24);
+          GOTOXY(45,11);
           writeln('                                                                                             ');
           end;
      TEXTCOLOR(GREEN);
-     GOTOXY(45,16);
+     GOTOXY(45,8);
      WRITE('INGRESE MES DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.MES);
-     while not(EsNumero(X.FECHA_EVAL.MES)) do
+      while not validarFechaDiaMes(x.fecha_eval.mes) do
           begin
-         GOTOXY(45,10);
+         GOTOXY(45,2);
           TEXTCOLOR(RED);
           writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
-          GOTOXY(45,16);
+          GOTOXY(45,8);
           WRITE('INGRESE MES DE EVALUACIÓN: ');
           TEXTCOLOR(WHITE);
           readln(X.FECHA_EVAL.MES);
-          GOTOXY(45,10);
+          GOTOXY(45,2);
           writeln('                                                                                             ');
           end;
      TEXTCOLOR(GREEN);
-     GOTOXY(45,18);
+     GOTOXY(45,10);
      WRITE('INGRESE AÑO DE EVALUACIÓN: ');
      TEXTCOLOR(WHITE);
      READLN(X.FECHA_EVAL.ANIO);
-     while not(EsNumero(X.FECHA_EVAL.ANIO)) do
+     while not (validarFechaAnio(x.fecha_eval.anio)) do
           begin
-         GOTOXY(45,10);
+         GOTOXY(45,2);
           TEXTCOLOR(RED);
           writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
           TEXTCOLOR(GREEN);
-          GOTOXY(45,18);
+          GOTOXY(45,10);
           WRITE('INGRESE AÑO DE EVALUACIÓN: ');
           TEXTCOLOR(WHITE);
           readln(X.FECHA_EVAL.ANIO);
-          GOTOXY(45,10);
+          GOTOXY(45,2);
           writeln('                                                                                             ');
           end;
      FECHA:=(X.FECHA_EVAL.DIA) + ' / ' + (X.FECHA_EVAL.MES) + ' / ' + (X.FECHA_EVAL.ANIO);
@@ -140,88 +137,106 @@ BEGIN
        writeln('OPRIMA <<ENTER>> PARA RECARGAR');
        READKEY;
        CLRSCR;
-     end;
-    until EsFechaValida(FECHA);
+     end
+           else
+           begin
+           legajo:=x.num_legajo;
+           if fechaExistente (archivoEval,fecha,legajo) then
+              begin
+                clrscr;
+                writeln('FECHA EXISTENTE. NO ES POSIBLE CARGAR MAS DE 1 EVALUACION POR DIA');
+              end;
+           end;
+    until EsFechaValida(FECHA) and Not fechaExistente (archivoEval,fecha,legajo);
 
-     GOTOXY(45,20);
-WRITELN('INGRESE LAS VALORACIONES: ');
-FOR I:=1 TO 5 DO
+GOTOXY(45,13);
+WRITELN('INGRESE LAS VALORACIONES DE 1 A 4 ');
+textcolor(lightgray);
+GOTOXY(35,14);
+WRITELN('A LAS DISCAPACIDADES QUE NO APLICAN SE LES ASIGNARÁ 0');
+FOR I:= 1 TO 5 DO
 BEGIN
-    CLRSCR;
     TEXTCOLOR(GREEN);
     GOTOXY(40,14);
     IF Y.DISCAPACIDAD[I] THEN
     BEGIN
-        WRITELN('EN UNA ESCALA DEL 1 AL 4, INGRESE EL VALOR ADECUADO A LA DISCAPACIDAD');
-        GOTOXY(40,16);
-        TEXTCOLOR(RED);
-        WRITELN('DONDE 1 ES EL VALOR MÍNIMO Y 4 EL MÁXIMO');
-        GOTOXY(40,18);
-        TEXTCOLOR(green);
-        WRITE('VALORACIÓN PARA ', OBTENERNOMBREDISCAPACIDAD(i), ' : ');
-        TEXTCOLOR(white);
-        READLN(VALORACION);
 
-        WHILE (VALORACION < 1) OR (VALORACION > 4) DO
-        BEGIN
-            CLRSCR;
+         REPEAT
+          GOTOXY(40,15+i);
+          TEXTCOLOR(green);
+          WRITE('VALORACIÓN PARA ', OBTENERNOMBREDISCAPACIDAD(i), ' : ');
+          TEXTCOLOR(white);
+          READLN(VALORACION);
+
+          IF NOT ESNUMERO(VALORACION) OR (VALORACION = '') THEN
+          BEGIN
             TEXTCOLOR(RED);
-            GOTOXY(40,10);
-            WRITELN('POR FAVOR REVISE LA COHERENCIA DE SUS DATOS INGRESADOS');
-            GOTOXY(40,12);
-            TEXTCOLOR(GREEN);
-            WRITELN('RECUERDE QUE EL VALOR DEBE ESTAR ENTRE 1 Y 4');
-            GOTOXY(40,14);
-            WRITE('VALORACIÓN ', I, ': ');
-            TEXTCOLOR(WHITE);
-            READLN(VALORACION);
-        END;
+            GOTOXY(46,22);
+            WRITELN('ERROR: INGRESE UN NUMERO ENTRE 1 Y 4.');
+            DELAY(1500);
+            GOTOXY(46,22);
+            CLREOL;
+            GOTOXY(51,20);
+            CLREOL;
+          END
+          ELSE
+          BEGIN
+            IF (VALORACION < '1') OR (VALORACION > '4') THEN
+            BEGIN
+              TEXTCOLOR(RED);
+              GOTOXY(47,22);
+              WRITELN('ERROR: OPCION FUERA DE RANGO.');
+              DELAY(2000);
+              GOTOXY(47,22);
+              CLREOL;
+              GOTOXY(51,20);
+              CLREOL;
+            END;
+          END;
+        UNTIL  ESNUMERO(VALORACION) AND (VALORACION > '0') AND (VALORACION <= '4') AND (VALORACION <> '');
+
     END
     ELSE
     BEGIN
-        textcolor(lightgray);
-        GOTOXY(35,14);
-        WRITELN('LA DISCAPACIDAD : ', OBTENERNOMBREDISCAPACIDAD(i), ' NO APLICA EN ESTE ALUMNO');
-        GOTOXY(40,15);
-        WRITELN('POR LO TANTO, SE LE ASIGNARA UNA VALORACION DE CERO(0)');
-        VALORACION := 0;
-        GOTOXY(40,17);
-        textcolor(red);
-        WRITELN('OPRIME <<ENTER>> PARA CONTINUAR');
-        READKEY;
+        VALORACION := '0';
     END;
+    X.VALORACION[I] := STRTOINT(VALORACION);
 
-    X.VALORACION[I] := VALORACION;
+
 END;
+textcolor(GREEN);
+gotoxy(2,22);
+write('OBSERVACIONES: ');
+textcolor(WHITE);
+READLN(X.OBS);
+
 end;
 
 PROCEDURE MUESTRADATOSEVAL(X:T_DATO_EVAL);
 BEGIN
     CLRSCR;
-    GOTOXY(42,10);
+    GOTOXY(8,10);
     WRITELN('DATOS ACTUALES DE LA EVALUACION:');
     TEXTCOLOR(GREEN);
-    GOTOXY(45,12);
+    GOTOXY(10,12);
     WRITE('LEGAJO: ');
     TEXTCOLOR(WHITE);
     WRITELN(X.NUM_LEGAJO);
     TEXTCOLOR(GREEN);
-    GOTOXY(45,14);
+    GOTOXY(10,14);
     WRITE('FECHA: ');
     TEXTCOLOR(WHITE);
     WRITELN(X.FECHA_EVAL.DIA, '/', X.FECHA_EVAL.MES, '/', X.FECHA_EVAL.ANIO);
     TEXTCOLOR(GREEN);
-    GOTOXY(45,16);
+    GOTOXY(10,16);
     WRITE('VALORACION: ');
     TEXTCOLOR(WHITE);
     WRITELN(X.VALORACION[1], ' ', X.VALORACION[2], ' ', X.VALORACION[3], ' ', X.VALORACION[4], ' ', X.VALORACION[5]);
     TEXTCOLOR(GREEN);
-    GOTOXY(45,18);
+    GOTOXY(10,18);
     WRITE('OBSERVACIONES: ');
     TEXTCOLOR(WHITE);
     WRITELN(X.OBS);
-    READKEY;
-    CLRSCR;
 END;
 
 PROCEDURE CARGARALTAEVAL (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR X:T_DATO_EVAL);
@@ -234,7 +249,7 @@ PROCEDURE DARALTAEVAL (VAR ARCHIVOEVAL:T_ARCHIVO_EVAL; VAR X:T_DATO_EVAL; VAR AR
 VAR
     FINARCH:CARDINAL;
 BEGIN
-    CARGARDATOSEVAL(X,ARCHIVOALUMNO,POS);
+    CARGARDATOSEVAL(X,ARCHIVOALUMNO,archivoeval,POS);
     CARGARALTAEVAL(ARCHIVOEVAL, X);
 END;
 
@@ -279,23 +294,77 @@ BEGIN
   BUSCADOLEGAJO:=   X.NUM_LEGAJO;
 
   TEXTCOLOR(GREEN);
-  GOTOXY(27,14);
-  WRITE('INGRESE FECHA DE LA EVALUACION. RECUERDE INGRESAR DIA MES Y AÑO POR SEPARADO');
+  GOTOXY(42,14);
+  WRITE('INGRESE FECHA DE LA EVALUACION');
    TEXTCOLOR(GREEN);
   GOTOXY(45,16);
   WRITE('INGRESE EL DIA: ');
   TEXTCOLOR(WHITE);
   READLN(DIA);
+
+  while not validarFechaDiaMes(DIA) do
+       begin
+       GOTOXY(55,16);
+       writeln('                                                                                             ');
+       GOTOXY(45,24);
+       TEXTCOLOR(RED);
+       writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+       TEXTCOLOR(GREEN);
+       GOTOXY(45,16);
+       WRITE('INGRESE EL DIA: ');
+       TEXTCOLOR(WHITE);
+       readln(DIA);
+       GOTOXY(45,24);
+       writeln('                                                                                             ');
+       end;
+
+
   TEXTCOLOR(GREEN);
   GOTOXY(45,18);
   WRITE('INGRESE EL MES: ');
   TEXTCOLOR(WHITE);
   READLN(MES);
+
+        while not validarFechaDiaMes(MES) do
+          begin
+          GOTOXY(55,18);
+          writeln('                                                                                             ');
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,18);
+          WRITE('INGRESE EL MES: ');
+          TEXTCOLOR(WHITE);
+          readln(MES);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
+
   TEXTCOLOR(GREEN);
   GOTOXY(45,20);
   WRITE('INGRESE EL AÑO: ');
   TEXTCOLOR(WHITE);
   READLN(ANIO);
+
+      while not validarFechaAnio(anio) do
+          begin
+          GOTOXY(55,20);
+          writeln('                                                                                             ');
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,20);
+          WRITE('INGRESE EL AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(anio);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
+
   buscadoFECHA := DIA + '/' + MES + '/' + ANIO;
 
   WHILE NOT  EsFechaValida(buscadoFecha) DO
@@ -330,16 +399,22 @@ BEGIN
   POS := BUSCAREVALUACION(RAIZLEGAJO, ARCHIVOEVAL, BUSCADOLEGAJO, BUSCADOFECHA);
   IF POS = -1 THEN
     BEGIN
-      GOTOXY(45,16);
+      CLRSCR;
+      TEXTCOLOR(RED);
+      GOTOXY(41,14);
       WRITELN('NO SE ENCUENTRA REGISTRO DE EVALUACION');
+      TEXTCOLOR(YELLOW);
+      GOTOXY(45,16);
+      writeln('OPRIMA <<ENTER>> PARA RECARGAR');
+      READKEY;
     END
   ELSE
     BEGIN
       SEEK(ARCHIVOEVAL, POS);
       READ(ARCHIVOEVAL, X);
       MUESTRADATOSEVAL(X);
-      readkey;
     END;
+    readkey;
     CLRSCR;
 END;
 
@@ -347,10 +422,10 @@ END;
 
 PROCEDURE MODIFICAREVAL(VAR RAIZAPYNOM, RAIZLEGAJO: T_PUNT_ARBOL; VAR ARCHIVOEVAL: T_ARCHIVO_EVAL; VAR ARCHIVOALUMNO:T_ARCHIVO_ALUMNOS; POSALUMNO:INTEGER);
 VAR
-  LEGAJO, FECHA: STRING;
+  LEGAJO, FECHA,OPCION: STRING;
   POS: INTEGER;
   X: T_DATO_EVAL;
-  OPCION,I: INTEGER;
+  I: INTEGER;
   DIA,MES,ANIO:STRING;
   Y:T_DATO_ALUMNOS;
 BEGIN
@@ -369,16 +444,66 @@ BEGIN
   WRITE('INGRESE EL DIA: ');
   TEXTCOLOR(WHITE);
   READLN(DIA);
+     while not validarFechaDiaMes(DIA) do
+          begin
+          GOTOXY(55,14);
+          writeln('                                                                                             ');
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('DIA INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,14);
+          WRITE('INGRESE EL DIA: ');
+          TEXTCOLOR(WHITE);
+          readln(DIA);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
   TEXTCOLOR(GREEN);
   GOTOXY(45,16);
   WRITE('INGRESE EL MES: ');
   TEXTCOLOR(WHITE);
   READLN(MES);
+       while not(validarFechaDiaMes(MES)) do
+          begin
+          GOTOXY(55,16);
+          writeln('                                                                                             ');
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('MES INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,16);
+          WRITE('INGRESE EL MES: ');
+          TEXTCOLOR(WHITE);
+          readln(MES);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
+
+
   TEXTCOLOR(GREEN);
   GOTOXY(45,18);
   WRITE('INGRESE EL AÑO: ');
   TEXTCOLOR(WHITE);
   READLN(ANIO);
+      while not(validarFechaAnio(ANIO)) do
+          begin
+          GOTOXY(55,18);
+          writeln('                                                                                             ');
+          GOTOXY(45,24);
+          TEXTCOLOR(RED);
+          writeln('AÑO INVALIDO, POR FAVOR VERIFIQUE E INGRESE NUEVAMENTE');
+          TEXTCOLOR(GREEN);
+          GOTOXY(45,18);
+          WRITE('INGRESE EL AÑO: ');
+          TEXTCOLOR(WHITE);
+          readln(ANIO);
+          GOTOXY(45,24);
+          writeln('                                                                                             ');
+          end;
+
 
   FECHA := DIA + '/' + MES + '/' + ANIO;
 
@@ -389,7 +514,7 @@ BEGIN
         GOTOXY(45,11);
         writeln('FECHA INGRESADA NO VALIDA. POR FAVOR REVISE SUS DATOS');
         GOTOXY(42,12);
-        WRITELN( 'RECUERDE DAR DIA, MES Y AÑO DE LA EVALUACION POR SEPARADO');
+        WRITELN('RECUERDE DAR DIA, MES Y AÑO DE LA EVALUACION POR SEPARADO');
         TEXTCOLOR(GREEN);
         GOTOXY(45,14);
         WRITE('INGRESE DIA: ');
@@ -411,7 +536,9 @@ BEGIN
   POS := BUSCAREVALUACION(RAIZLEGAJO,ARCHIVOEVAL,X.NUM_LEGAJO,FECHA);
   IF POS = -1 THEN
     BEGIN
+    CLRSCR;
     GOTOXY(45,16);
+    TEXTCOLOR(RED);
     WRITELN('NO SE ENCUENTRA REGISTRO DE EVALUACION')
     END
   ELSE
@@ -421,38 +548,47 @@ BEGIN
 
       MUESTRADATOSEVAL(X);
 
-      GOTOXY(45,12);
+      TEXTCOLOR(YELLOW);
+      GOTOXY(55,10);
       WRITELN('INGRESE EL CAMPO A MODIFICAR DE LA EVALUACION:');
+       TEXTCOLOR(GREEN);
+      GOTOXY(55,12);
+      WRITE('0- ');
+      TEXTCOLOR(WHITE);
+      WRITELN('VOLVER AL MENÚ DE SEGUIMIENTO');
       TEXTCOLOR(GREEN);
-      GOTOXY(45,14);
+      GOTOXY(55,14);
       WRITE('1- ');
       TEXTCOLOR(WHITE);
       WRITELN('FECHA DE LA EVALUACION (DD/MM/AAAA)');
       TEXTCOLOR(GREEN);
-      GOTOXY(45,16);
+      GOTOXY(55,16);
       WRITE('2- ');
       TEXTCOLOR(WHITE);
       WRITELN('VALORACION (1-5)');
       TEXTCOLOR(GREEN);
-      GOTOXY(45,18);
+      GOTOXY(55,18);
       WRITE('3- ');
       TEXTCOLOR(WHITE);
       WRITELN('OBSERVACIONES');
       TEXTCOLOR(GREEN);
-      GOTOXY(45,20);
+      GOTOXY(55,20);
       WRITE('OPCION: ');
       TEXTCOLOR(WHITE);
       READLN(OPCION);
+      while not esNumero(OPCION) or (OPCION < '0') or (OPCION > '3') do
+       BEGIN
+       GOTOXY(62,20);
+       WRITE('                                                         ');
+       TEXTCOLOR(GREEN);
+       GOTOXY(55,20);
+       WRITE('OPCION: ');
+       TEXTCOLOR(WHITE);
+       READLN(OPCION);
+       END;
 
-    IF (OPCION < 1) OR (OPCION > 3) THEN
-      BEGIN
-        GOTOXY(45,22);
-        WRITELN('OPCION INVALIDA');
-      END
-    ELSE
-      BEGIN
         CASE OPCION OF
-          1:
+          '1':
           BEGIN
             REPEAT
             CLRSCR;
@@ -537,7 +673,7 @@ BEGIN
 
     until EsFechaValida(FECHA);
           END;
-          2:
+          '2':
           BEGIN
            CLRSCR;
            TEXTCOLOR(GREEN);
@@ -569,14 +705,17 @@ BEGIN
               if x.valoracion[i] = 0 then
                 begin
                 clrscr;
+                GOTOXY(27,22);
                  writeln('ALUMNO NO POSEE DICHA DISCAPACIDAD. NO SE PUEDE VALORAR NI MODIFICAR');
+                 GOTOXY(27,24);
+                 TEXTCOLOR(RED);
                  writeln('OPRIMA <<ENTER>> PARA REGRESAR AL MENU');
                  READKEY;
                  end
                  else
-              READLN(X.VALORACION[I]);       //reveer esto, solo modificar si esta disponible.
+              READLN(X.VALORACION[I]);
           END;
-          3:
+          '3':
           BEGIN
             CLRSCR;
             TEXTCOLOR(GREEN);
@@ -589,13 +728,10 @@ BEGIN
 
         SEEK(ARCHIVOEVAL, POS);
         WRITE(ARCHIVOEVAL, X);
-        CLRSCR;
-        GOTOXY(40,15);
-        WRITELN('EVALUACION MODIFICADA CORRECTAMENTE');
+        PantallaCarga2;
+        clrscr;
       END;
-  END;
-  READKEY;
-  CLRSCR;
+  //READKEY;
 END;
 
 PROCEDURE MUESTRA_REGISTRO_POR_TABLA_EVAL (VAR X: T_DATO_EVAL);
