@@ -1,8 +1,8 @@
-program seguimientodeaprendizaje;
-uses
-    crt,MenuesFinal;
+PROGRAM SEGUIMIENTODEAPRENDIZAJE;
 
-begin
-     menuPrincial ();
-end.
-            
+USES
+    CRT,MENUESFINAL;
+
+BEGIN
+     MENUPRINCIAL ();
+END.

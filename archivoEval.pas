@@ -1,4 +1,5 @@
 UNIT ARCHIVOEVAL;
+
 {$CODEPAGE UTF8}
 
 INTERFACE
@@ -7,13 +8,13 @@ USES
   CRT;
 
 CONST
-    RUTA = 'C:\Users\lucia\OneDrive\Escritorio\TrabajoFinalAlgoritmos - copia.DAT';
+    RUTA = 'C:\TPFinal\TrabajoFinalAlgoritmos.DAT';
 
 TYPE
   T_FECHA = RECORD
-    DIA:1..31;
-    MES:1..12;
-    ANIO:WORD;
+    DIA:string[2];
+    MES:string[2];
+    ANIO:string[4];
   END;
 
   T_DATO_EVAL = RECORD
@@ -44,4 +45,5 @@ PROCEDURE CERRAR2 (VAR ARCH:T_ARCHIVO_EVAL);
 BEGIN
     CLOSE(ARCH);
 END;
+
 END.
